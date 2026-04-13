@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/utils/app_pages.dart';
-import '../../core/utils/formatters.dart';
 import '../../domain/entities/delivery_order.dart';
 
 class ActiveOrderSection extends StatelessWidget {
@@ -25,18 +24,20 @@ class ActiveOrderSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x12000000),
-                blurRadius: 16,
-                offset: Offset(0, 8),
-              ),
-            ],
-          ),
+        GestureDetector(
+          onTap: () => Get.toNamed('/order-detail', arguments: order),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x12000000),
+                  blurRadius: 16,
+                  offset: Offset(0, 8),
+                ),
+              ],
+            ),
           child: Column(
             children: [
               // Order Header with Image and Details
@@ -72,7 +73,7 @@ class ActiveOrderSection extends StatelessWidget {
                                 maxWidthDiskCache: 200,
                                 fadeInDuration: Duration.zero,
                                 fadeOutDuration: Duration.zero,
-                                errorWidget: (_, __, ___) => Container(
+                                errorWidget: (_, _, _) => Container(
                                   color: const Color(0xFFF0F0F0),
                                   child: const Icon(
                                     Icons.fastfood_rounded,
@@ -141,7 +142,7 @@ class ActiveOrderSection extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               color: _getStatusColor(order.status)
-                                  .withOpacity(0.1),
+                                  .withAlpha(26),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -235,6 +236,7 @@ class ActiveOrderSection extends StatelessWidget {
             ],
           ),
         ),
+        ),
       ],
     );
   }
@@ -288,7 +290,7 @@ class _LocationRow extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: iconColor.withOpacity(0.1),
+            color: iconColor.withAlpha(26),
             shape: BoxShape.circle,
           ),
           child: Center(

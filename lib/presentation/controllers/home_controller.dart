@@ -168,6 +168,26 @@ class HomeController extends GetxController {
 
   bool get shouldShowTshirtCard => !(user.value?.isTshirtPicked ?? false);
 
+  Future<void> toggleOnlineStatus(bool isOnline) async {
+    try {
+      await _getProfileUseCase.updateOnlineStatus(isOnline);
+      // Update local user state
+      final updatedUser = user.value?.copyWith(canOnline: isOnline);
+      user.value = updatedUser;
+      Get.snackbar(
+        'Success',
+        isOnline ? 'You are now online' : 'You are now offline',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } on Failure catch (error) {
+      Get.snackbar(
+        'Error',
+        error.message,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
   int _sortOrdersByMostRecent(DeliveryOrder a, DeliveryOrder b) {
     final aDate =
         Formatters.parseDateTime(a.createdAt) ??

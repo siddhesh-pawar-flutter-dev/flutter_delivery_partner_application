@@ -6,6 +6,7 @@ class AppConstants {
   static const String verifyOtp = '/login/delivery-mobile';
   static const String profile = '/delivery-partner/details';
   static const String myOrders = '/delivery-partner/my-orders';
+  static const String onlineStatus = '/delivery-partner/online-status';
 
   static const String tokenKey = 'auth_token';
   static const String userKey = 'user_json';

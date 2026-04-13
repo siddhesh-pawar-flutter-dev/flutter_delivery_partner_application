@@ -353,32 +353,62 @@ class _AvailabilityCard extends StatelessWidget {
   }
 }
 
-class _StatusSwitch extends StatelessWidget {
+class _StatusSwitch extends StatefulWidget {
   const _StatusSwitch({required this.isOnline});
 
   final bool isOnline;
 
   @override
+  State<_StatusSwitch> createState() => _StatusSwitchState();
+}
+
+class _StatusSwitchState extends State<_StatusSwitch> {
+  bool _isLoading = false;
+
+  Future<void> _toggleStatus() async {
+    setState(() => _isLoading = true);
+    try {
+      await Get.find<HomeController>().toggleOnlineStatus(!widget.isOnline);
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 180),
-      width: 52,
-      height: 30,
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: isOnline ? const Color(0xFF7ED957) : const Color(0xFF9A9A9A),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Align(
-        alignment: isOnline ? Alignment.centerRight : Alignment.centerLeft,
-        child: Container(
-          width: 22,
-          height: 22,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
+    return GestureDetector(
+      onTap: _isLoading ? null : _toggleStatus,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        width: 52,
+        height: 30,
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: widget.isOnline ? const Color(0xFF7ED957) : const Color(0xFF9A9A9A),
+          borderRadius: BorderRadius.circular(999),
         ),
+        child: _isLoading
+            ? const Center(child: SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ))
+            : Align(
+                alignment: widget.isOnline ? Alignment.centerRight : Alignment.centerLeft,
+                child: Container(
+                  width: 22,
+                  height: 22,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
       ),
     );
   }

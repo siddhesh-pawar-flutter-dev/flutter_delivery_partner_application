@@ -7,4 +7,7 @@ class GetProfileUseCase {
   final PartnerRepository _repository;
 
   Future<ProfileDetails> call() => _repository.getProfileDetails();
+
+  Future<Map<String, dynamic>> updateOnlineStatus(bool isOnline) =>
+      _repository.updateOnlineStatus(isOnline);
 }
