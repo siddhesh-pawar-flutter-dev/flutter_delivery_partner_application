@@ -11,6 +11,10 @@ class DeliveryPartner {
     required this.city,
     required this.state,
     required this.totalDeductionBalance,
+    required this.avgRating,
+    required this.totalRatings,
+    required this.canOnline,
+    required this.termToggle,
   });
 
   final int id;
@@ -24,4 +28,8 @@ class DeliveryPartner {
   final String city;
   final String state;
   final double totalDeductionBalance;
+  final double avgRating;
+  final int totalRatings;
+  final bool canOnline;
+  final bool termToggle;
 }

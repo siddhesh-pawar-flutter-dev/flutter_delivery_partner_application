@@ -1,21 +1,30 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 
 import '../../core/error/failures.dart';
+import '../../core/utils/formatters.dart';
 import '../../domain/entities/delivery_order.dart';
 import '../../domain/entities/delivery_partner.dart';
 import '../../domain/usecases/get_order_history_usecase.dart';
+import '../../domain/usecases/get_profile_usecase.dart';
 import '../../domain/usecases/get_saved_user_usecase.dart';
 
 class HomeController extends GetxController {
   HomeController({
     required GetOrderHistoryUseCase getOrdersUseCase,
+    required GetProfileUseCase getProfileUseCase,
     required GetSavedUserUseCase getSavedUserUseCase,
   }) : _getOrdersUseCase = getOrdersUseCase,
+       _getProfileUseCase = getProfileUseCase,
        _getSavedUserUseCase = getSavedUserUseCase;
 
   final GetOrderHistoryUseCase _getOrdersUseCase;
+  final GetProfileUseCase _getProfileUseCase;
   final GetSavedUserUseCase _getSavedUserUseCase;
+  final BaseCacheManager _cacheManager = DefaultCacheManager();
 
   final ScrollController scrollController = ScrollController();
   final RxList<DeliveryOrder> orders = <DeliveryOrder>[].obs;
@@ -23,16 +32,17 @@ class HomeController extends GetxController {
   final RxBool isLoadingMore = false.obs;
   final RxBool hasMoreData = true.obs;
   final RxString errorMessage = ''.obs;
+  final Rxn<DeliveryPartner> user = Rxn<DeliveryPartner>();
 
-  DeliveryPartner? user;
   int currentPage = 1;
-  final int limit = 10;
+  final int limit = 20;
 
   @override
   void onInit() {
     super.onInit();
-    user = _getSavedUserUseCase();
+    user.value = _getSavedUserUseCase();
     scrollController.addListener(_onScroll);
+    unawaited(loadProfileSummary());
     loadOrders();
   }
 
@@ -57,6 +67,7 @@ class HomeController extends GetxController {
     try {
       final page = await _getOrdersUseCase(page: currentPage, limit: limit);
       orders.addAll(page.orders);
+      unawaited(_warmOrderImages(page.orders));
       hasMoreData.value = currentPage < page.totalPage;
       if (hasMoreData.value) {
         currentPage++;
@@ -68,6 +79,68 @@ class HomeController extends GetxController {
       isLoadingMore.value = false;
     }
   }
+
+  Future<void> loadProfileSummary() async {
+    try {
+      final profile = await _getProfileUseCase();
+      user.value = profile.deliveryPartner;
+    } on Failure {
+      // Keep the last saved user for the header if the profile call fails.
+    }
+  }
+
+  Future<void> _warmOrderImages(List<DeliveryOrder> pageOrders) async {
+    final urls = pageOrders
+        .map((order) => order.imageUrl)
+        .where((url) => url.isNotEmpty)
+        .toSet()
+        .take(12);
+
+    for (final url in urls) {
+      unawaited(_cacheManager.downloadFile(url));
+    }
+  }
+
+  List<DeliveryOrder> get todayOrders {
+    final now = DateTime.now();
+    return orders.where((order) {
+      final parsed =
+          Formatters.parseDateTime(order.createdAt) ??
+          Formatters.parseDateTime(order.scheduledAt);
+      if (parsed == null) return false;
+      return parsed.year == now.year &&
+          parsed.month == now.month &&
+          parsed.day == now.day;
+    }).toList();
+  }
+
+  double get todayEarnings =>
+      todayOrders.fold(0, (sum, order) => sum + order.amount);
+
+  int get todayCompletedCount => todayOrders.length;
+
+  double get weeklyEarnings {
+    final now = DateTime.now();
+    final startOfWeek = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).subtract(Duration(days: now.weekday - 1));
+    final endOfWeek = startOfWeek.add(const Duration(days: 7));
+
+    return orders.fold(0, (sum, order) {
+      final parsed =
+          Formatters.parseDateTime(order.createdAt) ??
+          Formatters.parseDateTime(order.scheduledAt);
+      if (parsed == null) return sum;
+      if (parsed.isBefore(startOfWeek) || !parsed.isBefore(endOfWeek)) {
+        return sum;
+      }
+      return sum + order.amount;
+    });
+  }
+
+  bool get canReceiveOrders => (user.value?.canOnline ?? false);
 
   void _onScroll() {
     if (!scrollController.hasClients) return;

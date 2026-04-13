@@ -15,4 +15,11 @@ class Formatters {
     if (value is int) return value;
     return int.tryParse('$value') ?? 0;
   }
+
+  static DateTime? parseDateTime(String? value) {
+    if (value == null || value.trim().isEmpty) return null;
+
+    final normalized = value.trim().replaceFirst(' ', 'T');
+    return DateTime.tryParse(normalized)?.toLocal();
+  }
 }

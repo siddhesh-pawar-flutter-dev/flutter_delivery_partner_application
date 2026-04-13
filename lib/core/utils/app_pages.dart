@@ -20,30 +20,15 @@ class AppPages {
   static const String profile = '/profile';
 
   static final routes = <GetPage>[
-    GetPage(
-      name: splash,
-      page: () => const SplashPage(),
-    ),
+    GetPage(name: splash, page: () => const SplashPage()),
     GetPage(
       name: language,
       page: () => const LanguagePage(),
       binding: LanguageBinding(),
     ),
-    GetPage(
-      name: login,
-      page: () => const LoginPage(),
-      binding: AuthBinding(),
-    ),
-    GetPage(
-      name: otp,
-      page: () => const OtpPage(),
-      binding: AuthBinding(),
-    ),
-    GetPage(
-      name: home,
-      page: () => const HomePage(),
-      binding: HomeBinding(),
-    ),
+    GetPage(name: login, page: () => const LoginPage(), binding: AuthBinding()),
+    GetPage(name: otp, page: () => const OtpPage(), binding: AuthBinding()),
+    GetPage(name: home, page: () => const HomePage(), binding: HomeBinding()),
     GetPage(
       name: profile,
       page: () => const ProfilePage(),

@@ -5,7 +5,6 @@ import '../../core/utils/app_constants.dart';
 import '../../core/utils/app_theme.dart';
 import '../controllers/language_controller.dart';
 import '../widgets/connectivity_gate.dart';
-import '../widgets/primary_button.dart';
 
 class LanguagePage extends GetView<LanguageController> {
   const LanguagePage({super.key});
@@ -18,86 +17,156 @@ class LanguagePage extends GetView<LanguageController> {
         appBar: AppBar(),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 18),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  'Choose your language',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'This helps us personalize the onboarding flow for you.',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 24),
                 Expanded(
-                  child: 
-                  // Obx(
-                  //   () => 
-                    GridView.builder(
-                      itemCount: AppConstants.languages.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 14,
-                            mainAxisSpacing: 14,
-                            childAspectRatio: 1.2,
-                          ),
-                      itemBuilder: (context, index) {
-                        final language = AppConstants.languages[index];
-                        final isSelected =
-                            controller.selectedLanguage.value == language;
-                        return GestureDetector(
-                          onTap: () => controller.selectedLanguage.value = language,
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color:
-                                  isSelected
-                                      ? AppTheme.primary.withValues(alpha: 0.14)
-                                      : AppTheme.surface,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color:
-                                    isSelected
-                                        ? AppTheme.primary
-                                        : AppTheme.border,
-                              ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 12),
+                      Text(
+                        'Select language',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w800,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.language_rounded,
-                                  color:
-                                      isSelected
-                                          ? AppTheme.primary
-                                          : Colors.white,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Select one from below',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Expanded(
+                        child: Obx(() {
+                          final selectedLanguage =
+                              controller.selectedLanguage.value;
+                          return GridView.builder(
+                            itemCount: AppConstants.languages.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 14,
+                                  mainAxisSpacing: 14,
+                                  childAspectRatio: 1.55,
                                 ),
-                                const Spacer(),
-                                Text(
-                                  language,
-                                  style: Theme.of(context).textTheme.bodyLarge,
+                            itemBuilder: (context, index) {
+                              final language = AppConstants.languages[index];
+                              final isSelected =
+                                  selectedLanguage == language.value;
+                              return InkWell(
+                                borderRadius: BorderRadius.circular(10),
+                                onTap: () => controller.selectedLanguage.value =
+                                    language.value,
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 180),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF2C2C2C),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? AppTheme.primary.withValues(
+                                              alpha: 0.8,
+                                            )
+                                          : const Color(0xFF3A3A3A),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              language.nativeLabel,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleLarge
+                                                  ?.copyWith(
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                            ),
+                                            if (language
+                                                .subtitle
+                                                .isNotEmpty) ...[
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                language.subtitle,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      _SelectionIndicator(
+                                        isSelected: isSelected,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  // ),
+                              );
+                            },
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 18),
                 Obx(
-                  () => PrimaryButton(
-                    label: 'Proceed',
-                    onPressed:
-                        controller.selectedLanguage.value.isEmpty
-                            ? null
-                            : controller.proceed,
+                  () => SizedBox(
+                    width: double.infinity,
+                    height: 54,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primary.withValues(
+                          alpha: 0.8,
+                        ),
+                        // backgroundColor: const Color(0xFF6A6A6A),
+                        disabledBackgroundColor: const Color(0xFF4D4D4D),
+                        foregroundColor: Colors.black,
+                        disabledForegroundColor: Colors.black54,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: controller.selectedLanguage.value.isEmpty
+                          ? null
+                          : controller.proceed,
+                      child: const Text(
+                        'Proceed',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -105,6 +174,37 @@ class LanguagePage extends GetView<LanguageController> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SelectionIndicator extends StatelessWidget {
+  const _SelectionIndicator({required this.isSelected});
+
+  final bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: AppTheme.primary, width: 2),
+      ),
+      child: isSelected
+          ? Center(
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppTheme.primary,
+                ),
+              ),
+            )
+          : null,
     );
   }
 }

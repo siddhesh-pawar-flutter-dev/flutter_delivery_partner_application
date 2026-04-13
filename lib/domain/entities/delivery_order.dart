@@ -8,6 +8,10 @@ class DeliveryOrder {
     required this.createdAt,
     required this.itemSummary,
     required this.address,
+    required this.pickupArea,
+    required this.dropCity,
+    required this.scheduledAt,
+    required this.quantity,
   });
 
   final int id;
@@ -18,6 +22,10 @@ class DeliveryOrder {
   final String createdAt;
   final String itemSummary;
   final String address;
+  final String pickupArea;
+  final String dropCity;
+  final String scheduledAt;
+  final int quantity;
 }
 
 class OrderHistoryPage {
