@@ -15,6 +15,7 @@ class DeliveryPartner {
     required this.totalRatings,
     required this.canOnline,
     required this.termToggle,
+    required this.isTshirtPicked,
   });
 
   final int id;
@@ -32,4 +33,5 @@ class DeliveryPartner {
   final int totalRatings;
   final bool canOnline;
   final bool termToggle;
+  final bool isTshirtPicked;
 }

@@ -8,8 +8,10 @@ import '../../presentation/pages/home_page.dart';
 import '../../presentation/pages/language_page.dart';
 import '../../presentation/pages/login_page.dart';
 import '../../presentation/pages/otp_page.dart';
+import '../../presentation/pages/order_detail_page.dart';
 import '../../presentation/pages/profile_page.dart';
 import '../../presentation/pages/splash_page.dart';
+import '../../presentation/pages/tshirt_selection_page.dart';
 
 class AppPages {
   static const String splash = '/';
@@ -18,6 +20,8 @@ class AppPages {
   static const String otp = '/otp';
   static const String home = '/home';
   static const String profile = '/profile';
+  static const String tshirtSelection = '/tshirt-selection';
+  static const String orderDetail = '/order-detail';
 
   static final routes = <GetPage>[
     GetPage(name: splash, page: () => const SplashPage()),
@@ -34,5 +38,7 @@ class AppPages {
       page: () => const ProfilePage(),
       binding: ProfileBinding(),
     ),
+    GetPage(name: tshirtSelection, page: () => const TshirtSelectionPage()),
+    GetPage(name: orderDetail, page: () => const OrderDetailPage()),
   ];
 }

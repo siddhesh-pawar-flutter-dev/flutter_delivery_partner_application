@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import '../../core/utils/app_pages.dart';
 import '../../domain/entities/delivery_partner.dart';
 import '../controllers/home_controller.dart';
+import '../widgets/active_order_section.dart';
 import '../widgets/connectivity_gate.dart';
 import '../widgets/order_card.dart';
+import '../widgets/tshirt_card.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
@@ -39,6 +41,13 @@ class HomePage extends GetView<HomeController> {
                     canToggle: user?.termToggle ?? false,
                   ),
                   const SizedBox(height: 18),
+                  if (controller.shouldShowTshirtCard)
+                    Column(
+                      children: [
+                        const TshirtCard(),
+                        const SizedBox(height: 18),
+                      ],
+                    ),
                   const _SectionTitle("Today's Summary"),
                   const SizedBox(height: 12),
                   GridView.count(
@@ -88,6 +97,13 @@ class HomePage extends GetView<HomeController> {
                   const SizedBox(height: 16),
                   _InfoBanner(isOnline: controller.canReceiveOrders),
                   const SizedBox(height: 18),
+                  if (controller.activeOrder != null)
+                    Column(
+                      children: [
+                        ActiveOrderSection(order: controller.activeOrder!),
+                        const SizedBox(height: 24),
+                      ],
+                    ),
                   _DeliveryHeader(displayedOrders.length),
                   const SizedBox(height: 12),
                   if (controller.isLoading.value && controller.orders.isEmpty)

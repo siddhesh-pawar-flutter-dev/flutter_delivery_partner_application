@@ -15,6 +15,11 @@ class DeliveryOrderModel extends DeliveryOrder {
     required super.dropCity,
     required super.scheduledAt,
     required super.quantity,
+    required super.pickupAddress,
+    required super.pickupTime,
+    required super.paymentStatus,
+    required super.deliveryType,
+    required super.isCod,
   });
 
   factory DeliveryOrderModel.fromJson(Map<String, dynamic> json) {
@@ -36,14 +41,15 @@ class DeliveryOrderModel extends DeliveryOrder {
         summary['address_details'] as Map<String, dynamic>? ?? {};
     final scheduleDate = (order['order_schedule_date'] ?? '').toString();
     final scheduleTime = (order['order_schedule_time'] ?? '').toString();
+    final payoutAmount = order.containsKey('delivery_fee_before_tax')
+        ? order['delivery_fee_before_tax']
+        : order['grand_total'] ?? order['total_amount'];
 
     return DeliveryOrderModel(
       id: Formatters.parseInt(json['order_id']),
       restaurantName: (restaurant['restaurant_name'] ?? 'Restaurant')
           .toString(),
-      amount: Formatters.parseAmount(
-        order['grand_total'] ?? order['total_amount'],
-      ),
+      amount: Formatters.parseAmount(payoutAmount),
       status: ((json['status'] ?? order['status']) ?? '').toString(),
       imageUrl: Formatters.sanitizeUrl(
         json['order_pickup_image']?.toString() ??
@@ -60,6 +66,11 @@ class DeliveryOrderModel extends DeliveryOrder {
         scheduleTime,
       ].where((value) => value.isNotEmpty).join(' '),
       quantity: Formatters.parseInt(order['total_quantity']),
+      pickupAddress: (restaurant['address'] ?? '').toString(),
+      pickupTime: scheduleTime,
+      paymentStatus: (order['payment_status'] ?? '').toString(),
+      deliveryType: (order['delivery_type'] ?? '').toString(),
+      isCod: order['is_cod'] == 1 || order['is_cod'] == true,
     );
   }
 
@@ -77,6 +88,11 @@ class DeliveryOrderModel extends DeliveryOrder {
       'drop_city': dropCity,
       'scheduled_at': scheduledAt,
       'quantity': quantity,
+      'pickup_address': pickupAddress,
+      'pickup_time': pickupTime,
+      'payment_status': paymentStatus,
+      'delivery_type': deliveryType,
+      'is_cod': isCod,
     };
   }
 }

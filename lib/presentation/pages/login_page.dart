@@ -234,7 +234,8 @@ class LoginPage extends GetView<AuthController> {
                                               value: controller
                                                   .hasAcceptedTerms
                                                   .value,
-                                              onChanged: controller.toggleTerms,checkColor: Colors.white,
+                                              onChanged: controller.toggleTerms,
+                                              checkColor: Colors.white,
                                               activeColor: const Color(
                                                 0xFF2E7D32,
                                               ),
@@ -341,16 +342,6 @@ class LoginPage extends GetView<AuthController> {
                                                     fontWeight: FontWeight.w700,
                                                   ),
                                                 ),
-                                        ),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    const Center(
-                                      child: SizedBox(
-                                        width: 120,
-                                        child: Divider(
-                                          thickness: 4,
-                                          color: Color(0xFF2F3540),
                                         ),
                                       ),
                                     ),

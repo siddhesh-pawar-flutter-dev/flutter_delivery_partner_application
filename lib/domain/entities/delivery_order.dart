@@ -12,6 +12,11 @@ class DeliveryOrder {
     required this.dropCity,
     required this.scheduledAt,
     required this.quantity,
+    required this.pickupAddress,
+    required this.pickupTime,
+    required this.paymentStatus,
+    required this.deliveryType,
+    required this.isCod,
   });
 
   final int id;
@@ -26,6 +31,11 @@ class DeliveryOrder {
   final String dropCity;
   final String scheduledAt;
   final int quantity;
+  final String pickupAddress;
+  final String pickupTime;
+  final String paymentStatus;
+  final String deliveryType;
+  final bool isCod;
 }
 
 class OrderHistoryPage {

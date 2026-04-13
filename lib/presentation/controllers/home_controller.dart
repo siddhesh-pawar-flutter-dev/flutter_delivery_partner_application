@@ -50,7 +50,7 @@ class HomeController extends GetxController {
     currentPage = 1;
     hasMoreData.value = true;
     orders.clear();
-    await loadOrders();
+    await Future.wait([loadProfileSummary(), loadOrders()]);
   }
 
   Future<void> loadOrders() async {
@@ -141,6 +141,44 @@ class HomeController extends GetxController {
   }
 
   bool get canReceiveOrders => (user.value?.canOnline ?? false);
+
+  DeliveryOrder? get activeOrder {
+    if (orders.isEmpty) return null;
+
+    final nonCompleted = orders.where((order) {
+      final normalized = order.status.trim().toLowerCase();
+      return normalized != 'completed' &&
+          normalized != 'delivered' &&
+          normalized != 'cancelled';
+    }).toList();
+
+    if (nonCompleted.isNotEmpty) {
+      nonCompleted.sort(_sortOrdersByMostRecent);
+      return nonCompleted.first;
+    }
+
+    final sortedOrders = orders.toList()..sort(_sortOrdersByMostRecent);
+    return sortedOrders.first;
+  }
+
+  String get greetingName {
+    final name = user.value?.name.trim() ?? '';
+    return name.isEmpty ? 'User' : name;
+  }
+
+  bool get shouldShowTshirtCard => !(user.value?.isTshirtPicked ?? false);
+
+  int _sortOrdersByMostRecent(DeliveryOrder a, DeliveryOrder b) {
+    final aDate =
+        Formatters.parseDateTime(a.createdAt) ??
+        Formatters.parseDateTime(a.scheduledAt) ??
+        DateTime.fromMillisecondsSinceEpoch(0);
+    final bDate =
+        Formatters.parseDateTime(b.createdAt) ??
+        Formatters.parseDateTime(b.scheduledAt) ??
+        DateTime.fromMillisecondsSinceEpoch(0);
+    return bDate.compareTo(aDate);
+  }
 
   void _onScroll() {
     if (!scrollController.hasClients) return;

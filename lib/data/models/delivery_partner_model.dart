@@ -18,6 +18,7 @@ class DeliveryPartnerModel extends DeliveryPartner {
     required super.totalRatings,
     required super.canOnline,
     required super.termToggle,
+    required super.isTshirtPicked,
   });
 
   factory DeliveryPartnerModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +40,8 @@ class DeliveryPartnerModel extends DeliveryPartner {
       totalRatings: Formatters.parseInt(json['total_ratings']),
       canOnline: json['can_online'] == 1 || json['can_online'] == true,
       termToggle: json['term_toggle'] == 1 || json['term_toggle'] == true,
+      isTshirtPicked:
+          json['is_tshirt_picked'] == 1 || json['is_tshirt_picked'] == true,
     );
   }
 
@@ -59,6 +62,7 @@ class DeliveryPartnerModel extends DeliveryPartner {
       'total_ratings': totalRatings,
       'can_online': canOnline,
       'term_toggle': termToggle,
+      'is_tshirt_picked': isTshirtPicked,
     };
   }
 }
