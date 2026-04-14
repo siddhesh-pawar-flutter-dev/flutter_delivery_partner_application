@@ -59,19 +59,19 @@ class OrderDetailPage extends StatelessWidget {
                             const Spacer(),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
+                                horizontal: 10,
+                                vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFEAF8EF),
+                                color: _getStatusColor(order.status).withAlpha(26),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
-                                order.status.toUpperCase(),
-                                style: const TextStyle(
-                                  color: Color(0xFF2F9D57),
+                                _formatStatus(order.status),
+                                style: TextStyle(
+                                  color: _getStatusColor(order.status),
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
@@ -314,4 +314,34 @@ class _DetailRow extends StatelessWidget {
       ],
     );
   }
+}
+
+Color _getStatusColor(String status) {
+  final normalized = status.trim().toLowerCase();
+  switch (normalized) {
+    case 'accepted':
+    case 'delivered':
+    case 'completed':
+      return const Color(0xFF2F9D57); // Green
+    case 'picked':
+    case 'picked up':
+    case 'pending':
+      return const Color(0xFF2E7AD7); // Blue
+    case 'cancelled':
+    case 'failed':
+    case 'not accepted':
+    case 'not_accepted':
+    case 'user_not_accepted':
+      return const Color(0xFFE94F56); // Red
+    default:
+      return const Color(0xFF666666); // Grey
+  }
+}
+
+String _formatStatus(String status) {
+  final normalized = status.trim().toLowerCase();
+  if (normalized == 'not accepted' || normalized == 'not_accepted' || normalized == 'user_not_accepted') {
+    return 'FAILED';
+  }
+  return status.trim().replaceAll('_', ' ').toUpperCase();
 }
