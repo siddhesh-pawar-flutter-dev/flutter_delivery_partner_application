@@ -69,6 +69,22 @@ class ApiClient {
     }
   }
 
+  Future<Response<dynamic>> patch(
+    String path, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    try {
+      return await dio.patch(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+    } on DioException catch (error) {
+      throw _mapError(error);
+    }
+  }
+
   AppException _mapError(DioException error) {
     if (error.type == DioExceptionType.connectionError ||
         error.type == DioExceptionType.connectionTimeout ||

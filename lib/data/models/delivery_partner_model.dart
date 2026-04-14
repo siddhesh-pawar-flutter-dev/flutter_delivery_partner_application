@@ -14,6 +14,11 @@ class DeliveryPartnerModel extends DeliveryPartner {
     required super.city,
     required super.state,
     required super.totalDeductionBalance,
+    required super.avgRating,
+    required super.totalRatings,
+    required super.canOnline,
+    required super.termToggle,
+    required super.isTshirtPicked,
   });
 
   factory DeliveryPartnerModel.fromJson(Map<String, dynamic> json) {
@@ -28,8 +33,15 @@ class DeliveryPartnerModel extends DeliveryPartner {
       profileImage: Formatters.sanitizeUrl(json['profile_image']?.toString()),
       city: (json['city'] ?? '').toString(),
       state: (json['state'] ?? '').toString(),
-      totalDeductionBalance:
-          Formatters.parseAmount(json['total_deduction_balance']),
+      totalDeductionBalance: Formatters.parseAmount(
+        json['total_deduction_balance'],
+      ),
+      avgRating: Formatters.parseAmount(json['avg_rating']),
+      totalRatings: Formatters.parseInt(json['total_ratings']),
+      canOnline: json['can_online'] == 1 || json['can_online'] == true,
+      termToggle: json['term_toggle'] == 1 || json['term_toggle'] == true,
+      isTshirtPicked:
+          json['is_tshirt_picked'] == 1 || json['is_tshirt_picked'] == true,
     );
   }
 
@@ -46,6 +58,11 @@ class DeliveryPartnerModel extends DeliveryPartner {
       'city': city,
       'state': state,
       'total_deduction_balance': totalDeductionBalance,
+      'avg_rating': avgRating,
+      'total_ratings': totalRatings,
+      'can_online': canOnline,
+      'term_toggle': termToggle,
+      'is_tshirt_picked': isTshirtPicked,
     };
   }
 }

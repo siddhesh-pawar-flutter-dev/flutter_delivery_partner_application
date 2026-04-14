@@ -8,6 +8,15 @@ class DeliveryOrder {
     required this.createdAt,
     required this.itemSummary,
     required this.address,
+    required this.pickupArea,
+    required this.dropCity,
+    required this.scheduledAt,
+    required this.quantity,
+    required this.pickupAddress,
+    required this.pickupTime,
+    required this.paymentStatus,
+    required this.deliveryType,
+    required this.isCod,
   });
 
   final int id;
@@ -18,6 +27,15 @@ class DeliveryOrder {
   final String createdAt;
   final String itemSummary;
   final String address;
+  final String pickupArea;
+  final String dropCity;
+  final String scheduledAt;
+  final int quantity;
+  final String pickupAddress;
+  final String pickupTime;
+  final String paymentStatus;
+  final String deliveryType;
+  final bool isCod;
 }
 
 class OrderHistoryPage {

@@ -27,6 +27,7 @@ class AuthController extends GetxController {
 
   final RxBool isSendingOtp = false.obs;
   final RxBool isVerifyingOtp = false.obs;
+  final RxBool hasAcceptedTerms = true.obs;
   final RxInt secondsLeft = 30.obs;
   final RxString currentPhone = ''.obs;
 
@@ -34,6 +35,13 @@ class AuthController extends GetxController {
 
   Future<void> sendOtp() async {
     final phone = phoneController.text.trim();
+    if (!hasAcceptedTerms.value) {
+      Get.snackbar(
+        'Accept terms',
+        'Please agree to the Terms of use and Privacy Policy.',
+      );
+      return;
+    }
     if (phone.length != 10) {
       Get.snackbar('Invalid number', 'Please enter a valid 10-digit number.');
       return;
@@ -88,6 +96,10 @@ class AuthController extends GetxController {
     } else if (value.isEmpty && index > 0) {
       otpFocusNodes[index - 1].requestFocus();
     }
+  }
+
+  void toggleTerms(bool? value) {
+    hasAcceptedTerms.value = value ?? false;
   }
 
   void _startTimer() {
