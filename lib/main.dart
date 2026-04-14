@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'app_initializer.dart';
 import 'core/utils/app_pages.dart';
 import 'core/utils/app_theme.dart';

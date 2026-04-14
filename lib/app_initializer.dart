@@ -5,6 +5,7 @@ import 'core/network/api_client.dart';
 import 'core/network/network_info.dart';
 import 'core/utils/storage_service.dart';
 import 'data/datasources/auth_remote_data_source.dart';
+import 'data/datasources/online_status_remote_data_source.dart';
 import 'data/datasources/order_remote_data_source.dart';
 import 'data/datasources/partner_remote_data_source.dart';
 import 'data/repositories/auth_repository_impl.dart';
@@ -47,6 +48,10 @@ Future<void> initializeAppDependencies({bool reset = false}) async {
     OrderRemoteDataSourceImpl(apiClient),
     permanent: true,
   );
+  Get.put<OnlineStatusRemoteDataSource>(
+    OnlineStatusRemoteDataSourceImpl(apiClient),
+    permanent: true,
+  );
 
   Get.put<AuthRepository>(
     AuthRepositoryImpl(
@@ -56,7 +61,10 @@ Future<void> initializeAppDependencies({bool reset = false}) async {
     permanent: true,
   );
   Get.put<PartnerRepository>(
-    PartnerRepositoryImpl(Get.find<PartnerRemoteDataSource>()),
+    PartnerRepositoryImpl(
+      Get.find<PartnerRemoteDataSource>(),
+      Get.find<OnlineStatusRemoteDataSource>(),
+    ),
     permanent: true,
   );
   Get.put<OrderRepository>(
