@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/main_shell_controller.dart';
 import '../pages/gig_history_page.dart';
@@ -46,7 +47,7 @@ class _TheDock extends StatelessWidget {
 
   static const _items = [
     _NavItem(icon: Icons.grid_view_rounded, label: 'Hub'),
-    _NavItem(icon: Icons.local_shipping_rounded, label: 'Deliveries'),
+    _NavItem(icon: Icons.delivery_dining_rounded, label: 'Deliveries'),
     _NavItem(icon: Icons.payments_rounded, label: 'Earnings'),
     _NavItem(icon: Icons.account_balance_wallet_rounded, label: 'Wallet'),
     _NavItem(icon: Icons.account_circle_rounded, label: 'Profile'),
@@ -58,25 +59,30 @@ class _TheDock extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16), // Floating 16pt (8pt in design system + extra padding)
-      height: 72,
+      margin: const EdgeInsets.fromLTRB(
+        16,
+        0,
+        16,
+        8,
+      ), // Floating 8pt above bottom
+      height: 76,
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLowest.withValues(alpha: 0.8),
+        color: colorScheme.surfaceContainerLowest.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.onSurface.withValues(alpha: 0.06),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
+            color: colorScheme.onSurface.withValues(alpha: 0.08),
+            blurRadius: 32,
+            offset: const Offset(0, 12),
           ),
         ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -128,26 +134,31 @@ class _DockItem extends StatelessWidget {
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
+              // Signature: 'primary-fixed' circular aura when active
               color: isSelected
-                  ? colorScheme.primary.withValues(alpha: 0.1)
+                  ? const Color(0xFFccf5cc) // primary-fixed equivalent
                   : Colors.transparent,
               shape: BoxShape.circle,
             ),
             child: Icon(
               icon,
               size: 24,
-              color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+              color: isSelected
+                  ? colorScheme.primary
+                  : colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 1),
           Text(
             label,
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+            style: GoogleFonts.inter(
+              color: isSelected
+                  ? colorScheme.primary
+                  : colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
               fontSize: 10,
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
             ),
           ),
         ],

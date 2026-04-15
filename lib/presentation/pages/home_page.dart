@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../domain/entities/delivery_partner.dart';
 import '../controllers/home_controller.dart';
@@ -16,9 +17,12 @@ class HomePage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return ConnectivityGate(
       child: Scaffold(
-        backgroundColor: const Color(0xFFF6F5F2),
+        backgroundColor: colorScheme.surface,
         body: SafeArea(
           child: Obx(() {
             final user = controller.user.value;
@@ -27,93 +31,57 @@ class HomePage extends GetView<HomeController> {
                 : controller.orders;
 
             return RefreshIndicator(
-              color: const Color(0xFF4CAF50),
+              color: colorScheme.primary,
               onRefresh: controller.refreshOrders,
               child: ListView(
                 controller: controller.scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
-                cacheExtent: 1400,
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                 children: [
                   _TopBar(user: user),
-                  const SizedBox(height: 18),
-                  _AvailabilityCard(
-                    isOnline: controller.canReceiveOrders,
-                    canToggle: user?.termToggle ?? false,
-                  ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 32),
+                  const _GreetingSection(),
+                  const SizedBox(height: 16),
+                  const _AvailabilityToggle(),
+                  const SizedBox(height: 32),
+                  
                   if (controller.shouldShowTshirtCard)
-                    Column(
+                    const Column(
                       children: [
-                        const TshirtCard(),
-                        const SizedBox(height: 18),
+                        TshirtCard(),
+                        SizedBox(height: 32),
                       ],
                     ),
-                  const _SectionTitle("Today's Summary"),
-                  const SizedBox(height: 12),
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 1.48,
-                    children: [
-                      _SummaryTile(
-                        icon: Icons.account_balance_wallet_rounded,
-                        iconColor: const Color(0xFF2F9D57),
-                        iconBackground: const Color(0xFFE7F5EA),
-                        value: _currency(controller.todayEarnings),
-                        label: 'Earnings',
-                        subtitle: 'Today',
-                      ),
-                      _SummaryTile(
-                        icon: Icons.check_circle_rounded,
-                        iconColor: const Color(0xFF2E7AD7),
-                        iconBackground: const Color(0xFFE8F1FD),
-                        value: '${controller.todayCompletedCount}',
-                        label: 'Orders Done',
-                        subtitle: 'Today',
-                      ),
-                      _SummaryTile(
-                        icon: Icons.pending_actions_rounded,
-                        iconColor: const Color(0xFFF3A519),
-                        iconBackground: const Color(0xFFFFF5DE),
-                        value: '${controller.todayActiveCount}',
-                        label: 'Pending',
-                        subtitle: 'Today',
-                      ),
-                      _SummaryTile(
-                        icon: Icons.list_alt_rounded,
-                        iconColor: const Color(0xFFE56A6E),
-                        iconBackground: const Color(0xFFFFECEC),
-                        value: '${controller.todayTotalCount}',
-                        label: 'Total Orders',
-                        subtitle: 'Today',
-                      ),
-                    ],
+
+                  _SectionHeader(
+                    title: 'Active Deliveries',
+                    icon: Icons.restaurant_rounded,
+                    count: controller.todayActiveCount,
                   ),
                   const SizedBox(height: 16),
-                  _InfoBanner(isOnline: controller.canReceiveOrders),
-                  const SizedBox(height: 18),
                   if (controller.activeOrder != null)
-                    Column(
-                      children: [
-                        ActiveOrderSection(order: controller.activeOrder!),
-                        const SizedBox(height: 24),
-                      ],
-                    ),
-                  _DeliveryHeader("Today's Deliveries", displayedOrders.length),
-                  const SizedBox(height: 12),
+                    ActiveOrderSection(order: controller.activeOrder!)
+                  else
+                    const _EmptyDeliveriesIndicator(),
+
+                  const SizedBox(height: 32),
+                  const _WeeklyEarningsCard(),
+                  const SizedBox(height: 32),
+                  
+                  const _SectionHeader(title: 'Overview'),
+                  const SizedBox(height: 16),
+                  const _StatisticsGrid(),
+                  const SizedBox(height: 32),
+
+                  _DeliveryListHeader(count: displayedOrders.length),
+                  const SizedBox(height: 16),
                   if (controller.isLoading.value && controller.orders.isEmpty)
                     const _OrderSkeletonList()
                   else if (displayedOrders.isEmpty)
-                    const _EmptyDeliveries()
+                    const _EmptyState(message: 'No completed deliveries yet.')
                   else ...[
                     ListView.builder(
-                      itemCount: displayedOrders.length > 5
-                          ? 5
-                          : displayedOrders.length,
+                      itemCount: displayedOrders.length > 5 ? 5 : displayedOrders.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.zero,
@@ -122,55 +90,13 @@ class HomePage extends GetView<HomeController> {
                       },
                     ),
                     if (displayedOrders.length > 5) ...[
-                      const SizedBox(height: 4),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              Get.find<MainShellController>().goTo(1);
-                            },
-                            borderRadius: BorderRadius.circular(16),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1A2633),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'View More',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      const SizedBox(height: 12),
+                      _ViewMoreButton(onTap: () => Get.find<MainShellController>().goTo(1)),
                     ],
                   ],
-                  if (controller.isLoadingMore.value)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
-                  if (controller.errorMessage.value.isNotEmpty &&
-                      controller.orders.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Text(
-                        controller.errorMessage.value,
-                        style: const TextStyle(
-                          color: Color(0xFFB85C5C),
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
+                  
+                  // Bottom spacing for the floating dock
+                  const SizedBox(height: 80),
                 ],
               ),
             );
@@ -183,49 +109,48 @@ class HomePage extends GetView<HomeController> {
 
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.user});
-
   final DeliveryPartner? user;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Row(
       children: [
-        _ProfileAvatar(user: user),
+        // 1. Avatar with aura ring
+        Container(
+          padding: const EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: colorScheme.primary.withValues(alpha: 0.2), width: 2),
+          ),
+          child: _ProfileAvatar(user: user),
+        ),
         const SizedBox(width: 12),
+        // 2. Info section
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                (user?.name.trim().isNotEmpty ?? false)
-                    ? user?.name ?? 'Delivery Partner'
-                    : 'Delivery Partner',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: Color(0xFF2B2B2B),
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
+                'Easy Cater',
+                style: GoogleFonts.manrope(
+                  color: colorScheme.primary,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 2),
               Row(
                 children: [
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFB5B5B5),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
+                  Icon(Icons.stars_rounded, size: 14, color: colorScheme.tertiary),
+                  const SizedBox(width: 4),
                   Text(
-                    user?.canOnline == true ? 'Online' : 'Offline',
-                    style: const TextStyle(
-                      color: Color(0xFF8A8A8A),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                    '4.9 Star Rating',
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 11,
                     ),
                   ),
                 ],
@@ -233,442 +158,527 @@ class _TopBar extends StatelessWidget {
             ],
           ),
         ),
-        GestureDetector(
-          onTap: () => Get.to(() => const NotificationPage()),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(14),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x12000000),
-                      blurRadius: 18,
-                      offset: Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.notifications_none_rounded,
-                  color: Color(0xFF353535),
+        // 3. Aura Notification Button
+        _AuraNotificationButton(onTap: () => Get.to(() => const NotificationPage())),
+      ],
+    );
+  }
+}
+
+class _GreetingSection extends GetView<HomeController> {
+  const _GreetingSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Ready for lunch rush?',
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Obx(() => Text(
+          'Hi, ${controller.greetingName}',
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
+        )),
+      ],
+    );
+  }
+}
+
+class _AvailabilityToggle extends GetView<HomeController> {
+  const _AvailabilityToggle();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Obx(() {
+      final isOnline = controller.canReceiveOrders;
+      return Container(
+        height: 52,
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(99),
+        ),
+        child: Stack(
+          children: [
+            AnimatedAlign(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOutBack,
+              alignment: isOnline ? Alignment.centerLeft : Alignment.centerRight,
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
+                child: Container(
+                  margin: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: isOnline ? colorScheme.primary : colorScheme.surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(99),
+                    boxShadow: isOnline 
+                      ? [BoxShadow(color: colorScheme.primary.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 4))]
+                      : null,
+                  ),
                 ),
               ),
-              Positioned(
-                top: 8,
-                right: 10,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFE53935),
-                    shape: BoxShape.circle,
-                  ),
+            ),
+            Row(
+              children: [
+                _ToggleHalfIndicator(
+                  label: 'Online',
+                  isActive: isOnline,
+                  onTap: () => controller.toggleOnlineStatus(true),
+                ),
+                _ToggleHalfIndicator(
+                  label: 'Offline',
+                  isActive: !isOnline,
+                  onTap: () => controller.toggleOnlineStatus(false),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class _ToggleHalfIndicator extends StatelessWidget {
+  const _ToggleHalfIndicator({required this.label, required this.isActive, required this.onTap});
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Center(
+          child: Text(
+            label,
+            style: GoogleFonts.inter(
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+              color: isActive ? (label == 'Online' ? Colors.white : const Color(0xFF263238)) : const Color(0xFF8D8D8D),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WeeklyEarningsCard extends GetView<HomeController> {
+  const _WeeklyEarningsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.primary.withValues(alpha: 0.1),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'WEEKLY EARNINGS',
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: Colors.white.withValues(alpha: 0.7),
+              letterSpacing: 1.5,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Obx(() => Text(
+                _currency(controller.weeklyEarnings),
+                style: theme.textTheme.displayMedium?.copyWith(
+                  color: Colors.white,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w800,
+                ),
+              )),
+              const SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  '+12%',
+                  style: theme.textTheme.labelMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 24),
+          // No-line Divider substitute (empty space)
+          const SizedBox(height: 1), 
+          Row(
+            children: [
+              Expanded(child: _EarningStat(label: 'TIPS INCLUDED', value: '₹342.00')),
+              Container(width: 1, height: 32, color: Colors.white.withValues(alpha: 0.1)),
+              Expanded(
+                child: _EarningStat(
+                  label: 'NET BALANCE',
+                  value: _currency(controller.weeklyEarnings - 342),
+                  isRight: true,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 28),
+          _WithdrawButton(onTap: () {}),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatisticsGrid extends GetView<HomeController> {
+  const _StatisticsGrid();
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
+      childAspectRatio: 1.3,
+      children: [
+        _StatusTile(
+          icon: Icons.lunch_dining_rounded,
+          label: 'Deliveries Done',
+          value: '${controller.todayCompletedCount}',
+          color: const Color(0xFF7c5c46), 
+          backgroundColor: const Color(0xFFfdecdb),
+        ),
+        _StatusTile(
+          icon: Icons.shopping_bag_rounded,
+          label: 'Available Deliveries',
+          value: '08',
+          color: const Color(0xFF2E7D32),
+          backgroundColor: const Color(0xFFccf5cc),
+        ),
+        _StatusTile(
+          icon: Icons.local_offer_rounded,
+          label: 'New Offers',
+          value: '12',
+          badgeText: '+2 New',
+          color: const Color(0xFFd9435e),
+          backgroundColor: const Color(0xFFffd9e2),
+        ),
+        _StatusTile(
+          icon: Icons.timeline_rounded,
+          label: 'Total Career',
+          value: '1,482',
+          unit: 'DELIVERIES',
+          color: const Color(0xFF455A64),
+          backgroundColor: const Color(0xFFCFE6F2),
         ),
       ],
+    ));
+  }
+}
+
+class _StatusTile extends StatelessWidget {
+  const _StatusTile({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+    required this.backgroundColor,
+    this.badgeText,
+    this.unit,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+  final Color backgroundColor;
+  final String? badgeText;
+  final String? unit;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return ScaleInteraction(
+      onTap: () {},
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(color: backgroundColor, shape: BoxShape.circle),
+              child: Icon(icon, color: color, size: 20),
+            ),
+            const Spacer(),
+            Text(label, style: theme.textTheme.labelMedium?.copyWith(color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6), fontWeight: FontWeight.w600)),
+            const SizedBox(height: 2),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text(value, style: theme.textTheme.headlineSmall?.copyWith(fontSize: 22, fontWeight: FontWeight.w800)),
+                if (badgeText != null) ...[
+                  const SizedBox(width: 4),
+                  Text(badgeText!, style: theme.textTheme.labelMedium?.copyWith(color: color, fontWeight: FontWeight.w800, fontSize: 10)),
+                ],
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title, this.icon, this.count});
+  final String title;
+  final IconData? icon;
+  final int? count;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            if (icon != null) ...[
+              Icon(icon, color: colorScheme.primary, size: 18, weight: 800),
+              const SizedBox(width: 8),
+            ],
+            Text(
+              title,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+        if (count != null)
+          Text(
+            '$count order${count == 1 ? "" : "s"}',
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _DeliveryListHeader extends StatelessWidget {
+  const _DeliveryListHeader({required this.count});
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Today's Deliveries", style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800)),
+        Text("$count orders", style: theme.textTheme.labelMedium?.copyWith(color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6), fontWeight: FontWeight.w600)),
+      ],
+    );
+  }
+}
+
+class _EarningStat extends StatelessWidget {
+  const _EarningStat({required this.label, required this.value, this.isRight = false});
+  final String label;
+  final String value;
+  final bool isRight;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: isRight ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Text(label, style: theme.textTheme.labelMedium?.copyWith(color: Colors.white.withValues(alpha: 0.6), fontWeight: FontWeight.w700, fontSize: 10)),
+        const SizedBox(height: 4),
+        Text(value, style: theme.textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w800)),
+      ],
+    );
+  }
+}
+
+class _AuraNotificationButton extends StatelessWidget {
+  const _AuraNotificationButton({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(color: colorScheme.onSurface.withValues(alpha: 0.06), blurRadius: 24, offset: const Offset(0, 8)),
+          ],
+        ),
+        child: Icon(Icons.notifications_none_rounded, color: colorScheme.onSurfaceVariant, size: 24),
+      ),
+    );
+  }
+}
+
+class _WithdrawButton extends StatelessWidget {
+  const _WithdrawButton({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleInteraction(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: 52,
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(99)),
+        child: const Center(
+          child: Text('Withdraw', style: TextStyle(color: Color(0xFF2d8a39), fontWeight: FontWeight.w800, fontSize: 16)),
+        ),
+      ),
+    );
+  }
+}
+
+class _ViewMoreButton extends StatelessWidget {
+  const _ViewMoreButton({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleInteraction(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: 52,
+        decoration: BoxDecoration(color: const Color(0xFF1A1A1A), borderRadius: BorderRadius.circular(16)),
+        child: const Center(
+          child: Text('View More', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
+        ),
+      ),
     );
   }
 }
 
 class _ProfileAvatar extends StatelessWidget {
   const _ProfileAvatar({required this.user});
-
   final DeliveryPartner? user;
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final imageUrl = user?.profileImage ?? '';
     final initials = _initials(user?.name);
 
     return Container(
-      width: 50,
-      height: 50,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Color(0xFF4CAF50),
-      ),
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(shape: BoxShape.circle, color: colorScheme.primary),
       child: ClipOval(
         child: imageUrl.isEmpty
-            ? Center(
-                child: Text(
-                  initials,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              )
+            ? Center(child: Text(initials, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)))
             : CachedNetworkImage(
-                imageUrl: imageUrl,
+                imageUrl: imageUrl, 
                 fit: BoxFit.cover,
-                memCacheWidth: 120,
-                maxWidthDiskCache: 160,
-                fadeInDuration: Duration.zero,
-                fadeOutDuration: Duration.zero,
-                errorWidget: (_, _, _) => Center(
-                  child: Text(
-                    initials,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
+                errorWidget: (_, __, ___) => Center(child: Text(initials, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
               ),
       ),
     );
   }
 }
 
-class _AvailabilityCard extends StatelessWidget {
-  const _AvailabilityCard({required this.isOnline, required this.canToggle});
-
-  final bool isOnline;
-  final bool canToggle;
+class _EmptyDeliveriesIndicator extends StatelessWidget {
+  const _EmptyDeliveriesIndicator();
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF5C5B5A),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      decoration: BoxDecoration(color: colorScheme.surfaceContainerLow, borderRadius: BorderRadius.circular(16)),
+      child: Column(
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white70, width: 2),
-            ),
-            child: Center(
-              child: Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isOnline ? const Color(0xFF7ED957) : Colors.white,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  isOnline ? 'You are Online' : 'You are Offline',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  canToggle
-                      ? 'Toggle to start receiving orders'
-                      : 'Complete profile setup to receive orders',
-                  style: const TextStyle(
-                    color: Color(0xFFD9D9D9),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _StatusSwitch(isOnline: isOnline, canToggle: canToggle),
+          Icon(Icons.delivery_dining_rounded, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3), size: 48),
+          const SizedBox(height: 12),
+          Text('No active deliveries', style: TextStyle(color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5), fontWeight: FontWeight.w500)),
         ],
       ),
-    );
-  }
-}
-
-class _StatusSwitch extends StatelessWidget {
-  const _StatusSwitch({required this.isOnline, required this.canToggle});
-
-  final bool isOnline;
-  final bool canToggle;
-
-  void _toggleStatus() {
-    if (!canToggle) {
-      Get.snackbar(
-        'Action Required',
-        'Complete profile setup to receive orders',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-    Get.find<HomeController>().toggleOnlineStatus(!isOnline);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _toggleStatus,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        width: 52,
-        height: 30,
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          color: canToggle
-              ? (isOnline ? const Color(0xFF7ED957) : const Color(0xFF9A9A9A))
-              : const Color(0xFF7C7C7C),
-          borderRadius: BorderRadius.circular(999),
-        ),
-        child: Align(
-          alignment: isOnline ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(
-            width: 22,
-            height: 22,
-            decoration: BoxDecoration(
-              color: canToggle ? Colors.white : const Color(0xFFE0E0E0),
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle(this.title);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: const TextStyle(
-        color: Color(0xFF333333),
-        fontSize: 24,
-        fontWeight: FontWeight.w700,
-      ),
-    );
-  }
-}
-
-class _SummaryTile extends StatelessWidget {
-  const _SummaryTile({
-    required this.icon,
-    required this.iconColor,
-    required this.iconBackground,
-    required this.value,
-    required this.label,
-    required this.subtitle,
-  });
-
-  final IconData icon;
-  final Color iconColor;
-  final Color iconBackground;
-  final String value;
-  final String label;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x12000000),
-            blurRadius: 16,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: iconBackground,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: iconColor, size: 22),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  value,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF242424),
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Color(0xFF5E5E5E),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF9C9C9C),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _InfoBanner extends StatelessWidget {
-  const _InfoBanner({required this.isOnline});
-
-  final bool isOnline;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF6DF),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFF2C66B)),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.info_outline_rounded,
-            color: Color(0xFFEF9A22),
-            size: 18,
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              isOnline
-                  ? 'You are ready to receive new delivery orders'
-                  : 'Go online to start receiving orders and earning',
-              style: const TextStyle(
-                color: Color(0xFFD37E12),
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DeliveryHeader extends StatelessWidget {
-  const _DeliveryHeader(this.title, this.count);
-
-  final String title;
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Color(0xFF333333),
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        Text(
-          '$count orders',
-          style: const TextStyle(
-            color: Color(0xFF777777),
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
     );
   }
 }
 
 class _OrderSkeletonList extends StatelessWidget {
   const _OrderSkeletonList();
-
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 3,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.zero,
-      itemBuilder: (context, index) {
-        return Container(
-          height: 106,
-          margin: const EdgeInsets.only(bottom: 14),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-          ),
-        );
-      },
-    );
+    return Column(children: List.generate(3, (i) => Container(height: 100, margin: const EdgeInsets.only(bottom: 12), decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(16)))));
   }
 }
 
-class _EmptyDeliveries extends StatelessWidget {
-  const _EmptyDeliveries();
-
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({required this.message});
+  final String message;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: const Text(
-        'No completed deliveries yet. Pull to refresh after your next order.',
-        style: TextStyle(
-          color: Color(0xFF6B6B6B),
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
+    return Center(child: Text(message, style: const TextStyle(color: Colors.grey)));
   }
 }
 
@@ -681,7 +691,5 @@ String _initials(String? name) {
   final trimmed = name?.trim() ?? '';
   if (trimmed.isEmpty) return 'DP';
   final parts = trimmed.split(RegExp(r'\s+'));
-  final first = parts.first.isNotEmpty ? parts.first[0] : '';
-  final second = parts.length > 1 && parts[1].isNotEmpty ? parts[1][0] : '';
-  return (first + second).toUpperCase();
+  return (parts.first[0] + (parts.length > 1 ? parts[1][0] : '')).toUpperCase();
 }
