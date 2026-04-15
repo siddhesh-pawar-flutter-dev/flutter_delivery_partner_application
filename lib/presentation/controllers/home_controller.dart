@@ -66,7 +66,6 @@ class HomeController extends GetxController {
 
     try {
       final page = await _getOrdersUseCase(page: currentPage, limit: limit);
-
       orders.addAll(page.orders);
       unawaited(_warmOrderImages(page.orders));
       hasMoreData.value = currentPage < page.totalPage;
@@ -102,24 +101,6 @@ class HomeController extends GetxController {
     }
   }
 
-  bool _isCompleted(DeliveryOrder order) {
-    final status = order.status.trim().toLowerCase();
-    return status == 'completed' || status == 'delivered';
-  }
-
-  bool _isActive(DeliveryOrder order) {
-    final status = order.status.trim().toLowerCase();
-    if (status == 'completed' || status == 'delivered') return false;
-    if (status == 'cancelled' ||
-        status == 'failed' ||
-        status == 'not accepted' ||
-        status == 'not_accepted' ||
-        status == 'user_not_accepted') {
-      return false;
-    }
-    return true;
-  }
-
   List<DeliveryOrder> get todayOrders {
     final now = DateTime.now();
     return orders.where((order) {
@@ -133,23 +114,10 @@ class HomeController extends GetxController {
     }).toList();
   }
 
-  double get todayEarnings {
-    return todayOrders
-        .where(_isCompleted)
-        .fold(0, (sum, order) => sum + order.amount);
-  }
+  double get todayEarnings =>
+      todayOrders.fold(0, (sum, order) => sum + order.amount);
 
-  int get todayCompletedCount {
-    return todayOrders.where(_isCompleted).length;
-  }
-
-  int get todayActiveCount {
-    return todayOrders.where(_isActive).length;
-  }
-
-  int get todayTotalCount {
-    return todayOrders.length;
-  }
+  int get todayCompletedCount => todayOrders.length;
 
   double get weeklyEarnings {
     final now = DateTime.now();
@@ -160,7 +128,7 @@ class HomeController extends GetxController {
     ).subtract(Duration(days: now.weekday - 1));
     final endOfWeek = startOfWeek.add(const Duration(days: 7));
 
-    return orders.where(_isCompleted).fold(0, (sum, order) {
+    return orders.fold(0, (sum, order) {
       final parsed =
           Formatters.parseDateTime(order.createdAt) ??
           Formatters.parseDateTime(order.scheduledAt);
@@ -177,7 +145,12 @@ class HomeController extends GetxController {
   DeliveryOrder? get activeOrder {
     if (orders.isEmpty) return null;
 
-    final nonCompleted = orders.where(_isActive).toList();
+    final nonCompleted = orders.where((order) {
+      final normalized = order.status.trim().toLowerCase();
+      return normalized != 'completed' &&
+          normalized != 'delivered' &&
+          normalized != 'cancelled';
+    }).toList();
 
     if (nonCompleted.isNotEmpty) {
       nonCompleted.sort(_sortOrdersByMostRecent);
@@ -196,25 +169,22 @@ class HomeController extends GetxController {
   bool get shouldShowTshirtCard => !(user.value?.isTshirtPicked ?? false);
 
   Future<void> toggleOnlineStatus(bool isOnline) async {
-    final previousUser = user.value;
     try {
-      // Optimistic locally
-      user.value = previousUser?.copyWith(canOnline: isOnline);
-
       await _getProfileUseCase.updateOnlineStatus(isOnline);
-
+      // Update local user state
+      final updatedUser = user.value?.copyWith(canOnline: isOnline);
+      user.value = updatedUser;
       Get.snackbar(
         'Success',
         isOnline ? 'You are now online' : 'You are now offline',
         snackPosition: SnackPosition.BOTTOM,
       );
-    } catch (error) {
-      // Revert if API fails
-      user.value = previousUser;
-      final message = error is Failure
-          ? error.message
-          : 'Failed to update status. Please try again.';
-      Get.snackbar('Error', message, snackPosition: SnackPosition.BOTTOM);
+    } on Failure catch (error) {
+      Get.snackbar(
+        'Error',
+        error.message,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
@@ -232,10 +202,8 @@ class HomeController extends GetxController {
 
   void _onScroll() {
     if (!scrollController.hasClients) return;
-    if (scrollController.positions.length != 1) return;
-    final position = scrollController.positions.first;
-    final threshold = position.maxScrollExtent - 200;
-    if (position.pixels >= threshold) {
+    final threshold = scrollController.position.maxScrollExtent - 200;
+    if (scrollController.position.pixels >= threshold) {
       loadOrders();
     }
   }
