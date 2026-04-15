@@ -59,7 +59,7 @@ class _DeliveryPartnerAppState extends State<DeliveryPartnerApp> {
         return GetMaterialApp(
           title: 'Easy Cater Delivery',
           debugShowCheckedModeBanner: false,
-          theme: AppTheme.darkTheme,
+          theme: AppTheme.lightTheme,
           initialBinding: AppBinding(),
           initialRoute: AppPages.splash,
           getPages: AppPages.routes,

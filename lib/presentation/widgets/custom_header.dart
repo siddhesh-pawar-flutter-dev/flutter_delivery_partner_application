@@ -1,4 +1,6 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomHeader extends StatelessWidget {
   const CustomHeader({
@@ -8,7 +10,6 @@ class CustomHeader extends StatelessWidget {
     this.trailing,
     this.bottom,
     this.onBack,
-    this.showCircles = true,
   });
 
   final String title;
@@ -16,62 +17,40 @@ class CustomHeader extends StatelessWidget {
   final Widget? trailing;
   final Widget? bottom;
   final VoidCallback? onBack;
-  final bool showCircles;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFFAAF0B7), Color(0xFF4CAF50)],
+          colors: [
+            colorScheme.primary,
+            colorScheme.primaryContainer,
+          ],
           begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          end: const Alignment(0.8, 0.8), // Approx 135 degrees
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x334CAF50),
-            blurRadius: 20,
-            offset: Offset(0, 8),
-          ),
-        ],
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(24),
           bottomRight: Radius.circular(24),
         ),
       ),
-      child: Stack(
-        children: [
-          if (showCircles) ...[
-            Positioned(
-              right: -20,
-              top: -20,
-              child: Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.15),
-                ),
-              ),
-            ),
-            Positioned(
-              left: -30,
-              bottom: -10,
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.1),
-                ),
-              ),
-            ),
-          ],
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(24),
+          bottomRight: Radius.circular(24),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   children: [
@@ -86,7 +65,7 @@ class CustomHeader extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 16),
                     ],
                     Expanded(
                       child: Column(
@@ -94,19 +73,19 @@ class CustomHeader extends StatelessWidget {
                         children: [
                           Text(
                             title,
-                            style: const TextStyle(
+                            style: GoogleFonts.manrope(
                               color: Colors.white,
                               fontSize: 24,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.5,
                             ),
                           ),
                           if (subtitle != null) ...[
                             const SizedBox(height: 4),
                             Text(
                               subtitle!,
-                              style: const TextStyle(
-                                color: Colors.white70,
+                              style: GoogleFonts.inter(
+                                color: Colors.white.withValues(alpha: 0.8),
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -119,13 +98,13 @@ class CustomHeader extends StatelessWidget {
                   ],
                 ),
                 if (bottom case Widget b) ...[
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 20),
                   b,
                 ],
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

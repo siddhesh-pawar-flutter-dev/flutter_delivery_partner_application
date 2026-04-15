@@ -10,6 +10,9 @@ import '../../presentation/pages/login_page.dart';
 import '../../presentation/pages/main_shell_page.dart';
 import '../../presentation/pages/order_detail_page.dart';
 import '../../presentation/pages/otp_page.dart';
+import '../../presentation/bindings/personal_details_binding.dart';
+import '../../presentation/pages/edit_profile_page.dart';
+import '../../presentation/pages/personal_details_page.dart';
 import '../../presentation/pages/splash_page.dart';
 import '../../presentation/pages/tshirt_selection_page.dart';
 
@@ -24,6 +27,8 @@ class AppPages {
   static const String home = '/main';
   static const String orderHistory = '/main';
   static const String profile = '/main';
+  static const String personalDetails = '/personal-details';
+  static const String editProfile = '/edit-profile';
   static const String gigByDate = '/gig-by-date';
 
   static const String tshirtSelection = '/tshirt-selection';
@@ -53,6 +58,16 @@ class AppPages {
       name: gigByDate,
       page: () => const GigByDatePage(),
       binding: GigByDateBinding(),
+    ),
+    GetPage(
+      name: personalDetails,
+      page: () => const PersonalDetailsPage(),
+      binding: PersonalDetailsBinding(),
+    ),
+    GetPage(
+      name: editProfile,
+      page: () => const EditProfilePage(),
+      binding: PersonalDetailsBinding(),
     ),
   ];
 }

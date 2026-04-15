@@ -22,6 +22,10 @@ class ProfileController extends GetxController {
   final RxString appVersion = ''.obs;
   final Rxn<ProfileDetails> profile = Rxn<ProfileDetails>();
 
+  // Kinetic Logistics Specifics
+  final RxInt complianceScore = 0.obs;
+  final RxBool isOnline = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -33,12 +37,46 @@ class ProfileController extends GetxController {
     isLoading.value = true;
     errorMessage.value = '';
     try {
-      profile.value = await _getProfileUseCase();
+      final data = await _getProfileUseCase();
+      profile.value = data;
+      _calculateCompliance(data);
+      isOnline.value = data.deliveryPartner.canOnline;
     } on Failure catch (error) {
       errorMessage.value = error.message;
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void _calculateCompliance(ProfileDetails p) {
+    int filled = 0;
+    final partner = p.deliveryPartner;
+    final vehicle = p.vehicleDetails;
+    final bank = p.bankDetails;
+
+    if (partner.name.isNotEmpty) filled++;
+    if (partner.email.isNotEmpty) filled++;
+    if (partner.phoneNumber.isNotEmpty) filled++;
+    if (partner.profileImage.isNotEmpty) filled++;
+    if (partner.city.isNotEmpty) filled++;
+    
+    if (vehicle.vehicleType.isNotEmpty) filled++;
+    if (vehicle.vehicleNumber.isNotEmpty) filled++;
+    
+    if (bank.bankName.isNotEmpty) filled++;
+    if (bank.accountNumber.isNotEmpty) filled++;
+    if (bank.ifscCode.isNotEmpty) filled++;
+    if (bank.accountType.isNotEmpty) filled++;
+
+    if (p.documents.isNotEmpty) filled++;
+
+    complianceScore.value = ((filled / 12) * 100).round();
+  }
+
+  void toggleOnline() {
+    isOnline.value = !isOnline.value;
+    // In search of "essence", we'll implement the UI change optimistically.
+    // If there was an API for this, we'd call it here.
   }
 
   Future<void> loadAppVersion() async {

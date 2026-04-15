@@ -1,78 +1,128 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static const Color background = Color(0xFF111315);
-  static const Color surface = Color(0xFF1B1E21);
-  static const Color surfaceSoft = Color(0xFF24282C);
-  static const Color primary = Color(0xFF2ABF66);
-  static const Color textPrimary = Color(0xFFF4F5F7);
-  static const Color textSecondary = Color(0xFF9AA4AF);
-  static const Color border = Color(0xFF2F3338);
+  // Kinetic Logistics Palette
+  static const Color primary = Color(0xFF2E7D32);
+  static const Color primaryContainer = Color(0xFF0D631B);
+  static const Color onPrimary = Colors.white;
 
-  static ThemeData get darkTheme {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: primary,
-      brightness: Brightness.dark,
-    ).copyWith(
-      primary: primary,
-      secondary: primary,
-      surface: surface,
-    );
+  static const Color surface = Color(0xFFF4FAFF);
+  static const Color surfaceContainerLow = Color(0xFFE9F6FD);
+  static const Color surfaceContainerLowest = Color(0xFFFFFFFF);
+  static const Color surfaceContainerHigh = Color(0xFFE1EDF6);
+
+  static const Color secondaryContainer = Color(0xFFCFE6F2);
+  static const Color onSecondaryContainer = Color(0xFF001D33);
+
+  static const Color error = Color(0xFFBA1A1A);
+  static const Color errorContainer = Color(0xFFFFDAD6);
+  static const Color onErrorContainer = Color(0xFF410002);
+
+  static const Color outlineVariant = Color(
+    0xFFC4C7C5,
+  ); // Used for ghost borders
+  static const Color inverseSurface = Color(0xFF2F3033); // Night mode base
+
+  static ThemeData get lightTheme {
+    final colorScheme =
+        ColorScheme.fromSeed(
+          seedColor: primary,
+          brightness: Brightness.light,
+        ).copyWith(
+          primary: primary,
+          onPrimary: onPrimary,
+          primaryContainer: primaryContainer,
+          surface: surface,
+          surfaceContainerLow: surfaceContainerLow,
+          surfaceContainerLowest: surfaceContainerLowest,
+          surfaceContainerHigh: surfaceContainerHigh,
+          secondaryContainer: secondaryContainer,
+          onSecondaryContainer: onSecondaryContainer,
+          error: error,
+          errorContainer: errorContainer,
+          onErrorContainer: onErrorContainer,
+          outlineVariant: outlineVariant.withValues(
+            alpha: 0.2,
+          ), // Ghost border rule
+        );
 
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: background,
+      brightness: Brightness.light,
       colorScheme: colorScheme,
-      cardColor: surface,
-      dividerColor: border,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: background,
-        elevation: 0,
-        centerTitle: false,
+      scaffoldBackgroundColor: surface,
+      cardColor: surfaceContainerLowest,
+
+      // Typography
+      textTheme: TextTheme(
+        displayMedium: GoogleFonts.manrope(
+          fontSize: 44, // 2.75rem
+          fontWeight: FontWeight.w700,
+          color: colorScheme.onSurface,
+        ),
+        headlineSmall: GoogleFonts.manrope(
+          fontSize: 24, // 1.5rem
+          fontWeight: FontWeight.w600,
+          color: colorScheme.onSurface,
+        ),
+        titleMedium: GoogleFonts.inter(
+          fontSize: 18, // 1.125rem
+          fontWeight: FontWeight.w600,
+          color: colorScheme.onSurface,
+        ),
+        bodyMedium: GoogleFonts.inter(
+          fontSize: 14, // 0.875rem
+          fontWeight: FontWeight.w400,
+          color: colorScheme.onSurface,
+        ),
+        labelMedium: GoogleFonts.inter(
+          fontSize: 12, // 0.75rem
+          fontWeight: FontWeight.w500,
+          color: colorScheme.onSurfaceVariant,
+        ),
       ),
+
+      // Components
+      cardTheme: CardThemeData(
+        color: surfaceContainerLowest,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // xl radius (0.75rem)
+        ),
+      ),
+
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: surface,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 16,
-        ),
+        fillColor: surfaceContainerHigh,
+        contentPadding: const EdgeInsets.all(16),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: border),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: outlineVariant.withValues(alpha: 0.2)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: border),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: outlineVariant.withValues(alpha: 0.2)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: primary, width: 1.2),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: primary, width: 1.5),
         ),
+        errorStyle: GoogleFonts.inter(fontSize: 12, color: error),
       ),
-      textTheme: const TextTheme(
-        headlineMedium: TextStyle(
-          color: textPrimary,
-          fontSize: 28,
-          fontWeight: FontWeight.w700,
-        ),
-        titleLarge: TextStyle(
-          color: textPrimary,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-        ),
-        bodyLarge: TextStyle(
-          color: textPrimary,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-        bodyMedium: TextStyle(
-          color: textSecondary,
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-        ),
+
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
       ),
     );
   }
+
+  // Preserve darkTheme as a basis for inverse_surface / night mode if needed
+  static ThemeData get darkTheme => lightTheme.copyWith(
+    brightness: Brightness.dark,
+    // Note: Design system specifies "inverse_surface" for Night mode.
+    // For simplicity, we'll focus on Light theme first as per the main request.
+  );
 }

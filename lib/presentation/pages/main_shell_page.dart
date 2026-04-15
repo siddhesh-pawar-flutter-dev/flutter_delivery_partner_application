@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +15,7 @@ class MainShellPage extends GetView<MainShellController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true, // Allow body to flow behind the dock
       body: Obx(
         () => IndexedStack(
           index: controller.currentIndex.value,
@@ -27,7 +29,7 @@ class MainShellPage extends GetView<MainShellController> {
         ),
       ),
       bottomNavigationBar: Obx(
-        () => _SharedBottomBar(
+        () => _TheDock(
           currentIndex: controller.currentIndex.value,
           onTap: controller.goTo,
         ),
@@ -36,50 +38,58 @@ class MainShellPage extends GetView<MainShellController> {
   }
 }
 
-class _SharedBottomBar extends StatelessWidget {
-  const _SharedBottomBar({required this.currentIndex, required this.onTap});
+class _TheDock extends StatelessWidget {
+  const _TheDock({required this.currentIndex, required this.onTap});
 
   final int currentIndex;
   final void Function(int) onTap;
 
   static const _items = [
-    _NavItem(icon: Icons.home_filled, label: 'Home'),
-    _NavItem(icon: Icons.receipt_long_outlined, label: 'Orders'),
-    _NavItem(icon: Icons.work_history_outlined, label: 'Gigs'),
-    _NavItem(icon: Icons.account_balance_wallet_outlined, label: 'Payouts'),
-    _NavItem(icon: Icons.person_outline_rounded, label: 'Profile'),
+    _NavItem(icon: Icons.grid_view_rounded, label: 'Hub'),
+    _NavItem(icon: Icons.local_shipping_rounded, label: 'Deliveries'),
+    _NavItem(icon: Icons.payments_rounded, label: 'Earnings'),
+    _NavItem(icon: Icons.account_balance_wallet_rounded, label: 'Wallet'),
+    _NavItem(icon: Icons.account_circle_rounded, label: 'Profile'),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
-        decoration: const BoxDecoration(
-          color: Colors.white,
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x14000000),
-              blurRadius: 24,
-              offset: Offset(0, -6),
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16), // Floating 16pt (8pt in design system + extra padding)
+      height: 72,
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest.withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.onSurface.withValues(alpha: 0.06),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                for (int i = 0; i < _items.length; i++)
+                  _DockItem(
+                    icon: _items[i].icon,
+                    label: _items[i].label,
+                    isSelected: currentIndex == i,
+                    onTap: () => onTap(i),
+                  ),
+              ],
             ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            for (int i = 0; i < _items.length; i++)
-              GestureDetector(
-                onTap: () => onTap(i),
-                child: _BottomItem(
-                  icon: _items[i].icon,
-                  label: _items[i].label,
-                  isSelected: currentIndex == i,
-                ),
-              ),
-          ],
+          ),
         ),
       ),
     );
@@ -92,58 +102,56 @@ class _NavItem {
   final String label;
 }
 
-class _BottomItem extends StatelessWidget {
-  const _BottomItem({
+class _DockItem extends StatelessWidget {
+  const _DockItem({
     required this.icon,
     required this.label,
     required this.isSelected,
+    required this.onTap,
   });
 
   final IconData icon;
   final String label;
   final bool isSelected;
-
-  static const _gradientColors = [Color(0xFFAAF0B7), Color(0xFF4CAF50)];
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            gradient: isSelected
-                ? const LinearGradient(
-                    colors: _gradientColors,
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  )
-                : null,
-            color: isSelected ? null : Colors.transparent,
-            borderRadius: BorderRadius.circular(18),
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? colorScheme.primary.withValues(alpha: 0.1)
+                  : Colors.transparent,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              size: 24,
+              color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+            ),
           ),
-          child: isSelected
-              ? ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: [Colors.white, Colors.white],
-                  ).createShader(bounds),
-                  child: Icon(icon, size: 24, color: Colors.white),
-                )
-              : Icon(icon, size: 24, color: const Color(0xFF8E8E8E)),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: isSelected
-                ? const Color(0xFF2E7D32)
-                : const Color(0xFF8E8E8E),
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+              fontSize: 10,
+              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

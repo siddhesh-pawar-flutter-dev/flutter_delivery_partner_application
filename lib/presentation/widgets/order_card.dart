@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/utils/formatters.dart';
 import '../../domain/entities/delivery_order.dart';
@@ -12,6 +13,8 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final scheduledAt =
         Formatters.parseDateTime(order.scheduledAt) ??
         Formatters.parseDateTime(order.createdAt);
@@ -19,44 +22,45 @@ class OrderCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.toNamed('/order-detail', arguments: order),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 14),
-        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: const [
+          color: colorScheme.surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
             BoxShadow(
-              color: Color(0x12000000),
-              blurRadius: 16,
-              offset: Offset(0, 8),
+              color: colorScheme.onSurface.withValues(alpha: 0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(14),
-              child: order.imageUrl.isEmpty
-                  ? _fallbackImage()
-                  : CachedNetworkImage(
-                      imageUrl: order.imageUrl,
-                      width: 62,
-                      height: 62,
-                      fit: BoxFit.cover,
-                      memCacheWidth: 240,
-                      memCacheHeight: 240,
-                      maxWidthDiskCache: 320,
-                      maxHeightDiskCache: 320,
-                      fadeInDuration: Duration.zero,
-                      fadeOutDuration: Duration.zero,
-                      placeholderFadeInDuration: Duration.zero,
-                      placeholder: (_, _) =>
-                          _fallbackImage(icon: Icons.image_outlined),
-                      errorWidget: (_, _, _) => _fallbackImage(),
-                    ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: colorScheme.surfaceContainerLow,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: order.imageUrl.isEmpty
+                    ? _fallbackImage(colorScheme)
+                    : CachedNetworkImage(
+                        imageUrl: order.imageUrl,
+                        width: 64,
+                        height: 64,
+                        fit: BoxFit.cover,
+                        memCacheWidth: 240,
+                        memCacheHeight: 240,
+                        placeholder: (_, _) =>
+                            _fallbackImage(colorScheme, icon: Icons.image_outlined),
+                        errorWidget: (_, _, _) => _fallbackImage(colorScheme),
+                      ),
+              ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,9 +73,9 @@ class OrderCard extends StatelessWidget {
                           order.restaurantName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Color(0xFF2C2C2C),
-                            fontSize: 18,
+                          style: GoogleFonts.manrope(
+                            color: colorScheme.onSurface,
+                            fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -80,17 +84,17 @@ class OrderCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
-                          vertical: 5,
+                          vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: _statusBadgeBackground(order.status),
+                          color: _statusBadgeBackground(context, order.status),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
                           _statusLabel(order.status),
-                          style: TextStyle(
-                            color: _statusBadgeColor(order.status),
-                            fontSize: 11,
+                          style: GoogleFonts.inter(
+                            color: _statusBadgeColor(context, order.status),
+                            fontSize: 10,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -98,17 +102,24 @@ class OrderCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    _routeLabel(order),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF848484),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on_rounded, size: 14, color: colorScheme.primary),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          _routeLabel(order),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   Row(
                     children: [
                       Container(
@@ -117,54 +128,35 @@ class OrderCard extends StatelessWidget {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFEAF8EF),
+                          color: colorScheme.primary.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           'Rs ${order.amount.toStringAsFixed(0)}',
-                          style: const TextStyle(
-                            color: Color(0xFF2F9D57),
-                            fontSize: 14,
+                          style: GoogleFonts.inter(
+                            color: colorScheme.primary,
+                            fontSize: 13,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Icon(
-                        Icons.inventory_2_outlined,
-                        color: Color(0xFFAAAAAA),
-                        size: 15,
-                      ),
-                      const SizedBox(width: 4),
                       Text(
                         '${order.quantity} item${order.quantity == 1 ? '' : 's'}',
-                        style: const TextStyle(
-                          color: Color(0xFF8B8B8B),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: colorScheme.outline,
                         ),
                       ),
                       const Spacer(),
                       Text(
                         _formatTime(scheduledAt),
-                        style: const TextStyle(
-                          color: Color(0xFFA0A0A0),
-                          fontSize: 12,
+                        style: GoogleFonts.inter(
+                          color: colorScheme.outline,
+                          fontSize: 11,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    order.itemSummary,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF5F5F5F),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
                   ),
                 ],
               ),
@@ -175,12 +167,12 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Widget _fallbackImage({IconData icon = Icons.fastfood_rounded}) {
+  Widget _fallbackImage(ColorScheme colorScheme, {IconData icon = Icons.fastfood_rounded}) {
     return Container(
-      width: 62,
-      height: 62,
-      color: const Color(0xFFF1F1F1),
-      child: Icon(icon, color: const Color(0xFFBDBDBD)),
+      width: 64,
+      height: 64,
+      color: colorScheme.surfaceContainerHigh,
+      child: Icon(icon, color: colorScheme.outline.withValues(alpha: 0.5)),
     );
   }
 }
@@ -210,7 +202,7 @@ String _routeLabel(DeliveryOrder order) {
   final pickup = order.pickupArea.trim();
   final drop = order.dropCity.trim();
   if (pickup.isNotEmpty && drop.isNotEmpty) {
-    return '$pickup -> $drop';
+    return '$pickup to $drop';
   }
   if (order.address.trim().isNotEmpty) {
     return order.address;
@@ -226,42 +218,38 @@ String _formatTime(DateTime? value) {
   return '$hour:$minute $suffix';
 }
 
-Color _statusBadgeColor(String status) {
+Color _statusBadgeColor(BuildContext context, String status) {
+  final colorScheme = Theme.of(context).colorScheme;
   final normalized = status.trim().toLowerCase();
+  
   if (normalized == 'completed' || normalized == 'delivered') {
-    return const Color(0xFF2F9D57);
+    return colorScheme.primary;
   }
   if (normalized == 'cancelled' ||
       normalized == 'failed' ||
       normalized == 'not accepted' ||
       normalized == 'not_accepted' ||
       normalized == 'user_not_accepted') {
-    return const Color(0xFFE94F56);
+    return colorScheme.error;
   }
-  if (normalized == 'accepted' ||
-      normalized == 'picked' ||
-      normalized == 'picked up') {
-    return const Color(0xFF2E7AD7);
-  }
-  return const Color(0xFFD08000);
+  
+  return const Color(0xFF923357); // tertiary from design system
 }
 
-Color _statusBadgeBackground(String status) {
+Color _statusBadgeBackground(BuildContext context, String status) {
+  final colorScheme = Theme.of(context).colorScheme;
   final normalized = status.trim().toLowerCase();
+  
   if (normalized == 'completed' || normalized == 'delivered') {
-    return const Color(0xFFEAF8EF);
+    return colorScheme.primary.withValues(alpha: 0.1);
   }
   if (normalized == 'cancelled' ||
       normalized == 'failed' ||
       normalized == 'not accepted' ||
       normalized == 'not_accepted' ||
       normalized == 'user_not_accepted') {
-    return const Color(0xFFFFECEC);
+    return colorScheme.errorContainer.withValues(alpha: 0.5);
   }
-  if (normalized == 'accepted' ||
-      normalized == 'picked' ||
-      normalized == 'picked up') {
-    return const Color(0xFFE8F1FD);
-  }
-  return const Color(0xFFFFF5DE);
+  
+  return const Color(0xFFFDE7EF); // tertiary container light
 }
