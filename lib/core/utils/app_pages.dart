@@ -12,6 +12,8 @@ import '../../presentation/pages/order_detail_page.dart';
 import '../../presentation/pages/profile_page.dart';
 import '../../presentation/pages/splash_page.dart';
 import '../../presentation/pages/tshirt_selection_page.dart';
+import '../../presentation/pages/order_history_page.dart';
+import '../../presentation/bindings/order_history_binding.dart';
 
 class AppPages {
   static const String splash = '/';
@@ -22,6 +24,7 @@ class AppPages {
   static const String profile = '/profile';
   static const String tshirtSelection = '/tshirt-selection';
   static const String orderDetail = '/order-detail';
+  static const String orderHistory = '/order-history';
 
   static final routes = <GetPage>[
     GetPage(name: splash, page: () => const SplashPage()),
@@ -40,5 +43,10 @@ class AppPages {
     ),
     GetPage(name: tshirtSelection, page: () => const TshirtSelectionPage()),
     GetPage(name: orderDetail, page: () => const OrderDetailPage()),
+    GetPage(
+      name: orderHistory,
+      page: () => const OrderHistoryPage(),
+      binding: OrderHistoryBinding(),
+    ),
   ];
 }

@@ -75,22 +75,20 @@ class HomePage extends GetView<HomeController> {
                         subtitle: 'Today',
                       ),
                       _SummaryTile(
-                        icon: Icons.star_rounded,
+                        icon: Icons.pending_actions_rounded,
                         iconColor: const Color(0xFFF3A519),
                         iconBackground: const Color(0xFFFFF5DE),
-                        value: _rating(user),
-                        label: 'Rating',
-                        subtitle: user == null || user.totalRatings == 0
-                            ? 'No ratings yet'
-                            : 'From ${user.totalRatings} ratings',
+                        value: '${controller.todayActiveCount}',
+                        label: 'Pending',
+                        subtitle: 'Today',
                       ),
                       _SummaryTile(
-                        icon: Icons.trending_up_rounded,
+                        icon: Icons.list_alt_rounded,
                         iconColor: const Color(0xFFE56A6E),
                         iconBackground: const Color(0xFFFFECEC),
-                        value: _currency(controller.weeklyEarnings),
-                        label: 'Weekly',
-                        subtitle: 'Mon - Sun',
+                        value: '${controller.todayTotalCount}',
+                        label: 'Total Orders',
+                        subtitle: 'Today',
                       ),
                     ],
                   ),
@@ -104,14 +102,57 @@ class HomePage extends GetView<HomeController> {
                         const SizedBox(height: 24),
                       ],
                     ),
-                  _DeliveryHeader(displayedOrders.length),
+                  _DeliveryHeader("Today's Deliveries", displayedOrders.length),
                   const SizedBox(height: 12),
                   if (controller.isLoading.value && controller.orders.isEmpty)
                     const _OrderSkeletonList()
                   else if (displayedOrders.isEmpty)
                     const _EmptyDeliveries()
-                  else
-                    ...displayedOrders.map((order) => OrderCard(order: order)),
+                  else ...[
+                    ListView.builder(
+                      itemCount: displayedOrders.length > 5
+                          ? 5
+                          : displayedOrders.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        return OrderCard(order: displayedOrders[index]);
+                      },
+                    ),
+                    if (displayedOrders.length > 5) ...[
+                      const SizedBox(height: 4),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              Get.offNamed(AppPages.orderHistory);
+                            },
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF1A2633),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'View More',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                   if (controller.isLoadingMore.value)
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
@@ -346,69 +387,57 @@ class _AvailabilityCard extends StatelessWidget {
               ],
             ),
           ),
-          _StatusSwitch(isOnline: isOnline),
+          _StatusSwitch(isOnline: isOnline, canToggle: canToggle),
         ],
       ),
     );
   }
 }
 
-class _StatusSwitch extends StatefulWidget {
-  const _StatusSwitch({required this.isOnline});
+class _StatusSwitch extends StatelessWidget {
+  const _StatusSwitch({required this.isOnline, required this.canToggle});
 
   final bool isOnline;
+  final bool canToggle;
 
-  @override
-  State<_StatusSwitch> createState() => _StatusSwitchState();
-}
-
-class _StatusSwitchState extends State<_StatusSwitch> {
-  bool _isLoading = false;
-
-  Future<void> _toggleStatus() async {
-    setState(() => _isLoading = true);
-    try {
-      await Get.find<HomeController>().toggleOnlineStatus(!widget.isOnline);
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+  void _toggleStatus() {
+    if (!canToggle) {
+      Get.snackbar(
+        'Action Required',
+        'Complete profile setup to receive orders',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
     }
+    Get.find<HomeController>().toggleOnlineStatus(!isOnline);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _isLoading ? null : _toggleStatus,
+      onTap: _toggleStatus,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         width: 52,
         height: 30,
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: widget.isOnline ? const Color(0xFF7ED957) : const Color(0xFF9A9A9A),
+          color: canToggle
+              ? (isOnline ? const Color(0xFF7ED957) : const Color(0xFF9A9A9A))
+              : const Color(0xFF7C7C7C),
           borderRadius: BorderRadius.circular(999),
         ),
-        child: _isLoading
-            ? const Center(child: SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              ))
-            : Align(
-                alignment: widget.isOnline ? Alignment.centerRight : Alignment.centerLeft,
-                child: Container(
-                  width: 22,
-                  height: 22,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
+        child: Align(
+          alignment: isOnline ? Alignment.centerRight : Alignment.centerLeft,
+          child: Container(
+            width: 22,
+            height: 22,
+            decoration: BoxDecoration(
+              color: canToggle ? Colors.white : const Color(0xFFE0E0E0),
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -561,18 +590,19 @@ class _InfoBanner extends StatelessWidget {
 }
 
 class _DeliveryHeader extends StatelessWidget {
-  const _DeliveryHeader(this.count);
+  const _DeliveryHeader(this.title, this.count);
 
+  final String title;
   final int count;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           child: Text(
-            "Today's Deliveries",
-            style: TextStyle(
+            title,
+            style: const TextStyle(
               color: Color(0xFF333333),
               fontSize: 24,
               fontWeight: FontWeight.w700,
@@ -597,18 +627,21 @@ class _OrderSkeletonList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: List.generate(
-        3,
-        (_) => Container(
+    return ListView.builder(
+      itemCount: 3,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      itemBuilder: (context, index) {
+        return Container(
           height: 106,
           margin: const EdgeInsets.only(bottom: 14),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(18),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -659,14 +692,21 @@ class _HomeBottomBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const _BottomItem(
-              icon: Icons.home_filled,
-              label: 'Home',
-              isSelected: true,
+            GestureDetector(
+              onTap: () {},
+              child: const _BottomItem(
+                icon: Icons.home_filled,
+                label: 'Home',
+                isSelected: true,
+              ),
             ),
-            const _BottomItem(
-              icon: Icons.receipt_long_outlined,
-              label: 'Orders',
+            GestureDetector(
+              onTap: () => Get.offNamed(AppPages.orderHistory),
+              child: const _BottomItem(
+                icon: Icons.receipt_long_outlined,
+                label: 'Orders',
+                isSelected: false,
+              ),
             ),
             GestureDetector(
               onTap: () => Get.toNamed(AppPages.profile),
@@ -731,13 +771,6 @@ class _BottomItem extends StatelessWidget {
 String _currency(double value) {
   final hasDecimals = value.truncateToDouble() != value;
   return 'Rs ${value.toStringAsFixed(hasDecimals ? 2 : 0)}';
-}
-
-String _rating(DeliveryPartner? user) {
-  if (user == null || user.totalRatings == 0) {
-    return '--';
-  }
-  return user.avgRating.toStringAsFixed(1);
 }
 
 String _initials(String? name) {
