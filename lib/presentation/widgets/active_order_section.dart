@@ -245,18 +245,13 @@ class ActiveOrderSection extends StatelessWidget {
     final normalized = status.trim().toLowerCase();
     switch (normalized) {
       case 'accepted':
-      case 'delivered':
-      case 'completed':
         return const Color(0xFF2F9D57);
       case 'picked':
       case 'picked up':
-      case 'pending':
         return const Color(0xFF2E7AD7);
+      case 'delivered':
+        return const Color(0xFF2F9D57);
       case 'cancelled':
-      case 'failed':
-      case 'not accepted':
-      case 'not_accepted':
-      case 'user_not_accepted':
         return const Color(0xFFE94F56);
       default:
         return const Color(0xFF666666);
@@ -264,11 +259,7 @@ class ActiveOrderSection extends StatelessWidget {
   }
 
   String _formatStatus(String status) {
-    final normalized = status.trim().toLowerCase();
-    if (normalized == 'not accepted' || normalized == 'not_accepted' || normalized == 'user_not_accepted') {
-      return 'FAILED';
-    }
-    return status.trim().replaceAll('_', ' ').split(' ').map((word) {
+    return status.trim().split(' ').map((word) {
       if (word.isEmpty) return '';
       return word[0].toUpperCase() + word.substring(1).toLowerCase();
     }).join(' ');

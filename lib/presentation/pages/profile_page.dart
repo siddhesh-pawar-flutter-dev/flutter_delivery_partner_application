@@ -187,15 +187,11 @@ class _TopHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFFAAF0B7), Color(0xFF4CAF50)],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
-            color: Color(0x22000000),
+            color: Color(0x12000000),
             blurRadius: 18,
             offset: Offset(0, 10),
           ),
@@ -210,7 +206,7 @@ class _TopHeader extends StatelessWidget {
               child: Icon(
                 Icons.arrow_back_ios_new_rounded,
                 size: 18,
-                color: Colors.white,
+                color: Color(0xFF2D2D2D),
               ),
             ),
           ),
@@ -219,7 +215,7 @@ class _TopHeader extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: Color(0xFF2D2D2D),
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                 ),
@@ -262,7 +258,7 @@ class _ProfileHero extends StatelessWidget {
           padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: const Color(0xFF4CAF50), width: 2),
+            border: Border.all(color: const Color(0xFFFFB58D), width: 2),
           ),
           child: ClipOval(
             child: imageUrl.isEmpty
@@ -289,7 +285,7 @@ class _ProfileHero extends StatelessWidget {
                   const Icon(
                     Icons.person_outline_rounded,
                     size: 18,
-                    color: Color(0xFF4CAF50),
+                    color: Color(0xFFFF6A71),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -335,7 +331,7 @@ class _ProfileHero extends StatelessWidget {
                         const Icon(
                           Icons.star_rounded,
                           size: 16,
-                          color: Color(0xFF4CAF50),
+                          color: Color(0xFFFF7076),
                         ),
                       ],
                     ),
@@ -366,7 +362,7 @@ class _AvatarFallback extends StatelessWidget {
   Widget build(BuildContext context) {
     final initials = _initialsFor(name);
     return Container(
-      color: const Color(0xFF4CAF50),
+      color: const Color(0xFFFF6A71),
       alignment: Alignment.center,
       child: Text(
         initials,
@@ -390,7 +386,7 @@ class _ContactRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: const Color(0xFF4CAF50)),
+        Icon(icon, size: 18, color: const Color(0xFFFF6A71)),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
@@ -426,7 +422,7 @@ class _OptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final accent = isDestructive
         ? const Color(0xFFFF5E67)
-        : const Color(0xFF2E7D32);
+        : const Color(0xFFFF6A71);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -486,14 +482,13 @@ class _ProfileBottomBar extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Orders — inactive
             Expanded(
               child: GestureDetector(
                 onTap: onOrdersTap,
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF2F2F2),
+                    color: const Color(0xFFFF5A64),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Row(
@@ -501,14 +496,14 @@ class _ProfileBottomBar extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.shopping_bag_outlined,
-                        color: Color(0xFF8E8E8E),
+                        color: Colors.white,
                         size: 18,
                       ),
                       SizedBox(width: 8),
                       Text(
                         'Orders',
                         style: TextStyle(
-                          color: Color(0xFF8E8E8E),
+                          color: Colors.white,
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
                         ),
@@ -519,37 +514,25 @@ class _ProfileBottomBar extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 18),
-            // Account — selected (gradient)
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFAAF0B7), Color(0xFF4CAF50)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+            const Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.person_outline_rounded,
+                    color: Color(0xFF303030),
+                    size: 20,
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.person_outline_rounded,
-                      color: Colors.white,
-                      size: 20,
+                  SizedBox(width: 8),
+                  Text(
+                    'Account',
+                    style: TextStyle(
+                      color: Color(0xFF303030),
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
                     ),
-                    SizedBox(width: 8),
-                    Text(
-                      'Account',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

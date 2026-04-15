@@ -187,15 +187,9 @@ class OrderCard extends StatelessWidget {
 
 String _statusLabel(String status) {
   final normalized = status.trim().toLowerCase();
-  
   if (normalized.isEmpty) return 'Delivered';
-  if (normalized == 'not accepted' || normalized == 'not_accepted' || normalized == 'user_not_accepted') {
-    return 'Failed';
-  }
-  
   return normalized
-      .replaceAll('_', ' ')
-      .split(RegExp(r'\s+'))
+      .split(RegExp(r'[_\s]+'))
       .map(
         (part) => part.isEmpty
             ? part
