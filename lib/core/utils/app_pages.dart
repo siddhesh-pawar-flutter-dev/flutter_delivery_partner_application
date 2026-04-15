@@ -17,11 +17,8 @@ class AppPages {
   static const String login = '/login';
   static const String otp = '/otp';
 
-  /// The main shell that hosts Home / Orders / Profile tabs.
   static const String main = '/main';
 
-  // Legacy aliases kept so any remaining Get.toNamed calls still compile.
-  // They all redirect to the shell.
   static const String home = '/main';
   static const String orderHistory = '/main';
   static const String profile = '/main';
@@ -39,7 +36,6 @@ class AppPages {
     GetPage(name: login, page: () => const LoginPage(), binding: AuthBinding()),
     GetPage(name: otp, page: () => const OtpPage(), binding: AuthBinding()),
 
-    // Single shell that owns the bottom nav bar.
     GetPage(
       name: main,
       page: () => const MainShellPage(),
@@ -47,7 +43,7 @@ class AppPages {
     ),
 
     GetPage(name: tshirtSelection, page: () => const TshirtSelectionPage()),
-    // Order detail is a full-screen page pushed on top of the shell.
+
     GetPage(name: orderDetail, page: () => const OrderDetailPage()),
   ];
 }

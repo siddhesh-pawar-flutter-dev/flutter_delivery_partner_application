@@ -29,7 +29,6 @@ class OrderDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Order Header
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -58,19 +57,21 @@ class OrderDetailPage extends StatelessWidget {
                             const Spacer(),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
+                                horizontal: 10,
+                                vertical: 5,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFEAF8EF),
+                                color: _getStatusColor(
+                                  order.status,
+                                ).withAlpha(26),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
-                                order.status.toUpperCase(),
-                                style: const TextStyle(
-                                  color: Color(0xFF2F9D57),
+                                _formatStatus(order.status),
+                                style: TextStyle(
+                                  color: _getStatusColor(order.status),
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
@@ -99,7 +100,6 @@ class OrderDetailPage extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  // Order Items
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -155,7 +155,6 @@ class OrderDetailPage extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  // Delivery Details
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -213,7 +212,6 @@ class OrderDetailPage extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  // Images Section
                   if (order.imageUrl.isNotEmpty) ...[
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -321,19 +319,19 @@ Color _getStatusColor(String status) {
     case 'accepted':
     case 'delivered':
     case 'completed':
-      return const Color(0xFF2F9D57); // Green
+      return const Color(0xFF2F9D57);
     case 'picked':
     case 'picked up':
     case 'pending':
-      return const Color(0xFF2E7AD7); // Blue
+      return const Color(0xFF2E7AD7);
     case 'cancelled':
     case 'failed':
     case 'not accepted':
     case 'not_accepted':
     case 'user_not_accepted':
-      return const Color(0xFFE94F56); // Red
+      return const Color(0xFFE94F56);
     default:
-      return const Color(0xFF666666); // Grey
+      return const Color(0xFF666666);
   }
 }
 

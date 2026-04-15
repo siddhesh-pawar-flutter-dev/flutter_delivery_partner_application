@@ -12,11 +12,9 @@ import '../controllers/main_shell_controller.dart';
 import '../controllers/order_history_controller.dart';
 import '../controllers/profile_controller.dart';
 
-/// Binds all three tab controllers so they are available inside the shell.
 class MainShellBinding extends Bindings {
   @override
   void dependencies() {
-    // Shared infrastructure
     Get.lazyPut<OnlineStatusRemoteDataSource>(
       () => OnlineStatusRemoteDataSourceImpl(Get.find()),
     );
@@ -28,10 +26,8 @@ class MainShellBinding extends Bindings {
       ),
     );
 
-    // Tab navigation controller
     Get.lazyPut(() => MainShellController(), fenix: true);
 
-    // Home tab
     Get.lazyPut(
       () => HomeController(
         getOrdersUseCase: Get.find<GetOrderHistoryUseCase>(),
@@ -41,7 +37,6 @@ class MainShellBinding extends Bindings {
       fenix: true,
     );
 
-    // Orders tab
     Get.lazyPut(
       () => OrderHistoryController(
         getOrdersUseCase: Get.find<GetOrderHistoryUseCase>(),
@@ -49,7 +44,6 @@ class MainShellBinding extends Bindings {
       fenix: true,
     );
 
-    // Profile tab
     Get.lazyPut(
       () => ProfileController(
         getProfileUseCase: Get.find<GetProfileUseCase>(),

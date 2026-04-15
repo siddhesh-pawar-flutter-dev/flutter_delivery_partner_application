@@ -147,7 +147,7 @@ class LanguagePage extends GetView<LanguageController> {
                         backgroundColor: AppTheme.primary.withValues(
                           alpha: 0.8,
                         ),
-                        // backgroundColor: const Color(0xFF6A6A6A),
+
                         disabledBackgroundColor: const Color(0xFF4D4D4D),
                         foregroundColor: Colors.black,
                         disabledForegroundColor: Colors.black54,

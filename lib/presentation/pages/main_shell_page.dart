@@ -12,8 +12,6 @@ class MainShellPage extends GetView<MainShellController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // IndexedStack keeps all three pages alive in memory so their
-      // controllers/scroll positions are preserved when switching tabs.
       body: Obx(
         () => IndexedStack(
           index: controller.currentIndex.value,
@@ -29,10 +27,6 @@ class MainShellPage extends GetView<MainShellController> {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Shared Bottom Bar
-// ─────────────────────────────────────────────────────────────────────────────
 
 class _SharedBottomBar extends StatelessWidget {
   const _SharedBottomBar({required this.currentIndex, required this.onTap});
@@ -54,7 +48,7 @@ class _SharedBottomBar extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
         decoration: const BoxDecoration(
           color: Colors.white,
-          // borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+
           boxShadow: [
             BoxShadow(
               color: Color(0x14000000),

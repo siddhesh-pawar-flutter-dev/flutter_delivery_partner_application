@@ -85,9 +85,7 @@ class HomeController extends GetxController {
     try {
       final profile = await _getProfileUseCase();
       user.value = profile.deliveryPartner;
-    } on Failure {
-      // Keep the last saved user for the header if the profile call fails.
-    }
+    } on Failure {}
   }
 
   Future<void> _warmOrderImages(List<DeliveryOrder> pageOrders) async {
@@ -198,7 +196,6 @@ class HomeController extends GetxController {
   Future<void> toggleOnlineStatus(bool isOnline) async {
     final previousUser = user.value;
     try {
-      // Optimistic locally
       user.value = previousUser?.copyWith(canOnline: isOnline);
 
       await _getProfileUseCase.updateOnlineStatus(isOnline);
@@ -209,7 +206,6 @@ class HomeController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     } catch (error) {
-      // Revert if API fails
       user.value = previousUser;
       final message = error is Failure
           ? error.message

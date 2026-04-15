@@ -25,7 +25,6 @@ class OrderHistoryPage extends GetView<OrderHistoryController> {
               cacheExtent: 1400,
               padding: const EdgeInsets.only(bottom: 24),
               children: [
-                // ── Gradient header (title + filters) ──────────────────
                 Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
@@ -45,7 +44,7 @@ class OrderHistoryPage extends GetView<OrderHistoryController> {
                             child: Text(
                               'Order History',
                               style: TextStyle(
-                                color: Color(0xFF1B5E20),
+                                color: Colors.white,
                                 fontSize: 24,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -68,7 +67,6 @@ class OrderHistoryPage extends GetView<OrderHistoryController> {
                 ),
                 const SizedBox(height: 16),
 
-                // ── Order list (padded) ─────────────────────────────────
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
@@ -318,4 +316,3 @@ class _EmptyDeliveries extends StatelessWidget {
     );
   }
 }
-

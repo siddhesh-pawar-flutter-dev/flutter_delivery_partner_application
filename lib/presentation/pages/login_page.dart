@@ -433,15 +433,15 @@ class _WaveClipper extends CustomClipper<Path> {
     path.lineTo(0, size.height - 60);
     path.quadraticBezierTo(
       size.width * 0.25,
-      size.height, // left control point — pulls up
+      size.height,
       size.width * 0.5,
-      size.height - 30, // center dips back down
+      size.height - 30,
     );
     path.quadraticBezierTo(
       size.width * 0.75,
-      size.height - 60, // right control point
+      size.height - 60,
       size.width,
-      size.height - 20, // ends lower on the right
+      size.height - 20,
     );
     path.lineTo(size.width, 0);
     path.close();
