@@ -14,7 +14,8 @@ class OrderDetailPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F5F2),
-      appBar: AppBar(iconTheme: IconThemeData(color: Colors.black),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: const Color(0xFFF6F5F2),
         title: const Text(
           'Order Details',
@@ -267,263 +268,6 @@ class OrderDetailPage extends StatelessWidget {
                 ],
               ),
             ),
-    return Scaffold(
-      backgroundColor: const Color(0xFFF6F5F2),
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        // actionsIconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: const Color(0xFFF6F5F2),
-        title: const Text(
-          'Order Details',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: order == null
-          ? const Center(child: Text('Order not found'))
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Order Header
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x12000000),
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Order #${order.id}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            const Spacer(),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _getStatusColor(order.status).withAlpha(26),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                _formatStatus(order.status),
-                                style: TextStyle(
-                                  color: _getStatusColor(order.status),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          order.restaurantName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Rs ${order.amount.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xFF2F9D57),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Order Items
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x12000000),
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Order Items',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          order.itemSummary,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF666666),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.inventory_2_outlined,
-                              size: 16,
-                              color: Color(0xFF999999),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${order.quantity} item${order.quantity == 1 ? '' : 's'}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFF666666),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Delivery Details
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x12000000),
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Delivery Details',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        _DetailRow(
-                          icon: Icons.location_on_outlined,
-                          label: 'Pickup Address',
-                          value: order.pickupAddress,
-                        ),
-                        const SizedBox(height: 8),
-                        _DetailRow(
-                          icon: Icons.delivery_dining,
-                          label: 'Delivery Address',
-                          value: order.address,
-                        ),
-                        const SizedBox(height: 8),
-                        _DetailRow(
-                          icon: Icons.access_time,
-                          label: 'Scheduled Time',
-                          value: Formatters.formatDateTime(
-                            Formatters.parseDateTime(order.scheduledAt),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _DetailRow(
-                          icon: Icons.payment,
-                          label: 'Payment',
-                          value: order.isCod
-                              ? 'Cash on Delivery'
-                              : 'Online Payment',
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Images Section
-                  if (order.imageUrl.isNotEmpty) ...[
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x12000000),
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Order Images',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                              imageUrl: order.imageUrl,
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              placeholder: (_, _) => Container(
-                                height: 200,
-                                color: Colors.grey[200],
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                              errorWidget: (_, _, _) => Container(
-                                height: 200,
-                                color: Colors.grey[200],
-                                child: const Icon(Icons.image_not_supported),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ],
-              ),
-            ),
     );
   }
 }
@@ -562,7 +306,6 @@ class _DetailRow extends StatelessWidget {
               Text(
                 value,
                 style: const TextStyle(fontSize: 14, color: Color(0xFF333333)),
-                style: const TextStyle(fontSize: 14, color: Color(0xFF333333)),
               ),
             ],
           ),
@@ -596,7 +339,9 @@ Color _getStatusColor(String status) {
 
 String _formatStatus(String status) {
   final normalized = status.trim().toLowerCase();
-  if (normalized == 'not accepted' || normalized == 'not_accepted' || normalized == 'user_not_accepted') {
+  if (normalized == 'not accepted' ||
+      normalized == 'not_accepted' ||
+      normalized == 'user_not_accepted') {
     return 'FAILED';
   }
   return status.trim().replaceAll('_', ' ').toUpperCase();
