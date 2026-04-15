@@ -83,13 +83,13 @@ class OrderCard extends StatelessWidget {
                           vertical: 5,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFEAF8EF),
+                          color: _statusBadgeBackground(order.status),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
                           _statusLabel(order.status),
-                          style: const TextStyle(
-                            color: Color(0xFF44A66B),
+                          style: TextStyle(
+                            color: _statusBadgeColor(order.status),
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
                           ),
@@ -222,4 +222,40 @@ String _formatTime(DateTime? value) {
   final minute = value.minute.toString().padLeft(2, '0');
   final suffix = value.hour >= 12 ? 'PM' : 'AM';
   return '$hour:$minute $suffix';
+}
+
+Color _statusBadgeColor(String status) {
+  final normalized = status.trim().toLowerCase();
+  if (normalized == 'completed' || normalized == 'delivered') {
+    return const Color(0xFF2F9D57); // Green
+  }
+  if (normalized == 'cancelled' ||
+      normalized == 'failed' ||
+      normalized == 'not accepted' ||
+      normalized == 'not_accepted' ||
+      normalized == 'user_not_accepted') {
+    return const Color(0xFFE94F56); // Red
+  }
+  if (normalized == 'accepted' || normalized == 'picked' || normalized == 'picked up') {
+    return const Color(0xFF2E7AD7); // Blue
+  }
+  return const Color(0xFFD08000); // Orange/amber for pending/other
+}
+
+Color _statusBadgeBackground(String status) {
+  final normalized = status.trim().toLowerCase();
+  if (normalized == 'completed' || normalized == 'delivered') {
+    return const Color(0xFFEAF8EF); // Light green
+  }
+  if (normalized == 'cancelled' ||
+      normalized == 'failed' ||
+      normalized == 'not accepted' ||
+      normalized == 'not_accepted' ||
+      normalized == 'user_not_accepted') {
+    return const Color(0xFFFFECEC); // Light red
+  }
+  if (normalized == 'accepted' || normalized == 'picked' || normalized == 'picked up') {
+    return const Color(0xFFE8F1FD); // Light blue
+  }
+  return const Color(0xFFFFF5DE); // Light orange/amber for pending/other
 }

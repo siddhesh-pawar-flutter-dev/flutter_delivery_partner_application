@@ -1,30 +1,33 @@
 import 'package:get/get.dart';
 
 import '../../presentation/bindings/auth_binding.dart';
-import '../../presentation/bindings/home_binding.dart';
 import '../../presentation/bindings/language_binding.dart';
-import '../../presentation/bindings/profile_binding.dart';
-import '../../presentation/pages/home_page.dart';
+import '../../presentation/bindings/main_shell_binding.dart';
 import '../../presentation/pages/language_page.dart';
 import '../../presentation/pages/login_page.dart';
-import '../../presentation/pages/otp_page.dart';
+import '../../presentation/pages/main_shell_page.dart';
 import '../../presentation/pages/order_detail_page.dart';
-import '../../presentation/pages/profile_page.dart';
+import '../../presentation/pages/otp_page.dart';
 import '../../presentation/pages/splash_page.dart';
 import '../../presentation/pages/tshirt_selection_page.dart';
-import '../../presentation/pages/order_history_page.dart';
-import '../../presentation/bindings/order_history_binding.dart';
 
 class AppPages {
   static const String splash = '/';
   static const String language = '/language';
   static const String login = '/login';
   static const String otp = '/otp';
-  static const String home = '/home';
-  static const String profile = '/profile';
+
+  /// The main shell that hosts Home / Orders / Profile tabs.
+  static const String main = '/main';
+
+  // Legacy aliases kept so any remaining Get.toNamed calls still compile.
+  // They all redirect to the shell.
+  static const String home = '/main';
+  static const String orderHistory = '/main';
+  static const String profile = '/main';
+
   static const String tshirtSelection = '/tshirt-selection';
   static const String orderDetail = '/order-detail';
-  static const String orderHistory = '/order-history';
 
   static final routes = <GetPage>[
     GetPage(name: splash, page: () => const SplashPage()),
@@ -35,18 +38,16 @@ class AppPages {
     ),
     GetPage(name: login, page: () => const LoginPage(), binding: AuthBinding()),
     GetPage(name: otp, page: () => const OtpPage(), binding: AuthBinding()),
-    GetPage(name: home, page: () => const HomePage(), binding: HomeBinding()),
+
+    // Single shell that owns the bottom nav bar.
     GetPage(
-      name: profile,
-      page: () => const ProfilePage(),
-      binding: ProfileBinding(),
+      name: main,
+      page: () => const MainShellPage(),
+      binding: MainShellBinding(),
     ),
+
     GetPage(name: tshirtSelection, page: () => const TshirtSelectionPage()),
+    // Order detail is a full-screen page pushed on top of the shell.
     GetPage(name: orderDetail, page: () => const OrderDetailPage()),
-    GetPage(
-      name: orderHistory,
-      page: () => const OrderHistoryPage(),
-      binding: OrderHistoryBinding(),
-    ),
   ];
 }

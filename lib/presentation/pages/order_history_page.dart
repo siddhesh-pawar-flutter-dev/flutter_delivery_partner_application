@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/utils/app_pages.dart';
 import '../controllers/order_history_controller.dart';
 import '../widgets/connectivity_gate.dart';
 import '../widgets/order_card.dart';
@@ -18,7 +17,7 @@ class OrderHistoryPage extends GetView<OrderHistoryController> {
           final displayedOrders = controller.filteredOrders;
 
           return RefreshIndicator(
-            color: const Color(0xFFE94F56),
+            color: const Color(0xFF4CAF50),
             onRefresh: controller.refreshOrders,
             child: ListView(
               controller: controller.scrollController,
@@ -109,7 +108,6 @@ class OrderHistoryPage extends GetView<OrderHistoryController> {
             ),
           );
         }),
-        bottomNavigationBar: const _OrderHistoryBottomBar(),
       ),
     );
   }
@@ -163,7 +161,7 @@ class _FilterBar extends StatelessWidget {
                   return Theme(
                     data: Theme.of(context).copyWith(
                       colorScheme: const ColorScheme.light(
-                        primary: Color(0xFFE94F56),
+                        primary: Color(0xFF4CAF50),
                         onPrimary: Colors.white,
                         onSurface: Color(0xFF333333),
                       ),
@@ -321,112 +319,3 @@ class _EmptyDeliveries extends StatelessWidget {
   }
 }
 
-class _OrderHistoryBottomBar extends StatelessWidget {
-  const _OrderHistoryBottomBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x14000000),
-              blurRadius: 24,
-              offset: Offset(0, -6),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            GestureDetector(
-              onTap: () => Get.offNamed(AppPages.home),
-              child: const _BottomItem(
-                icon: Icons.home_filled,
-                label: 'Home',
-                isSelected: false,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: const _BottomItem(
-                icon: Icons.receipt_long_outlined,
-                label: 'Orders',
-                isSelected: true,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => Get.toNamed(AppPages.profile),
-              child: const _BottomItem(
-                icon: Icons.person_outline_rounded,
-                label: 'Profile',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomItem extends StatelessWidget {
-  const _BottomItem({
-    required this.icon,
-    required this.label,
-    this.isSelected = false,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-
-  // Gradient stops used for the selected state.
-  static const _gradientColors = [Color(0xFFAAF0B7), Color(0xFF4CAF50)];
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            gradient: isSelected
-                ? const LinearGradient(
-                    colors: _gradientColors,
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  )
-                : null,
-            color: isSelected ? null : Colors.transparent,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: isSelected
-              ? ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: [Colors.white, Colors.white],
-                  ).createShader(bounds),
-                  child: Icon(icon, size: 24, color: Colors.white),
-                )
-              : Icon(icon, size: 24, color: const Color(0xFF8E8E8E)),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: isSelected
-                ? const Color(0xFF2E7D32)
-                : const Color(0xFF8E8E8E),
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
-    );
-  }
-}

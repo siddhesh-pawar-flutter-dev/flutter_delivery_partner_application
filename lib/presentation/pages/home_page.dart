@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/utils/app_pages.dart';
 import '../../domain/entities/delivery_partner.dart';
 import '../controllers/home_controller.dart';
+import '../controllers/main_shell_controller.dart';
 import '../widgets/active_order_section.dart';
 import '../widgets/connectivity_gate.dart';
 import '../widgets/order_card.dart';
@@ -26,7 +26,7 @@ class HomePage extends GetView<HomeController> {
                 : controller.orders;
 
             return RefreshIndicator(
-              color: const Color(0xFFE94F56),
+              color: const Color(0xFF4CAF50),
               onRefresh: controller.refreshOrders,
               child: ListView(
                 controller: controller.scrollController,
@@ -128,7 +128,7 @@ class HomePage extends GetView<HomeController> {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () {
-                              Get.offNamed(AppPages.orderHistory);
+                              Get.find<MainShellController>().goTo(1);
                             },
                             borderRadius: BorderRadius.circular(16),
                             child: Container(
@@ -175,7 +175,6 @@ class HomePage extends GetView<HomeController> {
             );
           }),
         ),
-        bottomNavigationBar: const _HomeBottomBar(),
       ),
     );
   }
@@ -289,7 +288,7 @@ class _ProfileAvatar extends StatelessWidget {
       height: 50,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        color: Color(0xFFE94F56),
+        color: Color(0xFF4CAF50),
       ),
       child: ClipOval(
         child: imageUrl.isEmpty
@@ -665,105 +664,6 @@ class _EmptyDeliveries extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
       ),
-    );
-  }
-}
-
-class _HomeBottomBar extends StatelessWidget {
-  const _HomeBottomBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x14000000),
-              blurRadius: 24,
-              offset: Offset(0, -6),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            GestureDetector(
-              onTap: () {},
-              child: const _BottomItem(
-                icon: Icons.home_filled,
-                label: 'Home',
-                isSelected: true,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => Get.offNamed(AppPages.orderHistory),
-              child: const _BottomItem(
-                icon: Icons.receipt_long_outlined,
-                label: 'Orders',
-                isSelected: false,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => Get.toNamed(AppPages.profile),
-              child: const _BottomItem(
-                icon: Icons.person_outline_rounded,
-                label: 'Profile',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomItem extends StatelessWidget {
-  const _BottomItem({
-    required this.icon,
-    required this.label,
-    this.isSelected = false,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFFFFE7E8) : Colors.transparent,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: Icon(
-            icon,
-            color: isSelected
-                ? const Color(0xFFE94F56)
-                : const Color(0xFF8E8E8E),
-            size: 24,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: isSelected
-                ? const Color(0xFFE94F56)
-                : const Color(0xFF8E8E8E),
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
     );
   }
 }

@@ -39,13 +39,13 @@ class ProfilePage extends GetView<ProfileController> {
             }
 
             return RefreshIndicator(
-              color: const Color(0xFFFF5A64),
+              color: const Color(0xFF4CAF50),
               onRefresh: controller.loadProfile,
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 28),
                 children: [
-                  _TopHeader(title: 'Account', onBack: () => Get.back<void>()),
+                  _TopHeader(title: 'Account'),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(18, 14, 18, 0),
                     child: _ProfileHero(profile: profile),
@@ -138,9 +138,7 @@ class ProfilePage extends GetView<ProfileController> {
             );
           }),
         ),
-        bottomNavigationBar: _ProfileBottomBar(
-          onOrdersTap: () => Get.back<void>(),
-        ),
+
       ),
     );
   }
@@ -177,10 +175,9 @@ class ProfilePage extends GetView<ProfileController> {
 }
 
 class _TopHeader extends StatelessWidget {
-  const _TopHeader({required this.title, required this.onBack});
+  const _TopHeader({required this.title});
 
   final String title;
-  final VoidCallback onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +189,6 @@ class _TopHeader extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
-
         boxShadow: [
           BoxShadow(
             color: Color(0x22000000),
@@ -201,40 +197,15 @@ class _TopHeader extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: onBack,
-            child: const SizedBox(
-              width: 28,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 18,
-                color: Colors.white,
-              ),
-            ),
+      child: Center(
+        child: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
           ),
-          Expanded(
-            child: Center(
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 28,
-            child: Icon(
-              Icons.person_outline_rounded,
-              size: 20,
-              color: Colors.transparent,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -462,102 +433,6 @@ class _OptionTile extends StatelessWidget {
   }
 }
 
-class _ProfileBottomBar extends StatelessWidget {
-  const _ProfileBottomBar({required this.onOrdersTap});
-
-  final VoidCallback onOrdersTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x14000000),
-              blurRadius: 24,
-              offset: Offset(0, -6),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            // Orders — inactive
-            Expanded(
-              child: GestureDetector(
-                onTap: onOrdersTap,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF2F2F2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.shopping_bag_outlined,
-                        color: Color(0xFF8E8E8E),
-                        size: 18,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Orders',
-                        style: TextStyle(
-                          color: Color(0xFF8E8E8E),
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 18),
-            // Account — selected (gradient)
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFAAF0B7), Color(0xFF4CAF50)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.person_outline_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      'Account',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 String _initialsFor(String name) {
   final trimmed = name.trim();

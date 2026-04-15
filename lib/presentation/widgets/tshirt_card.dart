@@ -25,7 +25,7 @@ class TshirtCard extends StatelessWidget {
                   'Pick your T-shirt\nfrom here',
                   style: const TextStyle(
                     color: Color(0xFF1A1A1A),
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.w700,
                     height: 1.3,
                   ),
