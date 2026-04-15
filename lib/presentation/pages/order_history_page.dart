@@ -240,6 +240,7 @@ class _DateFilterChip extends StatelessWidget {
                 : Colors.white.withValues(alpha: 0.6),
           ),
         ),
+
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

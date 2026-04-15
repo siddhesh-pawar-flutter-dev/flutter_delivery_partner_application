@@ -12,12 +12,10 @@ import '../controllers/home_controller.dart';
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    // Add OnlineStatusRemoteDataSource
     Get.lazyPut<OnlineStatusRemoteDataSource>(
       () => OnlineStatusRemoteDataSourceImpl(Get.find()),
     );
 
-    // Update PartnerRepositoryImpl to include OnlineStatusRemoteDataSource
     Get.lazyPut<PartnerRepository>(
       () => PartnerRepositoryImpl(
         Get.find<PartnerRemoteDataSource>(),
