@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../controllers/order_history_controller.dart';
 import '../widgets/connectivity_gate.dart';
+import '../widgets/custom_header.dart';
 import '../widgets/order_card.dart';
 
 class OrderHistoryPage extends GetView<OrderHistoryController> {
@@ -25,45 +26,25 @@ class OrderHistoryPage extends GetView<OrderHistoryController> {
               cacheExtent: 1400,
               padding: const EdgeInsets.only(bottom: 24),
               children: [
-                Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFFAAF0B7), Color(0xFF4CAF50)],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+                CustomHeader(
+                  title: 'Order History',
+                  subtitle: 'Review and track your past deliveries',
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      '${displayedOrders.length} orders',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
-                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const Expanded(
-                            child: Text(
-                              'Order History',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            '${displayedOrders.length} orders',
-                            style: const TextStyle(
-                              color: Color(0xFF2E7D32),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 14),
-                      _FilterBar(controller: controller),
-                    ],
-                  ),
+                  bottom: _FilterBar(controller: controller),
                 ),
                 const SizedBox(height: 16),
 

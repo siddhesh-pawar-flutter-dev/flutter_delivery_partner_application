@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 
 import '../../presentation/bindings/auth_binding.dart';
+import '../../presentation/bindings/gig_by_date_binding.dart';
 import '../../presentation/bindings/language_binding.dart';
 import '../../presentation/bindings/main_shell_binding.dart';
+import '../../presentation/pages/gig_by_date_page.dart';
 import '../../presentation/pages/language_page.dart';
 import '../../presentation/pages/login_page.dart';
 import '../../presentation/pages/main_shell_page.dart';
@@ -22,6 +24,7 @@ class AppPages {
   static const String home = '/main';
   static const String orderHistory = '/main';
   static const String profile = '/main';
+  static const String gigByDate = '/gig-by-date';
 
   static const String tshirtSelection = '/tshirt-selection';
   static const String orderDetail = '/order-detail';
@@ -45,5 +48,11 @@ class AppPages {
     GetPage(name: tshirtSelection, page: () => const TshirtSelectionPage()),
 
     GetPage(name: orderDetail, page: () => const OrderDetailPage()),
+
+    GetPage(
+      name: gigByDate,
+      page: () => const GigByDatePage(),
+      binding: GigByDateBinding(),
+    ),
   ];
 }

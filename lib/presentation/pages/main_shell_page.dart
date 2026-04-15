@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/main_shell_controller.dart';
+import '../pages/gig_history_page.dart';
 import '../pages/home_page.dart';
 import '../pages/order_history_page.dart';
+import '../pages/payout_history_page.dart';
 import '../pages/profile_page.dart';
 
 class MainShellPage extends GetView<MainShellController> {
@@ -15,7 +17,13 @@ class MainShellPage extends GetView<MainShellController> {
       body: Obx(
         () => IndexedStack(
           index: controller.currentIndex.value,
-          children: const [HomePage(), OrderHistoryPage(), ProfilePage()],
+          children: const [
+            HomePage(),
+            OrderHistoryPage(),
+            GigHistoryPage(),
+            PayoutHistoryPage(),
+            ProfilePage(),
+          ],
         ),
       ),
       bottomNavigationBar: Obx(
@@ -37,6 +45,8 @@ class _SharedBottomBar extends StatelessWidget {
   static const _items = [
     _NavItem(icon: Icons.home_filled, label: 'Home'),
     _NavItem(icon: Icons.receipt_long_outlined, label: 'Orders'),
+    _NavItem(icon: Icons.work_history_outlined, label: 'Gigs'),
+    _NavItem(icon: Icons.account_balance_wallet_outlined, label: 'Payouts'),
     _NavItem(icon: Icons.person_outline_rounded, label: 'Profile'),
   ];
 

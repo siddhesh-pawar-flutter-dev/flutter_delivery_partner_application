@@ -7,6 +7,9 @@ class AppConstants {
   static const String profile = '/delivery-partner/details';
   static const String myOrders = '/delivery-partner/my-orders';
   static const String onlineStatus = '/delivery-partner/online-status';
+  static const String gigHistory = '/gigs/rider/gig_hisotry_list';
+  static const String gigByDate = '/gigs/rider/gig-by-date';
+  static const String myPayouts = '/delivery-partner/my-payouts';
 
   static const String tokenKey = 'auth_token';
   static const String userKey = 'user_json';
