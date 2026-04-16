@@ -96,20 +96,32 @@ class _OrderHeaderCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => Get.back(),
-            icon: const Icon(Icons.arrow_back, color: Color(0xFF2E7D32)),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            order.restaurantName,
-            style: GoogleFonts.manrope(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFF2E7D32),
+          Expanded(
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: const Icon(Icons.arrow_back, color: Color(0xFF2E7D32)),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    order.restaurantName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.manrope(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFF2E7D32),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const Spacer(),
+          const SizedBox(width: 12),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
@@ -158,9 +170,10 @@ class _EarningsCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 8,
+            runSpacing: 4,
             children: [
               Text(
                 'Rs ${amount.toStringAsFixed(2)}',
@@ -170,7 +183,6 @@ class _EarningsCard extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              const SizedBox(width: 8),
               Text(
                 '+ Rs 50.00 tip', // Placeholder for tip
                 style: GoogleFonts.inter(
@@ -386,7 +398,7 @@ class _CustomerContactCard extends StatelessWidget {
                   height: 120,
                   width: double.infinity,
                   color: Colors.blue[100],
-                  child: const Icon(Icons.map_outlined, size: 60, color: Colors.blue),
+                  child: const Icon(Icons.map_outlined, size: 60,    color: const Color(0xFF2E7D32),),
                 ),
                 Positioned(
                   bottom: 12,
@@ -412,7 +424,7 @@ class _CustomerContactCard extends StatelessWidget {
               const CircleAvatar(
                 radius: 20,
                 backgroundColor: Colors.white,
-                child: Icon(Icons.person, color: Colors.blue),
+                child: Icon(Icons.person,    color: const Color(0xFF2E7D32),),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -444,7 +456,7 @@ class _CustomerContactCard extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.chat_bubble, color: Colors.blue, size: 20),
+                  icon: const Icon(Icons.chat_bubble,    color: const Color(0xFF2E7D32), size: 20),
                   onPressed: () {},
                 ),
               ),
@@ -460,7 +472,7 @@ class _CustomerContactCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.home, color: Colors.blue, size: 20),
+                const Icon(Icons.home,    color: const Color(0xFF2E7D32), size: 20),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -700,14 +712,14 @@ class _PhotoPlaceholder extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.camera_alt_rounded, color: Colors.blue[300], size: 32),
+          Icon(Icons.camera_alt_rounded,    color: const Color(0xFF2E7D32), size: 32),
           const SizedBox(height: 8),
           Text(
             label,
             style: GoogleFonts.inter(
               fontSize: 10,
               fontWeight: FontWeight.w800,
-              color: Colors.blue[300],
+              color: const Color(0xFF2E7D32),
               letterSpacing: 0.5,
             ),
           ),
