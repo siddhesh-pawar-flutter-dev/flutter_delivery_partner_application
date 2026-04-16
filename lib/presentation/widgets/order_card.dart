@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,140 +22,113 @@ class OrderCard extends StatelessWidget {
       onTap: () => Get.toNamed('/order-detail', arguments: order),
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerLowest,
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: colorScheme.onSurface.withValues(alpha: 0.04),
+              color: Colors.black.withOpacity(0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: colorScheme.surfaceContainerLow,
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: order.imageUrl.isEmpty
-                    ? _fallbackImage(colorScheme)
-                    : CachedNetworkImage(
-                        imageUrl: order.imageUrl,
-                        width: 64,
-                        height: 64,
-                        fit: BoxFit.cover,
-                        memCacheWidth: 240,
-                        memCacheHeight: 240,
-                        placeholder: (_, _) =>
-                            _fallbackImage(colorScheme, icon: Icons.image_outlined),
-                        errorWidget: (_, _, _) => _fallbackImage(colorScheme),
-                      ),
+            // Top Row: Order ID & Status Badge
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'ORD-${order.id}',
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black26,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                _StatusBadge(status: order.status),
+              ],
+            ),
+            const SizedBox(height: 12),
+            
+            // Restaurant Name
+            Text(
+              order.restaurantName,
+              style: GoogleFonts.manrope(
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                color: Colors.black87,
               ),
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: 12),
+
+            // Item Summary
+            Row(
+              children: [
+                const Icon(Icons.inventory_2_outlined, size: 16, color: Colors.black38),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    order.itemSummary.isEmpty ? '${order.quantity} items' : order.itemSummary,
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black45,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+
+            // Date & Time
+            Row(
+              children: [
+                const Icon(Icons.access_time, size: 16, color: Colors.black38),
+                const SizedBox(width: 8),
+                Text(
+                  Formatters.formatDateTime(scheduledAt),
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black45,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            // Bottom Section: Grand Total
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: _getTonalColor(order.status).withOpacity(0.08),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          order.restaurantName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.manrope(
-                            color: colorScheme.onSurface,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _statusBadgeBackground(context, order.status),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Text(
-                          _statusLabel(order.status),
-                          style: GoogleFonts.inter(
-                            color: _statusBadgeColor(context, order.status),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ],
+                   Text(
+                    'Grand Total',
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black45,
+                    ),
                   ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(Icons.location_on_rounded, size: 14, color: colorScheme.primary),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          _routeLabel(order),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: colorScheme.primary.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'Rs ${order.amount.toStringAsFixed(0)}',
-                          style: GoogleFonts.inter(
-                            color: colorScheme.primary,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        '${order.quantity} item${order.quantity == 1 ? '' : 's'}',
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: colorScheme.outline,
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        _formatTime(scheduledAt),
-                        style: GoogleFonts.inter(
-                          color: colorScheme.outline,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Rs ${order.amount.toStringAsFixed(2)}',
+                    style: GoogleFonts.manrope(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      color: _getTonalColor(order.status),
+                    ),
                   ),
                 ],
               ),
@@ -167,89 +139,71 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Widget _fallbackImage(ColorScheme colorScheme, {IconData icon = Icons.fastfood_rounded}) {
+  Color _getTonalColor(String status) {
+    final normalized = status.trim().toLowerCase();
+    switch (normalized) {
+      case 'accepted':
+      case 'delivered':
+      case 'completed':
+        return const Color(0xFF2E7D32);
+      case 'picked':
+      case 'picked up':
+      case 'pending':
+      case 'in progress':
+        return const Color(0xFFC2185B); // Rose tonal for in progress
+      case 'cancelled':
+      case 'failed':
+      case 'not accepted':
+      case 'not_accepted':
+      case 'user_not_accepted':
+        return const Color(0xFFD32F2F);
+      default:
+        return const Color(0xFF2E7D32);
+    }
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  const _StatusBadge({required this.status});
+  final String status;
+
+  @override
+  Widget build(BuildContext context) {
+    final normalized = status.trim().toLowerCase();
+    Color bgColor;
+    Color textColor;
+    String label = status.trim().replaceAll('_', ' ').toUpperCase();
+
+    if (normalized == 'completed' || normalized == 'delivered') {
+      bgColor = const Color(0xFFC8E6C9);
+      textColor = const Color(0xFF2E7D32);
+      label = 'DELIVERED';
+    } else if (normalized == 'cancelled' || normalized == 'failed' || normalized.contains('not_accepted')) {
+      bgColor = const Color(0xFFFFCDD2);
+      textColor = const Color(0xFFC62828);
+      label = 'CANCELLED';
+    } else {
+      // In Progress / Pending
+      bgColor = const Color(0xFFFCE4EC);
+      textColor = const Color(0xFFC2185B);
+      label = 'IN PROGRESS';
+    }
+
     return Container(
-      width: 64,
-      height: 64,
-      color: colorScheme.surfaceContainerHigh,
-      child: Icon(icon, color: colorScheme.outline.withValues(alpha: 0.5)),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.inter(
+          fontSize: 9,
+          fontWeight: FontWeight.w900,
+          color: textColor,
+          letterSpacing: 0.5,
+        ),
+      ),
     );
   }
-}
-
-String _statusLabel(String status) {
-  final normalized = status.trim().toLowerCase();
-
-  if (normalized.isEmpty) return 'Delivered';
-  if (normalized == 'not accepted' ||
-      normalized == 'not_accepted' ||
-      normalized == 'user_not_accepted') {
-    return 'Failed';
-  }
-
-  return normalized
-      .replaceAll('_', ' ')
-      .split(RegExp(r'\s+'))
-      .map(
-        (part) => part.isEmpty
-            ? part
-            : '${part[0].toUpperCase()}${part.substring(1)}',
-      )
-      .join(' ');
-}
-
-String _routeLabel(DeliveryOrder order) {
-  final pickup = order.pickupArea.trim();
-  final drop = order.dropCity.trim();
-  if (pickup.isNotEmpty && drop.isNotEmpty) {
-    return '$pickup to $drop';
-  }
-  if (order.address.trim().isNotEmpty) {
-    return order.address;
-  }
-  return 'Delivery route unavailable';
-}
-
-String _formatTime(DateTime? value) {
-  if (value == null) return '--';
-  final hour = value.hour % 12 == 0 ? 12 : value.hour % 12;
-  final minute = value.minute.toString().padLeft(2, '0');
-  final suffix = value.hour >= 12 ? 'PM' : 'AM';
-  return '$hour:$minute $suffix';
-}
-
-Color _statusBadgeColor(BuildContext context, String status) {
-  final colorScheme = Theme.of(context).colorScheme;
-  final normalized = status.trim().toLowerCase();
-  
-  if (normalized == 'completed' || normalized == 'delivered') {
-    return colorScheme.primary;
-  }
-  if (normalized == 'cancelled' ||
-      normalized == 'failed' ||
-      normalized == 'not accepted' ||
-      normalized == 'not_accepted' ||
-      normalized == 'user_not_accepted') {
-    return colorScheme.error;
-  }
-  
-  return const Color(0xFF923357); // tertiary from design system
-}
-
-Color _statusBadgeBackground(BuildContext context, String status) {
-  final colorScheme = Theme.of(context).colorScheme;
-  final normalized = status.trim().toLowerCase();
-  
-  if (normalized == 'completed' || normalized == 'delivered') {
-    return colorScheme.primary.withValues(alpha: 0.1);
-  }
-  if (normalized == 'cancelled' ||
-      normalized == 'failed' ||
-      normalized == 'not accepted' ||
-      normalized == 'not_accepted' ||
-      normalized == 'user_not_accepted') {
-    return colorScheme.errorContainer.withValues(alpha: 0.5);
-  }
-  
-  return const Color(0xFFFDE7EF); // tertiary container light
 }

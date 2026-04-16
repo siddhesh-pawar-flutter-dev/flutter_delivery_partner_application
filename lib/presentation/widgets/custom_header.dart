@@ -10,6 +10,7 @@ class CustomHeader extends StatelessWidget {
     this.trailing,
     this.bottom,
     this.onBack,
+    this.leading,
   });
 
   final String title;
@@ -17,6 +18,7 @@ class CustomHeader extends StatelessWidget {
   final Widget? trailing;
   final Widget? bottom;
   final VoidCallback? onBack;
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,7 @@ class CustomHeader extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
-                  children: [
+                  children: [leading ?? const SizedBox(width:40),
                     if (onBack != null) ...[
                       IconButton(
                         onPressed: onBack,
@@ -75,8 +77,8 @@ class CustomHeader extends StatelessWidget {
                             title,
                             style: GoogleFonts.manrope(
                               color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
                               letterSpacing: -0.5,
                             ),
                           ),
