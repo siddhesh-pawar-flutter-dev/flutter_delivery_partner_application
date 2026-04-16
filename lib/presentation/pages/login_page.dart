@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../widgets/auth_wave_header.dart';
 import '../widgets/connectivity_gate.dart';
 
 class LoginPage extends GetView<AuthController> {
@@ -19,110 +20,48 @@ class LoginPage extends GetView<AuthController> {
           bottom: false,
           child: Column(
             children: [
-              ClipPath(
-                clipper: _WaveClipper(),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFFAAF0B7), Color(0xFF4CAF50)],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+              const AuthWaveHeader(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 40),
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 42.0),
+                        child: _HeroIcon(),
+                      ),
                     ),
-                  ),
-                  child: Stack(
-                    children: [
-                      const Positioned(
-                        top: 18,
-                        left: 26,
-                        child: _SparkleDot(size: 6),
+                    Text(
+                      'Be an Easy Cater Partner',
+                      style: TextStyle(
+                        color: Color(0xFF204B27),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
-                      const Positioned(
-                        top: 54,
-                        right: 34,
-                        child: _SparkleDot(size: 7),
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      'Get a stable monthly\nincome',
+                      style: TextStyle(
+                        color: Color(0xFF132A18),
+                        fontSize: 24,
+                        height: 1.2,
+                        fontWeight: FontWeight.w800,
                       ),
-                      const Positioned(
-                        top: 96,
-                        left: 98,
-                        child: _SparkleDot(size: 5),
-                      ),
-                      const Positioned(
-                        top: 164,
-                        right: 18,
-                        child: _SparkleDot(size: 6),
-                      ),
-                      Positioned(
-                        top: -50,
-                        right: -56,
-                        child: Container(
-                          width: 172,
-                          height: 172,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.12),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: -70,
-                        bottom: 48,
-                        child: Container(
-                          width: 152,
-                          height: 152,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 40),
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 42.0),
-                              child: _HeroIcon(),
-                            ),
-                          ),
-
-                          Text(
-                            'Be an Easy Cater Partner',
-                            style: TextStyle(
-                              color: Color(0xFF204B27),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Text(
-                            'Get a stable monthly\nincome',
-                            style: TextStyle(
-                              color: Color(0xFF132A18),
-                              fontSize: 24,
-                              height: 1.2,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16.0),
-                            child: _IndiaBadge(),
-                          ),
-                          SizedBox(height: 40.0),
-                        ],
-                      ),
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: _IndiaBadge(),
+                    ),
+                    SizedBox(height: 40.0),
+                  ],
                 ),
               ),
               Expanded(
                 child: ClipPath(
                   child: Container(
                     width: double.infinity,
-                    color: Colors.white,
+                    color: Color(0xFFF5FAF2),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 42, 20, 24),
                       child: LayoutBuilder(
@@ -164,7 +103,12 @@ class LoginPage extends GetView<AuthController> {
                                           LengthLimitingTextInputFormatter(10),
                                         ],
                                         style: const TextStyle(
-                                          color: Color(0xFF9AA0A6),
+                                          color: Color.fromARGB(
+                                            255,
+                                            80,
+                                            86,
+                                            94,
+                                          ),
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -196,7 +140,13 @@ class LoginPage extends GetView<AuthController> {
                                                 Text(
                                                   '+91',
                                                   style: TextStyle(
-                                                    color: Color(0xFF9AA0A6),
+                                                    color: Color.fromARGB(
+                                                      255,
+                                                      80,
+                                                      86,
+                                                      94,
+                                                    ),
+                                                    // color: Color(0xFF9AA0A6),
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w600,
                                                   ),
@@ -224,78 +174,86 @@ class LoginPage extends GetView<AuthController> {
                                     ),
                                     const SizedBox(height: 22),
                                     Obx(
-                                      () => Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Transform.translate(
-                                            offset: const Offset(-10, -2),
-                                            child: Checkbox(
-                                              value: controller
-                                                  .hasAcceptedTerms
-                                                  .value,
-                                              onChanged: controller.toggleTerms,
-                                              checkColor: Colors.white,
-                                              activeColor: const Color(
-                                                0xFF2E7D32,
-                                              ),
-                                              side: const BorderSide(
-                                                color: Color(0xFF7D7F87),
-                                              ),
-                                              materialTapTargetSize:
-                                                  MaterialTapTargetSize
-                                                      .shrinkWrap,
-                                              visualDensity:
-                                                  const VisualDensity(
-                                                    horizontal: -4,
-                                                    vertical: -4,
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
+                                      () => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 14.0,
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
                                               padding: const EdgeInsets.only(
-                                                top: 2,
+                                                right: 8.0,
                                               ),
-                                              child: RichText(
-                                                text: const TextSpan(
-                                                  style: TextStyle(
-                                                    color: Color(0xFF6E737B),
-                                                    fontSize: 14,
-                                                    height: 1.45,
+                                              child: Checkbox(
+                                                value: controller
+                                                    .hasAcceptedTerms
+                                                    .value,
+                                                onChanged:
+                                                    controller.toggleTerms,
+                                                checkColor: Colors.white,
+                                                activeColor: const Color(
+                                                  0xFF2E7D32,
+                                                ),
+                                                side: const BorderSide(
+                                                  color: Color(0xFF7D7F87),
+                                                ),
+                                                materialTapTargetSize:
+                                                    MaterialTapTargetSize
+                                                        .shrinkWrap,
+                                                visualDensity:
+                                                    const VisualDensity(
+                                                      horizontal: -4,
+                                                      vertical: -4,
+                                                    ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                  top: 2,
+                                                ),
+                                                child: RichText(
+                                                  text: const TextSpan(
+                                                    style: TextStyle(
+                                                      color: Color(0xFF6E737B),
+                                                      fontSize: 14,
+                                                      height: 1.45,
+                                                    ),
+                                                    children: [
+                                                      TextSpan(
+                                                        text:
+                                                            'By signing up I agree to the ',
+                                                      ),
+                                                      TextSpan(
+                                                        text: 'Terms of use',
+                                                        style: TextStyle(
+                                                          color: Color(
+                                                            0xFF3BAA45,
+                                                          ),
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                      TextSpan(text: ' and '),
+                                                      TextSpan(
+                                                        text: 'Privacy Policy.',
+                                                        style: TextStyle(
+                                                          color: Color(
+                                                            0xFF3BAA45,
+                                                          ),
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text:
-                                                          'By signing up I agree to the ',
-                                                    ),
-                                                    TextSpan(
-                                                      text: 'Terms of use',
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                          0xFF3BAA45,
-                                                        ),
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                    TextSpan(text: ' and '),
-                                                    TextSpan(
-                                                      text: 'Privacy Policy.',
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                          0xFF3BAA45,
-                                                        ),
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ],
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 24),
@@ -421,50 +379,6 @@ class _IndiaBadge extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _WaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.lineTo(0, size.height - 60);
-    path.quadraticBezierTo(
-      size.width * 0.25,
-      size.height,
-      size.width * 0.5,
-      size.height - 30,
-    );
-    path.quadraticBezierTo(
-      size.width * 0.75,
-      size.height - 60,
-      size.width,
-      size.height - 20,
-    );
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(_WaveClipper old) => false;
-}
-
-class _SparkleDot extends StatelessWidget {
-  const _SparkleDot({required this.size});
-
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
       ),
     );
   }

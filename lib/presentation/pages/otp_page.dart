@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../widgets/auth_wave_header.dart';
 import '../widgets/connectivity_gate.dart';
 
 class OtpPage extends GetView<AuthController> {
@@ -19,121 +20,52 @@ class OtpPage extends GetView<AuthController> {
           bottom: false,
           child: Column(
             children: [
-              // ── Gradient wave header (matches login page) ──────────────
-              ClipPath(
-                clipper: _WaveClipper(),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFFAAF0B7), Color(0xFF4CAF50)],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+              AuthWaveHeader(
+                leading: GestureDetector(
+                  onTap: () => Get.back<void>(),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.25),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: Colors.white,
+                      size: 18,
                     ),
                   ),
-                  child: Stack(
-                    children: [
-                      // Decorative sparkle dots
-                      const Positioned(
-                        top: 18,
-                        left: 26,
-                        child: _SparkleDot(size: 6),
+                ),
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 40),
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 42),
+                        child: _OtpHeroIcon(),
                       ),
-                      const Positioned(
-                        top: 54,
-                        right: 34,
-                        child: _SparkleDot(size: 7),
+                    ),
+                    Text(
+                      'Almost there!',
+                      style: TextStyle(
+                        color: Color(0xFF204B27),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
-                      const Positioned(
-                        top: 96,
-                        left: 98,
-                        child: _SparkleDot(size: 5),
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      'Verify your\nmobile number',
+                      style: TextStyle(
+                        color: Color(0xFF132A18),
+                        fontSize: 24,
+                        height: 1.2,
+                        fontWeight: FontWeight.w800,
                       ),
-                      const Positioned(
-                        top: 164,
-                        right: 18,
-                        child: _SparkleDot(size: 6),
-                      ),
-                      // Decorative translucent circles
-                      Positioned(
-                        top: -50,
-                        right: -56,
-                        child: Container(
-                          width: 172,
-                          height: 172,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.12),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: -70,
-                        bottom: 48,
-                        child: Container(
-                          width: 152,
-                          height: 152,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                      // Back button
-                      Positioned(
-                        top: 12,
-                        left: 0,
-                        child: GestureDetector(
-                          onTap: () => Get.back<void>(),
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.25),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.arrow_back_ios_new_rounded,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Hero content
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 40),
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 42),
-                              child: _OtpHeroIcon(),
-                            ),
-                          ),
-                          Text(
-                            'Almost there!',
-                            style: TextStyle(
-                              color: Color(0xFF204B27),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Text(
-                            'Verify your\nmobile number',
-                            style: TextStyle(
-                              color: Color(0xFF132A18),
-                              fontSize: 24,
-                              height: 1.2,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          SizedBox(height: 56),
-                        ],
-                      ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 56),
+                  ],
                 ),
               ),
 
@@ -141,7 +73,7 @@ class OtpPage extends GetView<AuthController> {
               Expanded(
                 child: Container(
                   width: double.infinity,
-                  color: Colors.white,
+                  color: Color(0xFFF5FAF2),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 36, 20, 24),
                     child: LayoutBuilder(
@@ -170,8 +102,13 @@ class OtpPage extends GetView<AuthController> {
                                   Obx(
                                     () => Text(
                                       'Code sent to +91 ${ctrl.currentPhone.value}',
-                                      style: const TextStyle(
-                                        color: Color(0xFF9AA0A6),
+                                      style: TextStyle(
+                                        color: const Color.fromARGB(
+                                          255,
+                                          145,
+                                          145,
+                                          145,
+                                        ),
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -184,9 +121,7 @@ class OtpPage extends GetView<AuthController> {
                                     children: List.generate(6, (index) {
                                       return Expanded(
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                            right: index == 6 ? 0 : 2,
-                                          ),
+                                          padding: EdgeInsets.only(right: 8),
                                           child: Container(
                                             height: 54,
                                             width: 54,
@@ -209,7 +144,12 @@ class OtpPage extends GetView<AuthController> {
                                               keyboardType:
                                                   TextInputType.number,
                                               style: const TextStyle(
-                                                color: Color(0xFF9AA0A6),
+                                                color: Color.fromARGB(
+                                                  255,
+                                                  58,
+                                                  60,
+                                                  61,
+                                                ),
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w700,
                                               ),
@@ -338,10 +278,6 @@ class OtpPage extends GetView<AuthController> {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// OTP hero icon (lock with digits feel)
-// ─────────────────────────────────────────────────────────────────────────────
-
 class _OtpHeroIcon extends StatelessWidget {
   const _OtpHeroIcon();
 
@@ -364,54 +300,6 @@ class _OtpHeroIcon extends StatelessWidget {
       ),
       child: const Center(
         child: Icon(Icons.lock_rounded, size: 54, color: Color(0xFF2D8E3A)),
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Shared wave + sparkle decorations (same as login_page.dart)
-// ─────────────────────────────────────────────────────────────────────────────
-
-class _WaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.lineTo(0, size.height - 60);
-    path.quadraticBezierTo(
-      size.width * 0.25,
-      size.height,
-      size.width * 0.5,
-      size.height - 30,
-    );
-    path.quadraticBezierTo(
-      size.width * 0.75,
-      size.height - 60,
-      size.width,
-      size.height - 20,
-    );
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(_WaveClipper old) => false;
-}
-
-class _SparkleDot extends StatelessWidget {
-  const _SparkleDot({required this.size});
-
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
       ),
     );
   }

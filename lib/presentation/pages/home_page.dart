@@ -374,6 +374,7 @@ class _StatisticsGrid extends GetView<HomeController> {
       mainAxisSpacing: 16,
       crossAxisSpacing: 16,
       childAspectRatio: 1.3,
+      
       children: [
         _StatusTile(
           icon: Icons.lunch_dining_rounded,
@@ -608,7 +609,7 @@ class _ViewMoreButton extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 52,
-        decoration: BoxDecoration(color: const Color(0xFF1A1A1A), borderRadius: BorderRadius.circular(16)),
+        decoration: BoxDecoration(color: const Color(0xFF2d8a39), borderRadius: BorderRadius.circular(16)),
         child: const Center(
           child: Text('View More', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
         ),
@@ -637,7 +638,7 @@ class _ProfileAvatar extends StatelessWidget {
             : CachedNetworkImage(
                 imageUrl: imageUrl, 
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => Center(child: Text(initials, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
+                errorWidget: (_, _, _) => Center(child: Text(initials, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
               ),
       ),
     );

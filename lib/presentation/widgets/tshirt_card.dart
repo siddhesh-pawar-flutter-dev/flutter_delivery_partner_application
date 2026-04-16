@@ -11,7 +11,7 @@ class TshirtCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
       decoration: BoxDecoration(
-        color: const Color(0xFFA7E949),
+        color: const Color(0xFF2E7D32),
         borderRadius: BorderRadius.circular(28),
       ),
       child: Row(
@@ -24,7 +24,7 @@ class TshirtCard extends StatelessWidget {
                 Text(
                   'Pick your T-shirt\nfrom here',
                   style: const TextStyle(
-                    color: Color(0xFF1A1A1A),
+                    color:Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     height: 1.3,
@@ -36,7 +36,7 @@ class TshirtCard extends StatelessWidget {
           const SizedBox(width: 12),
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF1A2633),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Material(
@@ -49,7 +49,7 @@ class TshirtCard extends StatelessWidget {
                   child: Text(
                     'View',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: const Color(0xFF2E7D32),
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
