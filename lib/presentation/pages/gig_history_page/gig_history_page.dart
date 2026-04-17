@@ -2,26 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
-import '../controllers/home_controller.dart';
-import '../controllers/gig_history_controller.dart';
-import '../widgets/connectivity_gate.dart';
-import '../widgets/empty_state.dart';
-import '../../core/utils/app_pages.dart';
+import '../../controllers/gig_history_controller.dart';
+import '../../widgets/connectivity_gate.dart';
+import '../../widgets/empty_state.dart';
+import '../../../core/utils/app_pages.dart';
 
 class GigHistoryPage extends GetView<GigHistoryController> {
   const GigHistoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final homeController = Get.find<HomeController>();
-
     return ConnectivityGate(
       child: Scaffold(
-        backgroundColor: const Color(0xFFF1F6F2), // Premium Light Background
+        backgroundColor: const Color(0xFFF1F6F2),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFF1F6F2),
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          ),
+          title: const Text(
+            'Earnings',
+            style: TextStyle(
+              color: Color(0xFF2E7D32),
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
         body: SafeArea(
           child: Obx(() {
-            final user = homeController.user.value;
             final gigs = controller.gigs;
 
             if (controller.isLoading.value && gigs.isEmpty) {
@@ -38,26 +49,6 @@ class GigHistoryPage extends GetView<GigHistoryController> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
-                  const SizedBox(height: 16),
-
-                  // 1. Profile Info Card
-                  _ProfileInfoCard(
-                    name: user?.name ?? 'Delivery Partner',
-                    imageUrl: user?.profileImage ?? '',
-                  ),
-                  const SizedBox(height: 32),
-
-                  // 2. Performance Overview Header
-                  Text(
-                    'PERFORMANCE OVERVIEW',
-                    style: GoogleFonts.inter(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black38,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
                   Text(
                     'Gig History',
                     style: GoogleFonts.manrope(
@@ -65,6 +56,17 @@ class GigHistoryPage extends GetView<GigHistoryController> {
                       fontWeight: FontWeight.w800,
                       color: Colors.black87,
                       letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+
+                  Text(
+                    'PERFORMANCE OVERVIEW',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black38,
+                      letterSpacing: 1.0,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -98,66 +100,6 @@ class GigHistoryPage extends GetView<GigHistoryController> {
           }),
         ),
       ),
-    );
-  }
-}
-
-class _ProfileInfoCard extends StatelessWidget {
-  const _ProfileInfoCard({required this.name, required this.imageUrl});
-  final String name;
-  final String imageUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            image: imageUrl.isNotEmpty
-                ? DecorationImage(
-                    image: NetworkImage(imageUrl),
-                    fit: BoxFit.cover,
-                  )
-                : null,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: imageUrl.isEmpty
-              ? const Icon(Icons.person, color: Color(0xFF2E7D32), size: 18)
-              : null,
-        ),
-        const SizedBox(width: 12),
-        Text(
-          'Easy Cater',
-          style: GoogleFonts.manrope(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: const Color(0xFF2E7D32),
-          ),
-        ),
-        const Spacer(),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.notifications_rounded,
-            color: Color(0xFF1B5E20),
-            size: 24,
-          ),
-          style: IconButton.styleFrom(
-            backgroundColor: Colors.white,
-            padding: const EdgeInsets.all(8),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -304,7 +246,7 @@ class _HistorySection extends StatelessWidget {
             ),
           ),
         ),
-        ...gigs.map((gig) => _GigCard(gig: gig)).toList(),
+        ...gigs.map((gig) => _GigCard(gig: gig)),
       ],
     );
   }
@@ -325,8 +267,6 @@ class _GigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statusColor = _getStatusColor(gig.status);
-
     return GestureDetector(
       onTap: () =>
           Get.toNamed(AppPages.gigByDate, arguments: {'date': gig.date}),
@@ -416,14 +356,6 @@ class _GigCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _getStatusColor(String status) {
-    if (status.toLowerCase().contains('complete'))
-      return const Color(0xFF2E7D32);
-    if (status.toLowerCase().contains('partial'))
-      return const Color(0xFFC2185B);
-    return Colors.black45;
   }
 }
 

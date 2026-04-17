@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/utils/formatters.dart';
-import '../controllers/gig_by_date_controller.dart';
-import '../widgets/custom_header.dart';
-import '../widgets/empty_state.dart';
+import '../../../core/utils/formatters.dart';
+import '../../controllers/gig_by_date_controller.dart';
+import '../../widgets/custom_header.dart';
+import '../../widgets/empty_state.dart';
 
 class GigByDatePage extends GetView<GigByDateController> {
   const GigByDatePage({super.key});
@@ -26,98 +26,99 @@ class GigByDatePage extends GetView<GigByDateController> {
       backgroundColor: const Color(0xFFF7F7F5),
       body: Column(
         children: [
-            CustomHeader(
-              title: 'Slots for $displayDate',
-              subtitle: 'Select a slot to start earning',
-              onBack: () => Get.back(),
-              trailing: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  '${controller.gigs.length} available',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                  ),
+          CustomHeader(
+            title: 'Slots for $displayDate',
+            subtitle: 'Select a slot to start earning',
+            onBack: () => Get.back(),
+            trailing: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                '${controller.gigs.length} available',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: Color(0xFF4CAF50)),
-                  );
-                }
+          ),
+          Expanded(
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Color(0xFF4CAF50)),
+                );
+              }
 
-                if (controller.errorMessage.value.isNotEmpty &&
-                    controller.gigs.isEmpty) {
-                  return Center(
-                    child: EmptyState(
-                      title: 'Failed to load gigs',
-                      subtitle: controller.errorMessage.value,
-                    ),
-                  );
-                }
-
-                if (controller.gigs.isEmpty) {
-                  return Center(
-                    child: EmptyState(
-                      title: 'No slots available',
-                      subtitle: 'There are no gig slots on $displayDate.',
-                    ),
-                  );
-                }
-
-                return RefreshIndicator(
-                  color: const Color(0xFF4CAF50),
-                  onRefresh: controller.loadInitialData,
-                  child: ListView.separated(
-                    controller: controller.scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      top: 16,
-                      bottom: 80, // Padding for bottom navbar just in case
-                    ),
-                    itemCount: controller.gigs.length +
-                        (controller.isLoadingMore.value ? 1 : 0),
-                    separatorBuilder: (_, _) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      if (index == controller.gigs.length) {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xFF4CAF50),
-                            ),
-                          ),
-                        );
-                      }
-                      
-                      final gig = controller.gigs[index];
-                      return _GigSlotCard(
-                        slotId: gig.slotId,
-                        slotStartHour: gig.slotStartHour,
-                        slotEndHour: gig.slotEndHour,
-                        estimatedPayout: gig.estimatedPayout,
-                        neededPeople: gig.neededPeople,
-                        enrolledPeople: gig.enrolledPeople,
-                        percentageForComplete: gig.percentageForComplete,
-                        status: gig.historyStatus,
-                      );
-                    },
+              if (controller.errorMessage.value.isNotEmpty &&
+                  controller.gigs.isEmpty) {
+                return Center(
+                  child: EmptyState(
+                    title: 'Failed to load gigs',
+                    subtitle: controller.errorMessage.value,
                   ),
                 );
-              }),
-            ),
-          ],
-        ),
+              }
+
+              if (controller.gigs.isEmpty) {
+                return Center(
+                  child: EmptyState(
+                    title: 'No slots available',
+                    subtitle: 'There are no gig slots on $displayDate.',
+                  ),
+                );
+              }
+
+              return RefreshIndicator(
+                color: const Color(0xFF4CAF50),
+                onRefresh: controller.loadInitialData,
+                child: ListView.separated(
+                  controller: controller.scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 16,
+                    bottom: 80, // Padding for bottom navbar just in case
+                  ),
+                  itemCount:
+                      controller.gigs.length +
+                      (controller.isLoadingMore.value ? 1 : 0),
+                  separatorBuilder: (_, _) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    if (index == controller.gigs.length) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF4CAF50),
+                          ),
+                        ),
+                      );
+                    }
+
+                    final gig = controller.gigs[index];
+                    return _GigSlotCard(
+                      slotId: gig.slotId,
+                      slotStartHour: gig.slotStartHour,
+                      slotEndHour: gig.slotEndHour,
+                      estimatedPayout: gig.estimatedPayout,
+                      neededPeople: gig.neededPeople,
+                      enrolledPeople: gig.enrolledPeople,
+                      percentageForComplete: gig.percentageForComplete,
+                      status: gig.historyStatus,
+                    );
+                  },
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -147,7 +148,7 @@ class _GigSlotCard extends StatelessWidget {
     if (statusText == null || statusText.isEmpty) {
       return const Color(0xFF2E7D32); // Available slot color
     }
-    
+
     final lowerStatus = statusText.toLowerCase();
     if (lowerStatus == 'complete' || lowerStatus == 'completed') {
       return const Color(0xFF4CAF50);
@@ -207,7 +208,11 @@ class _GigSlotCard extends StatelessWidget {
                             color: statusColor.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(Icons.access_time_rounded, size: 20, color: statusColor),
+                          child: Icon(
+                            Icons.access_time_rounded,
+                            size: 20,
+                            color: statusColor,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Text(

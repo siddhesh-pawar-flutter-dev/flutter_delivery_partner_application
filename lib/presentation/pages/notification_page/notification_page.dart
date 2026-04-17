@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../widgets/custom_header.dart';
+import '../../widgets/custom_header.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
@@ -31,10 +31,7 @@ class NotificationPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: const Color(0xFFE8F5E9),
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 4,
-                      ),
+                      border: Border.all(color: Colors.white, width: 4),
                       boxShadow: const [
                         BoxShadow(
                           color: Color(0x12000000),

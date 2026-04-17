@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../controllers/personal_details_controller.dart';
-import '../../core/utils/app_pages.dart';
+import '../../controllers/personal_details_controller.dart';
+import '../../../core/utils/app_pages.dart';
 
 class PersonalDetailsPage extends GetView<PersonalDetailsController> {
   const PersonalDetailsPage({super.key});

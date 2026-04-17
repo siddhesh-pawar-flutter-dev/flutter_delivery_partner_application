@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../controllers/personal_details_controller.dart';
-import '../widgets/primary_button.dart';
+import '../../controllers/personal_details_controller.dart';
+import '../../widgets/primary_button.dart';
 
 class EditProfilePage extends GetView<PersonalDetailsController> {
   const EditProfilePage({super.key});
@@ -86,11 +86,13 @@ class EditProfilePage extends GetView<PersonalDetailsController> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(24),
-        child: Obx(() => PrimaryButton(
-          label: 'Save Changes',
-          isLoading: controller.isLoading.value,
-          onPressed: controller.saveChanges,
-        )),
+        child: Obx(
+          () => PrimaryButton(
+            label: 'Save Changes',
+            isLoading: controller.isLoading.value,
+            onPressed: controller.saveChanges,
+          ),
+        ),
       ),
     );
   }
@@ -109,10 +111,7 @@ class EditProfilePage extends GetView<PersonalDetailsController> {
           padding: const EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
             label,
-            style: GoogleFonts.inter(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
+            style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
           ),
         ),
         TextFormField(

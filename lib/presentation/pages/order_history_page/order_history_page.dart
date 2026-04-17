@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../controllers/order_history_controller.dart';
-import '../widgets/connectivity_gate.dart';
-import '../widgets/order_card.dart';
+import '../../controllers/order_history_controller.dart';
+import '../../widgets/connectivity_gate.dart';
+import '../../widgets/order_card.dart';
 
 class OrderHistoryPage extends GetView<OrderHistoryController> {
   const OrderHistoryPage({super.key});

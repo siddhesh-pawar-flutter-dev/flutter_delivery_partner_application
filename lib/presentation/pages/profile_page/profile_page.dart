@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../domain/entities/delivery_partner.dart';
-import '../controllers/profile_controller.dart';
-import '../widgets/connectivity_gate.dart';
-import '../widgets/empty_state.dart';
+import '../../../domain/entities/delivery_partner.dart';
+import '../../controllers/profile_controller.dart';
+import '../../widgets/connectivity_gate.dart';
+import '../../widgets/empty_state.dart';
 
 class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({super.key});

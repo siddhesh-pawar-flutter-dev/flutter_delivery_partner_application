@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/utils/app_constants.dart';
-import '../../core/utils/app_theme.dart';
-import '../controllers/language_controller.dart';
-import '../widgets/connectivity_gate.dart';
+import '../../../core/utils/app_constants.dart';
+import '../../../core/utils/app_theme.dart';
+import '../../controllers/language_controller.dart';
+import '../../widgets/connectivity_gate.dart';
 
 class LanguagePage extends GetView<LanguageController> {
   const LanguagePage({super.key});

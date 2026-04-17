@@ -4,17 +4,17 @@ import '../../presentation/bindings/auth_binding.dart';
 import '../../presentation/bindings/gig_by_date_binding.dart';
 import '../../presentation/bindings/language_binding.dart';
 import '../../presentation/bindings/main_shell_binding.dart';
-import '../../presentation/pages/gig_by_date_page.dart';
-import '../../presentation/pages/language_page.dart';
-import '../../presentation/pages/login_page.dart';
-import '../../presentation/pages/main_shell_page.dart';
+import '../../presentation/pages/gig_by_date_page/gig_by_date_page.dart';
+import '../../presentation/pages/language_page/language_page.dart';
+import '../../presentation/pages/login_page/login_page.dart';
+import '../../presentation/pages/main_shell_page/main_shell_page.dart';
 import '../../presentation/pages/order_detail_page/order_detail_page.dart';
-import '../../presentation/pages/otp_page.dart';
+import '../../presentation/pages/otp_page/otp_page.dart';
 import '../../presentation/bindings/personal_details_binding.dart';
-import '../../presentation/pages/edit_profile_page.dart';
-import '../../presentation/pages/personal_details_page.dart';
-import '../../presentation/pages/splash_page.dart';
-import '../../presentation/pages/tshirt_selection_page.dart';
+import '../../presentation/pages/edit_profile_page/edit_profile_page.dart';
+import '../../presentation/pages/personal_details_page/personal_details_page.dart';
+import '../../presentation/pages/splash_page/splash_page.dart';
+import '../../presentation/pages/tshirt_selection_page/tshirt_selection_page.dart';
 
 class AppPages {
   static const String splash = '/';

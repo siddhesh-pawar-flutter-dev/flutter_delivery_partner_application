@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../controllers/main_shell_controller.dart';
-import '../pages/gig_history_page.dart';
-import '../pages/home_page.dart';
-import '../pages/order_history_page.dart';
-import '../pages/payout_history_page.dart';
-import '../pages/profile_page.dart';
+import '../../controllers/main_shell_controller.dart';
+import '../gig_history_page/gig_history_page.dart';
+import '../home_page/home_page.dart';
+import '../order_history_page/order_history_page.dart';
+import '../payout_history_page/payout_history_page.dart';
+import '../profile_page/profile_page.dart';
 
 class MainShellPage extends GetView<MainShellController> {
   const MainShellPage({super.key});
@@ -60,7 +60,6 @@ class _TheDock extends StatelessWidget {
     final inactiveColor = colorScheme.onSurfaceVariant.withValues(alpha: 0.68);
 
     const bubbleSize = 50.0;
-    const notchSize = 74.0;
     const dockTopInset = 24.0;
     const dockHeight = 78.0;
 
@@ -72,11 +71,6 @@ class _TheDock extends StatelessWidget {
           height: dockHeight + dockTopInset,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              // final itemWidth = constraints.maxWidth / _items.length;
-              // final bubbleLeft =
-              //     (itemWidth * currentIndex) + ((itemWidth - bubbleSize) / 2);
-              // final notchLeft =
-              //     (itemWidth * currentIndex) + ((itemWidth - notchSize) / 2);
               const dockHorizontalPadding = 8.0;
               final itemWidth =
                   (constraints.maxWidth - dockHorizontalPadding * 2) /
@@ -328,54 +322,4 @@ class _ActiveDockOrb extends StatelessWidget {
       ),
     );
   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   final colorScheme = Theme.of(context).colorScheme;
-
-  //   return Material(
-  //     color: Colors.transparent,
-  //     child: InkWell(
-  //       onTap: onTap,
-  //       customBorder: const CircleBorder(),
-  //       child: Ink(
-  //         decoration: BoxDecoration(
-  //           shape: BoxShape.circle,
-  //           gradient: LinearGradient(
-  //             begin: Alignment.topLeft,
-  //             end: Alignment.bottomRight,
-  //             colors: [colorScheme.primary, colorScheme.primaryContainer],
-  //           ),
-  //           border: Border.all(
-  //             color: Colors.white.withValues(alpha: 0.95),
-  //             width: 4,
-  //           ),
-  //           boxShadow: [
-  //             BoxShadow(
-  //               color: colorScheme.primary.withValues(alpha: 0.28),
-  //               blurRadius: 24,
-  //               offset: const Offset(0, 12),
-  //             ),
-  //           ],
-  //         ),
-  //         child: Center(
-  //           child: AnimatedSwitcher(
-  //             duration: const Duration(milliseconds: 260),
-  //             transitionBuilder: (child, animation) {
-  //               return FadeTransition(
-  //                 opacity: animation,
-  //                 child: ScaleTransition(scale: animation, child: child),
-  //               );
-  //             },
-  //             child: Icon(
-  //               item.icon,
-  //               key: ValueKey(item.label),
-  //               size: 22,
-  //               color: colorScheme.onPrimary,
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

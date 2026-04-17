@@ -12,8 +12,6 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final scheduledAt =
         Formatters.parseDateTime(order.scheduledAt) ??
         Formatters.parseDateTime(order.createdAt);

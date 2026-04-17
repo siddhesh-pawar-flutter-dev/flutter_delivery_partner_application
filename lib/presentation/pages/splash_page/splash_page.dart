@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/utils/app_theme.dart';
-import '../controllers/splash_controller.dart';
-import '../widgets/connectivity_gate.dart';
+import '../../../core/utils/app_theme.dart';
+import '../../controllers/splash_controller.dart';
+import '../../widgets/connectivity_gate.dart';
 
 class SplashPage extends GetView<SplashController> {
   const SplashPage({super.key});
@@ -30,7 +30,10 @@ class SplashPage extends GetView<SplashController> {
                 ),
               ),
               const SizedBox(height: 16),
-              Text('Easy Cater', style: Theme.of(context).textTheme.headlineMedium),
+              Text(
+                'Easy Cater',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
               const SizedBox(height: 8),
               Text(
                 'Delivery partner console',

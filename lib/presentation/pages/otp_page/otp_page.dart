@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../controllers/auth_controller.dart';
-import '../widgets/auth_wave_header.dart';
-import '../widgets/connectivity_gate.dart';
+import '../../controllers/auth_controller.dart';
+import '../../widgets/auth_wave_header.dart';
+import '../../widgets/connectivity_gate.dart';
 
 class OtpPage extends GetView<AuthController> {
   const OtpPage({super.key});
