@@ -15,7 +15,7 @@ class ActiveOrderSection extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return ScaleInteraction(
-      onTap: () => Get.toNamed('/order-detail', arguments: {'orderId': order.id}),
+      onTap: () => Get.toNamed(AppPages.orderDetail, arguments: order),
       child: Container(
         decoration: BoxDecoration(
           color: colorScheme.surfaceContainerLowest,
@@ -104,7 +104,7 @@ class ActiveOrderSection extends StatelessWidget {
                         children: [
                           Expanded(
                             child: _NavigateButton(
-                              onTap: () => Get.toNamed(AppPages.orderDetail, arguments: {'orderId': order.id}),
+                              onTap: () => Get.toNamed(AppPages.orderDetail, arguments: order),
                             ),
                           ),
                           const SizedBox(width: 12),

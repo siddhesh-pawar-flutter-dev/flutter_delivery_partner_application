@@ -85,10 +85,6 @@ class _TheDock extends StatelessWidget {
                   dockHorizontalPadding +
                   (itemWidth * currentIndex) +
                   ((itemWidth - bubbleSize) / 2);
-              final notchLeft =
-                  dockHorizontalPadding +
-                  (itemWidth * currentIndex) +
-                  ((itemWidth - notchSize) / 2);
 
               return Stack(
                 clipBehavior: Clip.none,

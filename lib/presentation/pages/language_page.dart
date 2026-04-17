@@ -72,15 +72,32 @@ class LanguagePage extends GetView<LanguageController> {
                                     vertical: 12,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF2C2C2C),
-                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.lightGreen.shade100,
+                                    // Theme.of(
+                                    //   context,
+                                    // ).colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
                                       color: isSelected
-                                          ? AppTheme.primary.withValues(
-                                              alpha: 0.8,
-                                            )
-                                          : const Color(0xFF3A3A3A),
+                                          ?
+                                            // Colors.lightGreen
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.outlineVariant,
+                                      width: isSelected ? 1.5 : 1,
                                     ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(
+                                          alpha: 0.04,
+                                        ),
+                                        blurRadius: 12,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
                                   ),
                                   child: Row(
                                     children: [
@@ -144,16 +161,19 @@ class LanguagePage extends GetView<LanguageController> {
                     height: 54,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.primary.withValues(
-                          alpha: 0.8,
-                        ),
-
-                        disabledBackgroundColor: const Color(0xFF4D4D4D),
-                        foregroundColor: Colors.black,
-                        disabledForegroundColor: Colors.black54,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onPrimary,
+                        disabledBackgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.12),
+                        disabledForegroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.38),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       onPressed: controller.selectedLanguage.value.isEmpty
@@ -162,8 +182,8 @@ class LanguagePage extends GetView<LanguageController> {
                       child: const Text(
                         'Proceed',
                         style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),

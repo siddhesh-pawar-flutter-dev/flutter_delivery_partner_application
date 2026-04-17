@@ -8,7 +8,7 @@ import '../../presentation/pages/gig_by_date_page.dart';
 import '../../presentation/pages/language_page.dart';
 import '../../presentation/pages/login_page.dart';
 import '../../presentation/pages/main_shell_page.dart';
-import '../../presentation/pages/order_detail_page.dart';
+import '../../presentation/pages/order_detail_page/order_detail_page.dart';
 import '../../presentation/pages/otp_page.dart';
 import '../../presentation/bindings/personal_details_binding.dart';
 import '../../presentation/pages/edit_profile_page.dart';

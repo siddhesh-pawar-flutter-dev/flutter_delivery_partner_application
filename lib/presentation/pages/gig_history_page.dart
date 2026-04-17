@@ -25,7 +25,9 @@ class GigHistoryPage extends GetView<GigHistoryController> {
             final gigs = controller.gigs;
 
             if (controller.isLoading.value && gigs.isEmpty) {
-              return const Center(child: CircularProgressIndicator(color: Color(0xFF2E7D32)));
+              return const Center(
+                child: CircularProgressIndicator(color: Color(0xFF2E7D32)),
+              );
             }
 
             return RefreshIndicator(
@@ -36,8 +38,8 @@ class GigHistoryPage extends GetView<GigHistoryController> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
-                   const SizedBox(height: 16),
-                  
+                  const SizedBox(height: 16),
+
                   // 1. Profile Info Card
                   _ProfileInfoCard(
                     name: user?.name ?? 'Delivery Partner',
@@ -73,13 +75,22 @@ class GigHistoryPage extends GetView<GigHistoryController> {
 
                   // 4. History Groups
                   if (gigs.isEmpty)
-                   const EmptyState(title: 'No Gig History', subtitle: 'Start your first shift!')
+                    const EmptyState(
+                      title: 'No Gig History',
+                      subtitle: 'Start your first shift!',
+                    )
                   else ...[
-                    _HistorySection(title: 'This Week', gigs: gigs.take(3).toList()),
+                    _HistorySection(
+                      title: 'This Week',
+                      gigs: gigs.take(3).toList(),
+                    ),
                     const SizedBox(height: 16),
-                    _HistorySection(title: 'Last Week', gigs: gigs.skip(3).toList()),
+                    _HistorySection(
+                      title: 'Last Week',
+                      gigs: gigs.skip(3).toList(),
+                    ),
                   ],
-                  
+
                   const SizedBox(height: 40),
                 ],
               ),
@@ -107,11 +118,14 @@ class _ProfileInfoCard extends StatelessWidget {
             color: Colors.white,
             shape: BoxShape.circle,
             image: imageUrl.isNotEmpty
-                ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
+                ? DecorationImage(
+                    image: NetworkImage(imageUrl),
+                    fit: BoxFit.cover,
+                  )
                 : null,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -133,7 +147,11 @@ class _ProfileInfoCard extends StatelessWidget {
         const Spacer(),
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.notifications_rounded, color: Color(0xFF1B5E20), size: 24),
+          icon: const Icon(
+            Icons.notifications_rounded,
+            color: Color(0xFF1B5E20),
+            size: 24,
+          ),
           style: IconButton.styleFrom(
             backgroundColor: Colors.white,
             padding: const EdgeInsets.all(8),
@@ -212,7 +230,11 @@ class _PerformanceOverview extends StatelessWidget {
 }
 
 class _MetricCard extends StatelessWidget {
-  const _MetricCard({required this.icon, required this.label, required this.value});
+  const _MetricCard({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
   final IconData icon;
   final String label;
   final String value;
@@ -226,7 +248,7 @@ class _MetricCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -306,7 +328,8 @@ class _GigCard extends StatelessWidget {
     final statusColor = _getStatusColor(gig.status);
 
     return GestureDetector(
-      onTap: () => Get.toNamed(AppPages.gigByDate, arguments: {'date': gig.date}),
+      onTap: () =>
+          Get.toNamed(AppPages.gigByDate, arguments: {'date': gig.date}),
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(20),
@@ -315,7 +338,7 @@ class _GigCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -381,7 +404,8 @@ class _GigCard extends StatelessWidget {
                 Expanded(
                   child: _MiniMetric(
                     label: 'REJECTED',
-                    value: '${gig.totalRejected} ${gig.totalRejected == 1 ? "Gig" : "Gigs"}',
+                    value:
+                        '${gig.totalRejected} ${gig.totalRejected == 1 ? "Gig" : "Gigs"}',
                     icon: Icons.cancel_rounded,
                     color: const Color(0xFFD32F2F),
                   ),
@@ -395,8 +419,10 @@ class _GigCard extends StatelessWidget {
   }
 
   Color _getStatusColor(String status) {
-    if (status.toLowerCase().contains('complete')) return const Color(0xFF2E7D32);
-    if (status.toLowerCase().contains('partial')) return const Color(0xFFC2185B);
+    if (status.toLowerCase().contains('complete'))
+      return const Color(0xFF2E7D32);
+    if (status.toLowerCase().contains('partial'))
+      return const Color(0xFFC2185B);
     return Colors.black45;
   }
 }
@@ -438,7 +464,12 @@ class _StatusBadge extends StatelessWidget {
 }
 
 class _MiniMetric extends StatelessWidget {
-  const _MiniMetric({required this.label, required this.value, required this.icon, required this.color});
+  const _MiniMetric({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
   final String label;
   final String value;
   final IconData icon;
@@ -449,7 +480,7 @@ class _MiniMetric extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.06),
+        color: color.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -465,7 +496,7 @@ class _MiniMetric extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 8,
                     fontWeight: FontWeight.w800,
-                    color: color.withOpacity(0.6),
+                    color: color.withValues(alpha: 0.6),
                     letterSpacing: 0.5,
                   ),
                 ),

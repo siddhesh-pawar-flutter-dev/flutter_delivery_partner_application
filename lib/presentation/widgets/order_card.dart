@@ -28,7 +28,7 @@ class OrderCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -54,7 +54,7 @@ class OrderCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            
+
             // Restaurant Name
             Text(
               order.restaurantName,
@@ -69,11 +69,17 @@ class OrderCard extends StatelessWidget {
             // Item Summary
             Row(
               children: [
-                const Icon(Icons.inventory_2_outlined, size: 16, color: Colors.black38),
+                const Icon(
+                  Icons.inventory_2_outlined,
+                  size: 16,
+                  color: Colors.black38,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    order.itemSummary.isEmpty ? '${order.quantity} items' : order.itemSummary,
+                    order.itemSummary.isEmpty
+                        ? '${order.quantity} items'
+                        : order.itemSummary,
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
@@ -108,13 +114,13 @@ class OrderCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: _getTonalColor(order.status).withOpacity(0.08),
+                color: _getTonalColor(order.status).withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   Text(
+                  Text(
                     'Grand Total',
                     style: GoogleFonts.inter(
                       fontSize: 13,
@@ -178,7 +184,9 @@ class _StatusBadge extends StatelessWidget {
       bgColor = const Color(0xFFC8E6C9);
       textColor = const Color(0xFF2E7D32);
       label = 'DELIVERED';
-    } else if (normalized == 'cancelled' || normalized == 'failed' || normalized.contains('not_accepted')) {
+    } else if (normalized == 'cancelled' ||
+        normalized == 'failed' ||
+        normalized.contains('not_accepted')) {
       bgColor = const Color(0xFFFFCDD2);
       textColor = const Color(0xFFC62828);
       label = 'CANCELLED';
