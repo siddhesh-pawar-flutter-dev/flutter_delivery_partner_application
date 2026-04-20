@@ -32,7 +32,10 @@ class ProfileController extends GetxController {
     loadProfile();
     loadAppVersion();
   }
-
+  String lastFour(String acc) {
+    if (acc.length < 4) return acc;
+    return acc.substring(acc.length - 4);
+  }
   Future<void> loadProfile() async {
     isLoading.value = true;
     errorMessage.value = '';
