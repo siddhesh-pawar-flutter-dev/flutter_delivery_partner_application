@@ -8,6 +8,7 @@ import '../../presentation/pages/gig_by_date_page/gig_by_date_page.dart';
 import '../../presentation/pages/language_page/language_page.dart';
 import '../../presentation/pages/login_page/login_page.dart';
 import '../../presentation/pages/main_shell_page/main_shell_page.dart';
+import '../../presentation/bindings/tshirt_selection_binding.dart';
 import '../../presentation/pages/order_detail_page/order_detail_page.dart';
 import '../../presentation/pages/otp_page/otp_page.dart';
 import '../../presentation/bindings/personal_details_binding.dart';
@@ -50,7 +51,11 @@ class AppPages {
       binding: MainShellBinding(),
     ),
 
-    GetPage(name: tshirtSelection, page: () => const TshirtSelectionPage()),
+    GetPage(
+      name: tshirtSelection,
+      page: () => const TshirtSelectionPage(),
+      binding: TshirtSelectionBinding(),
+    ),
 
     GetPage(name: orderDetail, page: () => const OrderDetailPage()),
 
