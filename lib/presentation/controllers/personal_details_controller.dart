@@ -5,9 +5,8 @@ import '../../domain/entities/profile_details.dart';
 import '../../domain/usecases/get_profile_usecase.dart';
 
 class PersonalDetailsController extends GetxController {
-  PersonalDetailsController({
-    required GetProfileUseCase getProfileUseCase,
-  }) : _getProfileUseCase = getProfileUseCase;
+  PersonalDetailsController({required GetProfileUseCase getProfileUseCase})
+    : _getProfileUseCase = getProfileUseCase;
 
   final GetProfileUseCase _getProfileUseCase;
 
@@ -15,7 +14,6 @@ class PersonalDetailsController extends GetxController {
   final Rxn<ProfileDetails> profile = Rxn<ProfileDetails>();
   final RxString errorMessage = ''.obs;
 
-  // Form Field Controllers
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
@@ -60,10 +58,10 @@ class PersonalDetailsController extends GetxController {
     nameController.text = p.deliveryPartner.name;
     emailController.text = p.deliveryPartner.email;
     phoneController.text = p.deliveryPartner.phoneNumber;
-    // Mocking Zip and DOB as they might not be in the base entity yet
-    dobController.text = '05/14/1992'; 
+
+    dobController.text = '05/14/1992';
     zipController.text = '11201';
-    addressController.text = p.deliveryPartner.city; // Using city as placeholder
+    addressController.text = p.deliveryPartner.city;
   }
 
   Future<void> saveChanges() async {
@@ -71,10 +69,8 @@ class PersonalDetailsController extends GetxController {
 
     isLoading.value = true;
     try {
-      // Simulate API call
       await Future.delayed(const Duration(seconds: 1));
-      
-      // Update local state (optimistic)
+
       if (profile.value != null) {
         final updatedPartner = profile.value!.deliveryPartner.copyWith(
           name: nameController.text,
@@ -88,8 +84,8 @@ class PersonalDetailsController extends GetxController {
           documents: profile.value!.documents,
         );
       }
-      
-      Get.back(); // Return to summary page
+
+      Get.back();
       Get.snackbar(
         'Success',
         'Profile updated successfully',
@@ -107,7 +103,6 @@ class PersonalDetailsController extends GetxController {
     }
   }
 
-  // Validators
   String? validateName(String? value) {
     if (value == null || value.isEmpty) return 'Please enter your name';
     return null;
@@ -121,7 +116,8 @@ class PersonalDetailsController extends GetxController {
 
   String? validatePhone(String? value) {
     if (value == null || value.isEmpty) return 'Please enter your phone number';
-    if (!GetUtils.isPhoneNumber(value)) return 'Please enter a valid phone number';
+    if (!GetUtils.isPhoneNumber(value))
+      return 'Please enter a valid phone number';
     return null;
   }
 }

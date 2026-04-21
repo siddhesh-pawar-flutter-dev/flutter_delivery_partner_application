@@ -25,8 +25,6 @@ class GigByDateItem {
   final int enrolledPeople;
   final String date;
   final double percentageForComplete;
-  
-  // Flattened GigsHistory
   final String? historyStatus;
   final int historyTotalCompleted;
   final int historyTotalRejected;

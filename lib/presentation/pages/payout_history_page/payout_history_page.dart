@@ -65,7 +65,7 @@ class PayoutHistoryPage extends GetView<PayoutHistoryController> {
                     left: 16,
                     right: 16,
                     top: 16,
-                    bottom: 80, // Padding for bottom navbar
+                    bottom: 80,
                   ),
                   itemCount:
                       1 +

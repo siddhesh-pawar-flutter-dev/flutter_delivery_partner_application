@@ -109,7 +109,6 @@ class PayoutHistoryController extends GetxController {
     try {
       await _loadNextPage();
     } catch (_) {
-      // Keep the current list visible if pagination fails.
     } finally {
       isLoadingMore.value = false;
     }
@@ -163,7 +162,6 @@ class PayoutHistoryController extends GetxController {
         await _loadNextPage();
       }
     } catch (_) {
-      // Filters still apply to the pages that have already loaded.
     } finally {
       isLoadingMore.value = false;
     }

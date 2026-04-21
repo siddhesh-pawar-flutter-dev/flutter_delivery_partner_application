@@ -29,12 +29,9 @@ class CustomHeader extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            colorScheme.primary,
-            colorScheme.primaryContainer,
-          ],
+          colors: [colorScheme.primary, colorScheme.primaryContainer],
           begin: Alignment.topLeft,
-          end: const Alignment(0.8, 0.8), // Approx 135 degrees
+          end: const Alignment(0.8, 0.8),
         ),
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(24),
@@ -55,7 +52,8 @@ class CustomHeader extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
-                  children: [leading ?? const SizedBox(width:40),
+                  children: [
+                    leading ?? const SizedBox(width: 40),
                     if (onBack != null) ...[
                       IconButton(
                         onPressed: onBack,
@@ -96,14 +94,11 @@ class CustomHeader extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
+
                     if (trailing case Widget t) t,
                   ],
                 ),
-                if (bottom case Widget b) ...[
-                  const SizedBox(height: 20),
-                  b,
-                ],
+                if (bottom case Widget b) ...[const SizedBox(height: 20), b],
               ],
             ),
           ),

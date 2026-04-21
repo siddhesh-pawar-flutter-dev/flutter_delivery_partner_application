@@ -102,7 +102,7 @@ class PersonalDetailsPage extends GetView<PersonalDetailsController> {
               SectionHeader(title: 'Account Security'),
               const SizedBox(height: 16),
               SecurityTile(),
-              const SizedBox(height: 100), // Space for bottom dock
+              const SizedBox(height: 100),
             ],
           ),
         );

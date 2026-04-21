@@ -13,11 +13,10 @@ class TshirtSelectionController extends GetxController {
     await MapUtils.openGoogleMaps(lat: lat, lng: lng);
   }
 
-  // Simulating stock
   final Map<String, bool> sizeStock = {
     "S": true,
     "M": true,
-    "L": true, // out of stock
+    "L": true,
     "XL": true,
     "XXL": false,
   };

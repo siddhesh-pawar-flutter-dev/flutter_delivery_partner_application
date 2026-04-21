@@ -35,7 +35,6 @@ class OrderCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Row: Order ID & Status Badge
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -53,7 +52,6 @@ class OrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Restaurant Name
             Text(
               order.restaurantName,
               style: GoogleFonts.manrope(
@@ -64,7 +62,6 @@ class OrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Item Summary
             Row(
               children: [
                 const Icon(
@@ -91,7 +88,6 @@ class OrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            // Date & Time
             Row(
               children: [
                 const Icon(Icons.access_time, size: 16, color: Colors.black38),
@@ -108,7 +104,6 @@ class OrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Bottom Section: Grand Total
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
@@ -154,7 +149,7 @@ class OrderCard extends StatelessWidget {
       case 'picked up':
       case 'pending':
       case 'in progress':
-        return const Color(0xFFC2185B); // Rose tonal for in progress
+        return const Color(0xFFC2185B);
       case 'cancelled':
       case 'failed':
       case 'not accepted':
@@ -189,7 +184,6 @@ class _StatusBadge extends StatelessWidget {
       textColor = const Color(0xFFC62828);
       label = 'CANCELLED';
     } else {
-      // In Progress / Pending
       bgColor = const Color(0xFFFCE4EC);
       textColor = const Color(0xFFC2185B);
       label = 'IN PROGRESS';

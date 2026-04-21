@@ -146,7 +146,6 @@ class LoginPage extends GetView<AuthController> {
                                                       86,
                                                       94,
                                                     ),
-                                                    // color: Color(0xFF9AA0A6),
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w600,
                                                   ),

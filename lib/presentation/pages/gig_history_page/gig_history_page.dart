@@ -67,11 +67,9 @@ class GigHistoryPage extends GetView<GigHistoryController> {
                   ),
                   const SizedBox(height: 24),
 
-                  // 3. Performance Cards
                   _PerformanceOverview(gigs: gigs),
                   const SizedBox(height: 32),
 
-                  // 4. History Groups
                   if (gigs.isEmpty)
                     const EmptyState(
                       title: 'No Gig History',
@@ -106,10 +104,8 @@ class _PerformanceOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Placeholder logic for stats
     return Column(
       children: [
-        // Large Success Rate Card
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(24),
@@ -142,7 +138,7 @@ class _PerformanceOverview extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        // Side-by-side metric cards
+
         Row(
           children: [
             Expanded(
@@ -282,7 +278,6 @@ class _GigCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // Top Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -313,7 +308,7 @@ class _GigCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Rs 1,425.00', // Placeholder for daily earnings
+                      'Rs 1,425.00',
                       style: GoogleFonts.manrope(
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
@@ -325,7 +320,7 @@ class _GigCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
-            // Bottom metric boxes
+
             Row(
               children: [
                 Expanded(

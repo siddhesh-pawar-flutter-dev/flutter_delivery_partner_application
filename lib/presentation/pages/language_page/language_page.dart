@@ -73,15 +73,10 @@ class LanguagePage extends GetView<LanguageController> {
                                   ),
                                   decoration: BoxDecoration(
                                     color: Colors.lightGreen.shade100,
-                                    // Theme.of(
-                                    //   context,
-                                    // ).colorScheme.primary,
                                     borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
                                       color: isSelected
-                                          ?
-                                            // Colors.lightGreen
-                                            Theme.of(
+                                          ? Theme.of(
                                               context,
                                             ).colorScheme.primary
                                           : Theme.of(

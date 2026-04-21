@@ -31,7 +31,6 @@ class ActiveOrderSection extends StatelessWidget {
         child: IntrinsicHeight(
           child: Row(
             children: [
-              // 1. Signature Accent Stripe
               Container(
                 width: 6,
                 decoration: BoxDecoration(
@@ -48,7 +47,6 @@ class ActiveOrderSection extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 2. Status Badge and Delivery Est.
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -61,11 +59,12 @@ class ActiveOrderSection extends StatelessWidget {
                                 style: theme.textTheme.labelMedium?.copyWith(
                                   fontSize: 10,
                                   letterSpacing: 0.5,
-                                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                                  color: colorScheme.onSurfaceVariant
+                                      .withValues(alpha: 0.6),
                                 ),
                               ),
                               Text(
-                                '14:30 PM', // Placeholder for actual est. time if available
+                                '14:30 PM',
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   fontSize: 18,
                                   color: colorScheme.primary,
@@ -78,7 +77,6 @@ class ActiveOrderSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
 
-                      // 3. Information Content
                       Text(
                         'Order #${order.id}',
                         style: theme.textTheme.titleMedium?.copyWith(
@@ -89,22 +87,25 @@ class ActiveOrderSection extends StatelessWidget {
                       Text(
                         '${order.restaurantName} (${order.quantity} items)',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                          color: colorScheme.onSurfaceVariant.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20),
 
-                      // 4. No-Line Address Block (Tonal Shift)
                       _AddressSegment(order: order),
 
                       const SizedBox(height: 24),
 
-                      // 5. Actions
                       Row(
                         children: [
                           Expanded(
                             child: _NavigateButton(
-                              onTap: () => Get.toNamed(AppPages.orderDetail, arguments: order),
+                              onTap: () => Get.toNamed(
+                                AppPages.orderDetail,
+                                arguments: order,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -184,7 +185,9 @@ class _AddressSegment extends StatelessWidget {
         children: [
           _LocationRow(
             icon: Icons.store_rounded,
-            address: order.pickupAddress.isNotEmpty ? order.pickupAddress : order.pickupArea,
+            address: order.pickupAddress.isNotEmpty
+                ? order.pickupAddress
+                : order.pickupArea,
             isStart: true,
           ),
           const Padding(
@@ -213,7 +216,11 @@ class _AddressSegment extends StatelessWidget {
 }
 
 class _LocationRow extends StatelessWidget {
-  const _LocationRow({required this.icon, required this.address, required this.isStart});
+  const _LocationRow({
+    required this.icon,
+    required this.address,
+    required this.isStart,
+  });
   final IconData icon;
   final String address;
   final bool isStart;
@@ -228,7 +235,9 @@ class _LocationRow extends StatelessWidget {
         Icon(
           icon,
           size: 18,
-          color: isStart ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6) : colorScheme.primary,
+          color: isStart
+              ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6)
+              : colorScheme.primary,
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -239,7 +248,9 @@ class _LocationRow extends StatelessWidget {
             style: theme.textTheme.bodyMedium?.copyWith(
               fontSize: 13,
               fontWeight: isStart ? FontWeight.w500 : FontWeight.w700,
-              color: isStart ? colorScheme.onSurfaceVariant : colorScheme.onSurface,
+              color: isStart
+                  ? colorScheme.onSurfaceVariant
+                  : colorScheme.onSurface,
             ),
           ),
         ),
@@ -277,7 +288,11 @@ class _NavigateButton extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            const Icon(Icons.directions_car_rounded, color: Colors.white, size: 18),
+            const Icon(
+              Icons.directions_car_rounded,
+              color: Colors.white,
+              size: 18,
+            ),
           ],
         ),
       ),
@@ -309,7 +324,6 @@ class _CallButton extends StatelessWidget {
   }
 }
 
-// Signature Component: ScaleInteraction
 class ScaleInteraction extends StatefulWidget {
   const ScaleInteraction({required this.child, required this.onTap, super.key});
   final Widget child;
@@ -319,7 +333,8 @@ class ScaleInteraction extends StatefulWidget {
   State<ScaleInteraction> createState() => _ScaleInteractionState();
 }
 
-class _ScaleInteractionState extends State<ScaleInteraction> with SingleTickerProviderStateMixin {
+class _ScaleInteractionState extends State<ScaleInteraction>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -330,9 +345,10 @@ class _ScaleInteractionState extends State<ScaleInteraction> with SingleTickerPr
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.98).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.98,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -350,10 +366,7 @@ class _ScaleInteractionState extends State<ScaleInteraction> with SingleTickerPr
         widget.onTap();
       },
       onTapCancel: () => _controller.reverse(),
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: widget.child,
-      ),
+      child: ScaleTransition(scale: _scaleAnimation, child: widget.child),
     );
   }
 }

@@ -19,11 +19,9 @@ class AvailabilityToggle extends GetView<ProfileController> {
         ),
         child: Stack(
           children: [
-            // Sliding Indicator
             AnimatedAlign(
               duration: const Duration(milliseconds: 750),
-              curve:
-                  Curves.easeInOutBack, // Gives a slight "bounce" to the slide
+              curve: Curves.easeInOutBack,
               alignment: isOnline
                   ? Alignment.centerLeft
                   : Alignment.centerRight,
@@ -53,7 +51,7 @@ class AvailabilityToggle extends GetView<ProfileController> {
                 ),
               ),
             ),
-            // Interaction Layer
+
             Row(
               children: [
                 Expanded(

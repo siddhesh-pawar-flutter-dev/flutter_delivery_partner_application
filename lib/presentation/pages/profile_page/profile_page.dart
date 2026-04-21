@@ -129,7 +129,7 @@ class ProfilePage extends GetView<ProfileController> {
                     color: colorScheme.outline,
                   ),
                 ),
-                const SizedBox(height: 100), // Space for floating dock
+                const SizedBox(height: 100),
               ],
             ),
           );

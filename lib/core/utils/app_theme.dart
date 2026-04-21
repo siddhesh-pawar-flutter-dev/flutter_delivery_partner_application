@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Kinetic Logistics Palette
   static const Color primary = Color(0xFF2E7D32);
   static const Color primaryContainer = Color(0xFF0D631B);
   static const Color onPrimary = Colors.white;
@@ -19,10 +18,8 @@ class AppTheme {
   static const Color errorContainer = Color(0xFFFFDAD6);
   static const Color onErrorContainer = Color(0xFF410002);
 
-  static const Color outlineVariant = Color(
-    0xFFC4C7C5,
-  ); // Used for ghost borders
-  static const Color inverseSurface = Color(0xFF2F3033); // Night mode base
+  static const Color outlineVariant = Color(0xFFC4C7C5);
+  static const Color inverseSurface = Color(0xFF2F3033);
 
   static ThemeData get lightTheme {
     final colorScheme =
@@ -42,9 +39,7 @@ class AppTheme {
           error: error,
           errorContainer: errorContainer,
           onErrorContainer: onErrorContainer,
-          outlineVariant: outlineVariant.withValues(
-            alpha: 0.2,
-          ), // Ghost border rule
+          outlineVariant: outlineVariant.withValues(alpha: 0.2),
         );
 
     return ThemeData(
@@ -54,42 +49,38 @@ class AppTheme {
       scaffoldBackgroundColor: surface,
       cardColor: surfaceContainerLowest,
 
-      // Typography
       textTheme: TextTheme(
         displayMedium: GoogleFonts.manrope(
-          fontSize: 44, // 2.75rem
+          fontSize: 44,
           fontWeight: FontWeight.w700,
           color: colorScheme.onSurface,
         ),
         headlineSmall: GoogleFonts.manrope(
-          fontSize: 24, // 1.5rem
+          fontSize: 24,
           fontWeight: FontWeight.w600,
           color: colorScheme.onSurface,
         ),
         titleMedium: GoogleFonts.inter(
-          fontSize: 18, // 1.125rem
+          fontSize: 18,
           fontWeight: FontWeight.w600,
           color: colorScheme.onSurface,
         ),
         bodyMedium: GoogleFonts.inter(
-          fontSize: 14, // 0.875rem
+          fontSize: 14,
           fontWeight: FontWeight.w400,
           color: colorScheme.onSurface,
         ),
         labelMedium: GoogleFonts.inter(
-          fontSize: 12, // 0.75rem
+          fontSize: 12,
           fontWeight: FontWeight.w500,
           color: colorScheme.onSurfaceVariant,
         ),
       ),
 
-      // Components
       cardTheme: CardThemeData(
         color: surfaceContainerLowest,
         elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), // xl radius (0.75rem)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
 
       inputDecorationTheme: InputDecorationTheme(
@@ -119,10 +110,6 @@ class AppTheme {
     );
   }
 
-  // Preserve darkTheme as a basis for inverse_surface / night mode if needed
-  static ThemeData get darkTheme => lightTheme.copyWith(
-    brightness: Brightness.dark,
-    // Note: Design system specifies "inverse_surface" for Night mode.
-    // For simplicity, we'll focus on Light theme first as per the main request.
-  );
+  static ThemeData get darkTheme =>
+      lightTheme.copyWith(brightness: Brightness.dark);
 }

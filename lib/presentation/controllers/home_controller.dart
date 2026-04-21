@@ -85,9 +85,7 @@ class HomeController extends GetxController {
     try {
       final profile = await _getProfileUseCase();
       user.value = profile.deliveryPartner;
-    } on Failure {
-      // Profile refresh failed — keep showing the last saved user in the header.
-    }
+    } on Failure {}
   }
 
   Future<void> _warmOrderImages(List<DeliveryOrder> pageOrders) async {

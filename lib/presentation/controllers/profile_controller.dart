@@ -22,7 +22,6 @@ class ProfileController extends GetxController {
   final RxString appVersion = ''.obs;
   final Rxn<ProfileDetails> profile = Rxn<ProfileDetails>();
 
-  // Kinetic Logistics Specifics
   final RxInt complianceScore = 0.obs;
   final RxBool isOnline = false.obs;
 
@@ -32,10 +31,12 @@ class ProfileController extends GetxController {
     loadProfile();
     loadAppVersion();
   }
+
   String lastFour(String acc) {
     if (acc.length < 4) return acc;
     return acc.substring(acc.length - 4);
   }
+
   Future<void> loadProfile() async {
     isLoading.value = true;
     errorMessage.value = '';
@@ -62,10 +63,10 @@ class ProfileController extends GetxController {
     if (partner.phoneNumber.isNotEmpty) filled++;
     if (partner.profileImage.isNotEmpty) filled++;
     if (partner.city.isNotEmpty) filled++;
-    
+
     if (vehicle.vehicleType.isNotEmpty) filled++;
     if (vehicle.vehicleNumber.isNotEmpty) filled++;
-    
+
     if (bank.bankName.isNotEmpty) filled++;
     if (bank.accountNumber.isNotEmpty) filled++;
     if (bank.ifscCode.isNotEmpty) filled++;
@@ -78,8 +79,6 @@ class ProfileController extends GetxController {
 
   void toggleOnline() {
     isOnline.value = !isOnline.value;
-    // In search of "essence", we'll implement the UI change optimistically.
-    // If there was an API for this, we'd call it here.
   }
 
   Future<void> loadAppVersion() async {

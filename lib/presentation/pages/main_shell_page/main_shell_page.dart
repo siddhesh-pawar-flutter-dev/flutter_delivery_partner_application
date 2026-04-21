@@ -16,7 +16,7 @@ class MainShellPage extends GetView<MainShellController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // Allow body to flow behind the dock
+      extendBody: true,
       body: Obx(
         () => IndexedStack(
           index: controller.currentIndex.value,
@@ -119,8 +119,7 @@ class _TheDock extends StatelessWidget {
                                   duration: const Duration(milliseconds: 320),
                                   curve: Curves.easeOut,
                                   left: bubbleLeft,
-                                  top:
-                                      15, // increase this value to pull it further down
+                                  top: 15,
                                   width: bubbleSize,
                                   height: bubbleSize,
                                   child: IgnorePointer(
@@ -283,7 +282,7 @@ class _ActiveDockOrb extends StatelessWidget {
           ),
           border: Border.all(
             color: Colors.white.withValues(alpha: 0.95),
-            width: 3, // reduced from 4
+            width: 3,
           ),
           boxShadow: [
             BoxShadow(
@@ -299,9 +298,7 @@ class _ActiveDockOrb extends StatelessWidget {
             child: InkWell(
               onTap: onTap,
               child: Padding(
-                padding: const EdgeInsets.all(
-                  10,
-                ), // controls tap area & icon breathing room
+                padding: const EdgeInsets.all(10),
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 260),
                   transitionBuilder: (child, animation) => FadeTransition(
@@ -311,7 +308,7 @@ class _ActiveDockOrb extends StatelessWidget {
                   child: Icon(
                     item.icon,
                     key: ValueKey(item.label),
-                    size: 20, // reduced from 22
+                    size: 20,
                     color: colorScheme.onPrimary,
                   ),
                 ),

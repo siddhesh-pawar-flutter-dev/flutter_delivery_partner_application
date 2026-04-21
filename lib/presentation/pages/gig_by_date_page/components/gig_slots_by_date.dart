@@ -1,7 +1,4 @@
-import 'package:flutter/widgets.dart';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
 
 class GigSlotsByDate extends StatelessWidget {
   const GigSlotsByDate({
@@ -25,16 +22,14 @@ class GigSlotsByDate extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    // colors: [colorScheme.primary.withValues(alpha: 0.4), colorScheme.primaryContainer.withValues(alpha: 0.4)],
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18.0),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
           color: colorScheme.primary.withValues(alpha: 0.8),
-            borderRadius: const BorderRadius.all(
-            Radius.circular(24),
-          ),
+          borderRadius: const BorderRadius.all(Radius.circular(24)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -72,7 +67,7 @@ class GigSlotsByDate extends StatelessWidget {
                       ],
                     ),
                   ),
-        
+
                   if (trailing case Widget t) t,
                 ],
               ),

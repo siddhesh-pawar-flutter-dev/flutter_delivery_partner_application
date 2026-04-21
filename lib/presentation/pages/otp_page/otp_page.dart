@@ -88,7 +88,6 @@ class OtpPage extends GetView<AuthController> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Sub-heading
                                   const Text(
                                     'Enter OTP',
                                     style: TextStyle(
@@ -115,7 +114,6 @@ class OtpPage extends GetView<AuthController> {
                                   ),
                                   const SizedBox(height: 28),
 
-                                  // OTP input boxes
                                   Row(
                                     children: List.generate(6, (index) {
                                       return Expanded(
@@ -174,10 +172,7 @@ class OtpPage extends GetView<AuthController> {
                                       );
                                     }),
                                   ),
-
                                   const SizedBox(height: 20),
-
-                                  // Resend row
                                   Obx(
                                     () => Row(
                                       children: [
@@ -210,10 +205,7 @@ class OtpPage extends GetView<AuthController> {
                                       ],
                                     ),
                                   ),
-
                                   const Spacer(),
-
-                                  // Verify button
                                   Obx(
                                     () => SizedBox(
                                       width: double.infinity,

@@ -45,11 +45,9 @@ class TshirtSelectionPage extends GetView<TshirtSelectionController> {
               ),
             ),
 
-            // 🔻 Pickup Location Card
             Padding(
-              padding:
-                  EdgeInsets.zero, // symmetric(horizontal: 20, vertical: 16),
-              // symmetric(horizontal: 20, vertical: 16),
+              padding: EdgeInsets.zero,
+
               child: const PickupLocationCard(),
             ),
           ],
@@ -78,7 +76,6 @@ class TshirtSelectionPage extends GetView<TshirtSelectionController> {
       ),
       child: Column(
         children: [
-          // Top Badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
@@ -106,7 +103,6 @@ class TshirtSelectionPage extends GetView<TshirtSelectionController> {
           ),
           const SizedBox(height: 20),
 
-          // T-shirt Icon Container
           Container(
             height: 160,
             decoration: BoxDecoration(
@@ -123,7 +119,6 @@ class TshirtSelectionPage extends GetView<TshirtSelectionController> {
           ),
           const SizedBox(height: 20),
 
-          // Title
           Text(
             "Your Delivery Partner Uniform",
             textAlign: TextAlign.center,
@@ -135,7 +130,6 @@ class TshirtSelectionPage extends GetView<TshirtSelectionController> {
           ),
           const SizedBox(height: 8),
 
-          // Description
           Text(
             "Complete your setup with your official uniform",
             textAlign: TextAlign.center,
@@ -146,7 +140,6 @@ class TshirtSelectionPage extends GetView<TshirtSelectionController> {
           ),
           const SizedBox(height: 16),
 
-          // Features Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

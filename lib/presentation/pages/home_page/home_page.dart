@@ -99,7 +99,6 @@ class HomePage extends GetView<HomeController> {
                     ],
                   ],
 
-                  // Bottom spacing for the floating dock
                   const SizedBox(height: 80),
                 ],
               ),
@@ -122,7 +121,6 @@ class _TopBar extends StatelessWidget {
 
     return Row(
       children: [
-        // 1. Avatar with aura ring
         Container(
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
@@ -135,7 +133,7 @@ class _TopBar extends StatelessWidget {
           child: _ProfileAvatar(user: user),
         ),
         const SizedBox(width: 12),
-        // 2. Info section
+
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,7 +169,7 @@ class _TopBar extends StatelessWidget {
             ],
           ),
         ),
-        // 3. Aura Notification Button
+
         _AuraNotificationButton(
           onTap: () => Get.to(() => const NotificationPage()),
         ),
@@ -377,8 +375,6 @@ class _WeeklyEarningsCard extends GetView<HomeController> {
             ],
           ),
           const SizedBox(height: 24),
-          // No-line Divider substitute (empty space)
-          const SizedBox(height: 1),
           Row(
             children: [
               Expanded(

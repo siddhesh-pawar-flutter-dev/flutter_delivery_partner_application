@@ -66,9 +66,7 @@ class PayoutCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            // Ripple effect visually, no external routing set for payouts yet
-          },
+          onTap: () {},
           borderRadius: BorderRadius.circular(20),
           splashColor: statusColor.withValues(alpha: 0.05),
           highlightColor: statusColor.withValues(alpha: 0.05),

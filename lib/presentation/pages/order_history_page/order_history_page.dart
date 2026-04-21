@@ -47,9 +47,6 @@ class OrderHistoryPage extends GetView<OrderHistoryController> {
                   const SizedBox(height: 24),
 
                   _StatusFilterRow(controller: controller),
-                  const SizedBox(height: 12),
-
-                  _SecondaryFilterRow(controller: controller),
                   const SizedBox(height: 32),
 
                   if (controller.isLoading.value && controller.orders.isEmpty)
@@ -134,6 +131,7 @@ class _StatusFilterRow extends StatelessWidget {
     return Obx(
       () => Wrap(
         spacing: 10,
+        runSpacing: 10,
         children: [
           _FilterChip(
             label: 'All Orders',
@@ -149,6 +147,21 @@ class _StatusFilterRow extends StatelessWidget {
             label: 'In Progress',
             isSelected: controller.statusFilter.value == 'Pending',
             onTap: () => controller.statusFilter.value = 'Pending',
+          ),
+          _FilterChip(
+            label: 'Canceled',
+            isSelected: controller.statusFilter.value == 'Cancelled',
+            onTap: () => controller.statusFilter.value = 'Cancelled',
+          ),
+          _FilterChip(
+            label: 'Last 30 Days',
+            isSelected: controller.statusFilter.value == 'Last30Days',
+            onTap: () => controller.statusFilter.value = 'Last30Days',
+          ),
+          _FilterChip(
+            label: 'High Value',
+            isSelected: controller.statusFilter.value == 'HighValue',
+            onTap: () => controller.statusFilter.value = 'HighValue',
           ),
         ],
       ),
@@ -186,74 +199,6 @@ class _FilterChip extends StatelessWidget {
             fontSize: 13,
             fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SecondaryFilterRow extends StatelessWidget {
-  const _SecondaryFilterRow({required this.controller});
-  final OrderHistoryController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 12,
-      children: [
-        _SecondaryButton(
-          icon: Icons.calendar_today_rounded,
-          label: 'Last 30 Days',
-          onTap: () {},
-        ),
-        _SecondaryButton(
-          icon: Icons.filter_list_rounded,
-          label: 'High Value',
-          onTap: () {},
-        ),
-      ],
-    );
-  }
-}
-
-class _SecondaryButton extends StatelessWidget {
-  const _SecondaryButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: const Color(0xFFD1E9F6).withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 14,
-              color: const Color(0xFF2E7D32).withValues(alpha: 0.6),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: GoogleFonts.inter(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF2E7D32),
-              ),
-            ),
-          ],
         ),
       ),
     );

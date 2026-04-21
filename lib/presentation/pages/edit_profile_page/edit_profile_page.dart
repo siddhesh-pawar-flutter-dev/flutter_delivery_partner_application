@@ -79,7 +79,7 @@ class EditProfilePage extends GetView<PersonalDetailsController> {
                 controller: controller.addressController,
                 maxLines: 3,
               ),
-              const SizedBox(height: 120), // Space for button
+              const SizedBox(height: 120),
             ],
           ),
         ),

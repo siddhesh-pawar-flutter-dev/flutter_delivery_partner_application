@@ -4,11 +4,11 @@ import 'package:flutter_delivery_partner_application/presentation/pages/gig_by_d
 import 'package:flutter_delivery_partner_application/presentation/widgets/empty_state.dart';
 import 'package:get/get.dart';
 
-class GigByDatePage extends StatelessWidget{
+class GigByDatePage extends StatelessWidget {
   const GigByDatePage({super.key});
   @override
   Widget build(BuildContext context) {
-    final GigByDateController controller= Get.find <GigByDateController>(); 
+    final GigByDateController controller = Get.find<GigByDateController>();
     final displayDate = controller.formatDate(controller.date);
 
     return Scaffold(
@@ -47,30 +47,7 @@ class GigByDatePage extends StatelessWidget{
               ),
             ),
           ),
-          // Column(
-          //   children: [
-          //     Container(
-          //       padding: const EdgeInsets.symmetric(
-          //         horizontal: 12,
-          //         vertical: 6,
-          //       ),
-          //       decoration: BoxDecoration(
-          //         color: Colors.white.withValues(alpha: 0.15),
-          //         borderRadius: BorderRadius.circular(10),
-          //       ),
-          //       child: Text(
-          //         '${controller.gigs.length} available',
-          //         style: const TextStyle(
-          //           color: Colors.white,
-          //           fontSize: 13,
-          //           fontWeight: FontWeight.w700,
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          
-          
+
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
@@ -108,7 +85,7 @@ class GigByDatePage extends StatelessWidget{
                     left: 16,
                     right: 16,
                     top: 16,
-                    bottom: 80, // Padding for bottom navbar just in case
+                    bottom: 80,
                   ),
                   itemCount:
                       controller.gigs.length +
@@ -171,7 +148,7 @@ class _GigSlotCard extends StatelessWidget {
 
   Color _getStatusColor(String? statusText) {
     if (statusText == null || statusText.isEmpty) {
-      return const Color(0xFF2E7D32); // Available slot color
+      return const Color(0xFF2E7D32);
     }
 
     final lowerStatus = statusText.toLowerCase();
@@ -211,9 +188,7 @@ class _GigSlotCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            // Future enrollment logic
-          },
+          onTap: () {},
           borderRadius: BorderRadius.circular(20),
           splashColor: statusColor.withValues(alpha: 0.05),
           highlightColor: statusColor.withValues(alpha: 0.05),
