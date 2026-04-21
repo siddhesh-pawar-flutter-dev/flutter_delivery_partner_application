@@ -18,10 +18,6 @@ class GigHistoryPage extends GetView<GigHistoryController> {
         appBar: AppBar(
           backgroundColor: const Color(0xFFF1F6F2),
           elevation: 0,
-          leading: IconButton(
-            onPressed: () => Get.back(),
-            icon: const Icon(Icons.arrow_back, color: Colors.black87),
-          ),
           title: const Text(
             'Earnings',
             style: TextStyle(

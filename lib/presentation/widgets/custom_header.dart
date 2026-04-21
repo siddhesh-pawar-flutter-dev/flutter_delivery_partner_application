@@ -96,6 +96,7 @@ class CustomHeader extends StatelessWidget {
                         ],
                       ),
                     ),
+                    
                     if (trailing case Widget t) t,
                   ],
                 ),

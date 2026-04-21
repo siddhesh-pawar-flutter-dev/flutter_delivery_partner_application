@@ -43,7 +43,7 @@ class PickupLocationCard extends StatelessWidget {
                 ),
                 child: Icon(
                   Icons.location_on_rounded,
-                  color: colorScheme.primary,
+                  color: Colors.white.withValues(alpha: 0.8),
                   size: 24,
                 ),
               ),

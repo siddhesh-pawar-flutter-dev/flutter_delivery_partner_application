@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_delivery_partner_application/core/utils/formatters.dart';
 import 'package:get/get.dart';
 
 import '../../domain/entities/gig_by_date.dart';
@@ -67,6 +68,14 @@ class GigByDateController extends GetxController {
       errorMessage.value = e.toString();
     } finally {
       isLoading.value = false;
+    }
+  }
+  String formatDate(String dateString) {
+    try {
+      final parsed = DateTime.parse(dateString);
+      return Formatters.formatDateTime(parsed, format: 'dd/MM/yyyy');
+    } catch (_) {
+      return dateString;
     }
   }
 

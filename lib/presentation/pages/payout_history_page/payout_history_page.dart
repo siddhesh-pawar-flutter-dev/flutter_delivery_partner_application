@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delivery_partner_application/presentation/pages/payout_history_page/components/payout_card.dart';
+import 'package:flutter_delivery_partner_application/presentation/pages/payout_history_page/components/payout_filter_chip.dart';
+import 'package:flutter_delivery_partner_application/presentation/pages/payout_history_page/payout_filters.dart';
 import 'package:get/get.dart';
 import '../../controllers/payout_history_controller.dart';
-import '../../widgets/custom_header.dart';
 import '../../widgets/empty_state.dart';
 
 class PayoutHistoryPage extends GetView<PayoutHistoryController> {
@@ -12,24 +13,20 @@ class PayoutHistoryPage extends GetView<PayoutHistoryController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F5),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF1F6F2),
+        elevation: 0,
+        title: const Text(
+          'Payout History',
+          style: TextStyle(
+            color: Color(0xFF2E7D32),
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: Column(
         children: [
-          CustomHeader(
-            title: 'Payout History',
-            subtitle: 'Review your settlements & earnings',
-            trailing: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(
-                Icons.account_balance_wallet_rounded,
-                color: Colors.white,
-                size: 28,
-              ),
-            ),
-          ),
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
@@ -57,6 +54,8 @@ class PayoutHistoryPage extends GetView<PayoutHistoryController> {
                 );
               }
 
+              final displayedPayouts = controller.filteredPayouts;
+
               return RefreshIndicator(
                 color: const Color(0xFF4CAF50),
                 onRefresh: controller.loadInitialData,
@@ -70,11 +69,28 @@ class PayoutHistoryPage extends GetView<PayoutHistoryController> {
                     bottom: 80, // Padding for bottom navbar
                   ),
                   itemCount:
-                      controller.payouts.length +
+                      1 +
+                      (displayedPayouts.isEmpty ? 1 : displayedPayouts.length) +
                       (controller.isLoadingMore.value ? 1 : 0),
                   separatorBuilder: (_, _) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
-                    if (index == controller.payouts.length) {
+                    if (index == 0) {
+                      return PayoutFilters(controller: controller);
+                    }
+
+                    final payoutIndex = index - 1;
+
+                    if (displayedPayouts.isEmpty) {
+                      if (payoutIndex == 0) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 48),
+                          child: EmptyState(
+                            title: 'No payouts found',
+                            subtitle: '',
+                          ),
+                        );
+                      }
+
                       return const Padding(
                         padding: EdgeInsets.symmetric(vertical: 16),
                         child: Center(
@@ -85,7 +101,18 @@ class PayoutHistoryPage extends GetView<PayoutHistoryController> {
                       );
                     }
 
-                    final payout = controller.payouts[index];
+                    if (payoutIndex == displayedPayouts.length) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF4CAF50),
+                          ),
+                        ),
+                      );
+                    }
+
+                    final payout = displayedPayouts[payoutIndex];
                     return PayoutCard(
                       orderId: payout.orderId,
                       amount: payout.amount,

@@ -1,32 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_delivery_partner_application/presentation/controllers/gig_by_date_controller.dart';
+import 'package:flutter_delivery_partner_application/presentation/pages/gig_by_date_page/components/gig_slots_by_date.dart';
+import 'package:flutter_delivery_partner_application/presentation/widgets/empty_state.dart';
 import 'package:get/get.dart';
 
-import '../../../core/utils/formatters.dart';
-import '../../controllers/gig_by_date_controller.dart';
-import '../../widgets/custom_header.dart';
-import '../../widgets/empty_state.dart';
-
-class GigByDatePage extends GetView<GigByDateController> {
+class GigByDatePage extends StatelessWidget{
   const GigByDatePage({super.key});
-
-  String _formatDate(String dateString) {
-    try {
-      final parsed = DateTime.parse(dateString);
-      return Formatters.formatDateTime(parsed, format: 'dd/MM/yyyy');
-    } catch (_) {
-      return dateString;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final displayDate = _formatDate(controller.date);
+    final GigByDateController controller= Get.find <GigByDateController>(); 
+    final displayDate = controller.formatDate(controller.date);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F5),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF1F6F2),
+        elevation: 0,
+        title: const Text(
+          'Gig Slots',
+          style: TextStyle(
+            color: Color(0xFF2E7D32),
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: Column(
         children: [
-          CustomHeader(
+          GigSlotsByDate(
             title: 'Slots for $displayDate',
             subtitle: 'Select a slot to start earning',
             onBack: () => Get.back(),
@@ -46,6 +47,30 @@ class GigByDatePage extends GetView<GigByDateController> {
               ),
             ),
           ),
+          // Column(
+          //   children: [
+          //     Container(
+          //       padding: const EdgeInsets.symmetric(
+          //         horizontal: 12,
+          //         vertical: 6,
+          //       ),
+          //       decoration: BoxDecoration(
+          //         color: Colors.white.withValues(alpha: 0.15),
+          //         borderRadius: BorderRadius.circular(10),
+          //       ),
+          //       child: Text(
+          //         '${controller.gigs.length} available',
+          //         style: const TextStyle(
+          //           color: Colors.white,
+          //           fontSize: 13,
+          //           fontWeight: FontWeight.w700,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          
+          
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {

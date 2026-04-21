@@ -35,30 +35,6 @@ class TshirtSelectionPage extends GetView<TshirtSelectionController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 🔹 Header Section
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     Text(
-                    //       "Select Your Uniform  size and collect from the pickup location",
-                    //       style: theme.textTheme.bodyLarge?.copyWith(
-                    //         color: colorScheme.onSurface,
-                    //         fontWeight: FontWeight.w700,
-                    //       ),
-                    //     ),
-                    //     // const SizedBox(height: 8),
-                    //     // Text(
-                    //     //   "Choose your size and collect from the pickup location",
-                    //     //   style: theme.textTheme.bodyMedium?.copyWith(
-                    //     //     color: colorScheme.onSurfaceVariant,
-                    //     //   ),
-                    //     // ),
-                    //   ],
-                    // ),
-
-                    // const SizedBox(height: 32),
-
-                    // 🔹 T-shirt Preview Card
                     _buildPreviewCard(context, colorScheme),
 
                     const SizedBox(height: 32),
