@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_delivery_partner_application/presentation/pages/payout_history_page/components/payout_card.dart';
-import 'package:flutter_delivery_partner_application/presentation/pages/payout_history_page/components/payout_filter_chip.dart';
 import 'package:flutter_delivery_partner_application/presentation/pages/payout_history_page/payout_filters.dart';
 import 'package:get/get.dart';
 import '../../controllers/payout_history_controller.dart';
