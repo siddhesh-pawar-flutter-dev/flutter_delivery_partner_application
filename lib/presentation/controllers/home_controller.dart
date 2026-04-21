@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../core/error/failures.dart';
 import '../../core/utils/formatters.dart';
@@ -47,10 +48,24 @@ class HomeController extends GetxController {
   }
 
   Future<void> refreshOrders() async {
+    Hive.box('api_cache').clear();
     currentPage = 1;
     hasMoreData.value = true;
     orders.clear();
     await Future.wait([loadProfileSummary(), loadOrders()]);
+  }
+
+  String getCurrency(double value) {
+    final hasDecimals = value.truncateToDouble() != value;
+    return 'Rs ${value.toStringAsFixed(hasDecimals ? 2 : 0)}';
+  }
+
+  String getInitials(String? name) {
+    final trimmed = name?.trim() ?? '';
+    if (trimmed.isEmpty) return 'DP';
+    final parts = trimmed.split(RegExp(r'\s+'));
+    return (parts.first[0] + (parts.length > 1 ? parts[1][0] : ''))
+        .toUpperCase();
   }
 
   Future<void> loadOrders() async {
@@ -85,7 +100,9 @@ class HomeController extends GetxController {
     try {
       final profile = await _getProfileUseCase();
       user.value = profile.deliveryPartner;
-    } on Failure {}
+    } on Failure {
+      //
+    }
   }
 
   Future<void> _warmOrderImages(List<DeliveryOrder> pageOrders) async {

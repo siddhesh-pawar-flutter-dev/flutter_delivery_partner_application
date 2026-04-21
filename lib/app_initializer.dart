@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/network/api_client.dart';
@@ -27,6 +28,9 @@ Future<void> initializeAppDependencies({bool reset = false}) async {
   if (reset) {
     Get.reset();
   }
+
+  await Hive.initFlutter();
+  await Hive.openBox('api_cache');
 
   final sharedPreferences = await SharedPreferences.getInstance();
   final storageService = StorageService(sharedPreferences);

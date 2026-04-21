@@ -116,8 +116,9 @@ class PersonalDetailsController extends GetxController {
 
   String? validatePhone(String? value) {
     if (value == null || value.isEmpty) return 'Please enter your phone number';
-    if (!GetUtils.isPhoneNumber(value))
+    if (!GetUtils.isPhoneNumber(value)) {
       return 'Please enter a valid phone number';
+    }
     return null;
   }
 }

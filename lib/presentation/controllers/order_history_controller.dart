@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../core/error/failures.dart';
 import '../../core/utils/formatters.dart';
@@ -34,6 +35,7 @@ class OrderHistoryController extends GetxController {
   }
 
   Future<void> refreshOrders() async {
+    Hive.box('api_cache').clear();
     orders.clear();
     await loadAllOrders();
   }
