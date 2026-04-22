@@ -49,7 +49,7 @@ class _TheDock extends StatelessWidget {
     _NavItem(icon: Icons.grid_view_rounded, label: 'Hub'),
     _NavItem(icon: Icons.delivery_dining_rounded, label: 'Deliveries'),
     _NavItem(icon: Icons.payments_rounded, label: 'Earnings'),
-    _NavItem(icon: Icons.account_balance_wallet_rounded, label: 'Wallet'),
+    _NavItem(icon: Icons.account_balance_wallet_rounded, label: 'Payouts'),
     _NavItem(icon: Icons.account_circle_rounded, label: 'Profile'),
   ];
 

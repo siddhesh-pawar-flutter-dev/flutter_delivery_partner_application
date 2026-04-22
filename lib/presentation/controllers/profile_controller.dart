@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -51,6 +52,23 @@ class ProfileController extends GetxController {
       isLoading.value = false;
     }
   }
+Color statusColor(String status) {
+  final lowerStatus = status.trim().toLowerCase();
+
+  if (lowerStatus == 'verified' ||
+      lowerStatus == 'approved' ||
+      lowerStatus == 'active') {
+    return Colors.green;
+  }
+
+  if (lowerStatus == 'rejected' ||
+      lowerStatus == 'failed' ||
+      lowerStatus == 'expired') {
+    return Colors.redAccent;
+  }
+
+  return Colors.orange;
+}
 
   void _calculateCompliance(ProfileDetails p) {
     int filled = 0;

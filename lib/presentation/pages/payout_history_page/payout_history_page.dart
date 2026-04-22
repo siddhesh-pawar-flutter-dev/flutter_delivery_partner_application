@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_delivery_partner_application/presentation/pages/payout_history_page/components/payout_card.dart';
 import 'package:flutter_delivery_partner_application/presentation/pages/payout_history_page/payout_filters.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../controllers/payout_history_controller.dart';
 import '../../widgets/empty_state.dart';
 
@@ -12,23 +13,12 @@ class PayoutHistoryPage extends GetView<PayoutHistoryController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F5),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF1F6F2),
-        elevation: 0,
-        title: const Text(
-          'Payout History',
-          style: TextStyle(
-            color: Color(0xFF2E7D32),
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
+
       body: Column(
         children: [
           Expanded(
             child: Obx(() {
-              if (controller.isLoading.value) {
+              if (controller.isLoading.value && controller.payouts.isEmpty) {
                 return const Center(
                   child: CircularProgressIndicator(color: Color(0xFF4CAF50)),
                 );
@@ -54,6 +44,10 @@ class PayoutHistoryPage extends GetView<PayoutHistoryController> {
               }
 
               final displayedPayouts = controller.filteredPayouts;
+              final itemCount =
+                  2 +
+                  (displayedPayouts.isEmpty ? 1 : displayedPayouts.length) +
+                  (controller.isLoadingMore.value ? 1 : 0);
 
               return RefreshIndicator(
                 color: const Color(0xFF4CAF50),
@@ -61,23 +55,44 @@ class PayoutHistoryPage extends GetView<PayoutHistoryController> {
                 child: ListView.separated(
                   controller: controller.scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: 16,
-                    bottom: 80,
-                  ),
-                  itemCount:
-                      1 +
-                      (displayedPayouts.isEmpty ? 1 : displayedPayouts.length) +
-                      (controller.isLoadingMore.value ? 1 : 0),
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 96),
+                  itemCount: itemCount,
                   separatorBuilder: (_, _) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     if (index == 0) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 24,),
+                          Text(
+                            'Payout History',
+                            style: GoogleFonts.manrope(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black87,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'PAYMENT OVERVIEW',
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black38,
+                              letterSpacing: 1.0,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                      );
+                    }
+
+                    if (index == 1) {
                       return PayoutFilters(controller: controller);
                     }
 
-                    final payoutIndex = index - 1;
+                    final payoutIndex = index - 2;
 
                     if (displayedPayouts.isEmpty) {
                       if (payoutIndex == 0) {

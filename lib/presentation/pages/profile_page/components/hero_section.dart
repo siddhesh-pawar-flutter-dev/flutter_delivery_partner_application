@@ -33,15 +33,10 @@ class HeroSection extends StatelessWidget {
                     ? CachedNetworkImage(
                         imageUrl: partner.profileImage,
                         fit: BoxFit.cover,
+                        errorWidget: (_, _, _) =>
+                            _AvatarFallback(colorScheme: colorScheme),
                       )
-                    : Container(
-                        color: Colors.white,
-                        child: Icon(
-                          Icons.person_rounded,
-                          size: 60,
-                          color: colorScheme.primary,
-                        ),
-                      ),
+                    : _AvatarFallback(colorScheme: colorScheme),
               ),
             ),
             Positioned(
@@ -65,6 +60,7 @@ class HeroSection extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           partner.name.isEmpty ? 'Delivery Partner' : partner.name,
+          textAlign: TextAlign.center,
           style: theme.textTheme.headlineSmall,
         ),
         const SizedBox(height: 8),
@@ -91,15 +87,32 @@ class HeroSection extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            Text(
-              '•  Delivery Partner',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+            Flexible(
+              child: Text(
+                'Delivery Partner',
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
           ],
         ),
       ],
+    );
+  }
+}
+
+class _AvatarFallback extends StatelessWidget {
+  const _AvatarFallback({required this.colorScheme});
+
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Icon(Icons.person_rounded, size: 60, color: colorScheme.primary),
     );
   }
 }

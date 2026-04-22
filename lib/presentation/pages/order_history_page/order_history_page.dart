@@ -25,7 +25,7 @@ class OrderHistoryPage extends GetView<OrderHistoryController> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   Text(
                     'Order History',
                     style: GoogleFonts.manrope(

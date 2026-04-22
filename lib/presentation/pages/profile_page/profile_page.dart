@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_delivery_partner_application/core/utils/app_pages.dart';
 import 'package:flutter_delivery_partner_application/presentation/controllers/profile_controller.dart';
 import 'package:flutter_delivery_partner_application/presentation/pages/profile_page/components/availability_toggle.dart';
 import 'package:flutter_delivery_partner_application/presentation/pages/profile_page/components/compliance_card.dart';
@@ -9,36 +10,18 @@ import 'package:flutter_delivery_partner_application/presentation/widgets/empty_
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProfilePage extends GetView<ProfileController> {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ProfileController controller = Get.find<ProfileController>();
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     return ConnectivityGate(
       child: Scaffold(
-        backgroundColor: colorScheme.surface,
-        appBar: AppBar(
-          title: Text(
-            'Profile',
-            style: GoogleFonts.manrope(
-              fontWeight: FontWeight.w700,
-              color: colorScheme.primary,
-            ),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_rounded),
-            onPressed: () => Get.back(),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.help_outline_rounded),
-              onPressed: () {},
-            ),
-          ],
-        ),
+        backgroundColor: const Color(0xFFF7F7F5),
         body: Obx(() {
           if (controller.isLoading.value && controller.profile.value == null) {
             return const Center(child: CircularProgressIndicator());
@@ -54,18 +37,40 @@ class ProfilePage extends GetView<ProfileController> {
             );
           }
 
+          final verifiedDocumentCount = p.documents.where((document) {
+            final status = document.status.trim().toLowerCase();
+            return status == 'verified' || status == 'approved';
+          }).length;
+          final allDocumentsVerified =
+              verifiedDocumentCount == p.documents.length &&
+              p.documents.isNotEmpty;
+
           return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
             child: Column(
               children: [
+                const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Profile',
+                    style: GoogleFonts.manrope(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black87,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
                 HeroSection(partner: p.deliveryPartner),
                 const SizedBox(height: 24),
-                AvailabilityToggle(),
+                const AvailabilityToggle(),
                 const SizedBox(height: 32),
                 ComplianceCard(score: controller.complianceScore.value),
                 const SizedBox(height: 16),
                 GestureDetector(
-                  onTap: () => Get.toNamed('personal-details'),
+                  onTap: () => Get.toNamed(AppPages.personalDetails),
                   child: ProfilePageInfoCard(
                     icon: Icons.person_rounded,
                     title: 'Personal Info',
@@ -85,27 +90,36 @@ class ProfilePage extends GetView<ProfileController> {
                   subtitle: p.vehicleDetails.vehicleType,
                   content: p.vehicleDetails.vehicleNumber,
                   badgeText: p.vehicleDetails.status.toUpperCase(),
+                  badgeColor: controller.statusColor(p.vehicleDetails.status),
                 ),
                 const SizedBox(height: 16),
                 ProfilePageInfoCard(
                   icon: Icons.account_balance_rounded,
                   title: 'Bank Account',
                   subtitle: p.bankDetails.bankName,
-                  content:
-                      '•••• •••• ${controller.lastFour(p.bankDetails.accountNumber)}',
-                  trailing: const Icon(
-                    Icons.check_circle_rounded,
-                    color: Colors.green,
-                  ),
+                  content: p.bankDetails.accountNumber.isEmpty
+                      ? 'Not provided'
+                      : '**** **** ${controller.lastFour(p.bankDetails.accountNumber)}',
+                  trailing: p.bankDetails.accountNumber.isEmpty
+                      ? null
+                      : const Icon(
+                          Icons.check_circle_rounded,
+                          color: Colors.green,
+                        ),
                 ),
                 const SizedBox(height: 16),
                 ProfilePageInfoCard(
                   icon: Icons.description_rounded,
                   title: 'Documents',
                   subtitle:
-                      '${p.documents.length}/${p.documents.length} Verified',
-                  content: p.documents.map((d) => d.documentType).join(', '),
-                  badgeText: 'ALL SET',
+                      '$verifiedDocumentCount/${p.documents.length} Verified',
+                  content: p.documents.isEmpty
+                      ? 'No documents added'
+                      : p.documents.map((d) => d.documentType).join(', '),
+                  badgeText: allDocumentsVerified ? 'ALL SET' : 'PENDING',
+                  badgeColor: allDocumentsVerified
+                      ? Colors.green
+                      : Colors.orange,
                 ),
                 const SizedBox(height: 48),
                 TextButton.icon(

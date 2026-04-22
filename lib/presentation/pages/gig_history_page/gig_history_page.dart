@@ -15,18 +15,18 @@ class GigHistoryPage extends GetView<GigHistoryController> {
     return ConnectivityGate(
       child: Scaffold(
         backgroundColor: const Color(0xFFF1F6F2),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFFF1F6F2),
-          elevation: 0,
-          title: const Text(
-            'Earnings',
-            style: TextStyle(
-              color: Color(0xFF2E7D32),
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
+        // appBar: AppBar(
+        //   backgroundColor: const Color(0xFFF1F6F2),
+        //   elevation: 0,
+        //   title: const Text(
+        //     'Earnings',
+        //     style: TextStyle(
+        //       color: Color(0xFF2E7D32),
+        //       fontSize: 18,
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //   ),
+        // ),
         body: SafeArea(
           child: Obx(() {
             final gigs = controller.gigs;
@@ -45,6 +45,8 @@ class GigHistoryPage extends GetView<GigHistoryController> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
+                  const SizedBox(height: 24),
+
                   Text(
                     'Gig History',
                     style: GoogleFonts.manrope(

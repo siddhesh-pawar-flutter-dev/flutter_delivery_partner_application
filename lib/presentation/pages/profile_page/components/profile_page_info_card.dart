@@ -10,6 +10,7 @@ class ProfilePageInfoCard extends StatelessWidget {
     required this.content,
     this.trailing,
     this.badgeText,
+    this.badgeColor,
   });
 
   final IconData icon;
@@ -18,11 +19,13 @@ class ProfilePageInfoCard extends StatelessWidget {
   final String content;
   final Widget? trailing;
   final String? badgeText;
+  final Color? badgeColor;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final effectiveBadgeColor = badgeColor ?? Colors.green;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -56,7 +59,7 @@ class ProfilePageInfoCard extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.green.withValues(alpha: 0.1),
+                    color: effectiveBadgeColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -64,7 +67,7 @@ class ProfilePageInfoCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: Colors.green,
+                      color: effectiveBadgeColor,
                     ),
                   ),
                 ),
