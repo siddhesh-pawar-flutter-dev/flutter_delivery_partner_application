@@ -3,6 +3,7 @@ import 'package:flutter_delivery_partner_application/domain/entities/delivery_pa
 import 'package:flutter_delivery_partner_application/presentation/pages/home_page/components/aura_notification_button.dart';
 import 'package:flutter_delivery_partner_application/presentation/pages/home_page/components/profile_avatar.dart';
 import 'package:flutter_delivery_partner_application/presentation/pages/notification_page/notification_page.dart';
+import 'package:flutter_delivery_partner_application/presentation/bindings/notification_binding.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -67,7 +68,10 @@ class TopBar extends StatelessWidget {
         ),
 
         AuraNotificationButton(
-          onTap: () => Get.to(() => const NotificationPage()),
+          onTap: () => Get.to(
+            () => const NotificationPage(),
+            binding: NotificationBinding(),
+          ),
         ),
       ],
     );
